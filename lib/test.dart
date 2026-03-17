@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
-                  'Assets/Images/wallet logo for loging page.png',
+                  'assets/images/wallet logo for loging page.png',
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
