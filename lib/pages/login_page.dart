@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 
 // import '../Widget/Login/login_bloc.dart';
-import '../widget/login/login_bloc.dart';
-// import 'package:income_and_expense_tracker/widget/login/login_bloc.dart';
+import '../View/login/login_bloc.dart';
+
+// import '../widget/login/login_bloc.dart';
+// import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -265,8 +267,10 @@ class LoginPage extends StatelessWidget {
                         children: [
                           Text(
                             "Don't have an account? ",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
+
+
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
                               if (state is LoginNavigateToSignupActionState) {
@@ -282,7 +286,10 @@ class LoginPage extends StatelessWidget {
                               return InkWell(
                                 child: Text(
                                   "Sign up",
-                                  style: TextStyle(color: Colors.blue),
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 17,
+                                  ),
                                 ),
                                 onTap: () {
                                   context.read<LoginBloc>().add(
