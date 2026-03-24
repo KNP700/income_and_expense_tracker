@@ -1,5 +1,12 @@
 part of 'login_bloc.dart';
 
-abstract class LoginEvent {}
+abstract class LoginEvent {
 
-class LoginNavigateToSignupActionEvent extends LoginEvent {}
+}
+
+class LoginNavigateToSignupActionEvent extends LoginEvent {
+
+}
+
+
+class LoginNavigateToForgotActionEvent extends LoginEvent{}

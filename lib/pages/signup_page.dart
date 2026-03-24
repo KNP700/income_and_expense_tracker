@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
+import 'package:income_and_expense_tracker/pages/signup_otp_page.dart';
+
+import '../View/signup_otp_page_bloc.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -90,15 +93,36 @@ class SignupPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Center(
-                          child: Text(
-                            'Continue',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                        BlocConsumer<SignupBloc, SignupState>(
+                          listener: (context, state) {
+                            if(state is SignupNavigateToOtpActionState){
+                              Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => SignUpOtpPage(),
+
                             ),
-                          ),
+                            );
+                            }
+
+
+                            // TODO: implement listener
+                            },
+                          builder: (context, state) {
+                            return InkWell(
+                              child: Text(
+                                'Continue',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onTap: (){
+                                context.read<SignupBloc>().add(
+                                  SignupNavigateToOtpActionEvent(),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -200,7 +224,7 @@ class SignupPage extends StatelessWidget {
                           BlocConsumer<SignupBloc, SignupState>(
                             listener: (context, state) {
                               if (state is SignupNavigateToSigninActionState) {
-                                Navigator.of(context).push(
+                                Navigator.of(context).pop(
                                   MaterialPageRoute(
                                     builder: (context) => const LoginPage(),
                                   ),

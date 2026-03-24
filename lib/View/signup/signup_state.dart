@@ -6,3 +6,6 @@ sealed class SignupState {}
 class SignupInitial extends SignupState {}
 
 class SignupNavigateToSigninActionState extends SignupState{}
+
+class SignupNavigateToOtpActionState extends SignupState{}
+

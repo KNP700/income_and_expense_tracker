@@ -1,15 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// import 'package:income_and_expense_tracker/Widget/Login/login_bloc.dart';
+import 'package:income_and_expense_tracker/pages/forgot_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
-
-// import '../Widget/Login/login_bloc.dart';
 import '../View/login/login_bloc.dart';
-
-// import '../widget/login/login_bloc.dart';
-// import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -51,7 +45,7 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 0),
 
                   const Text(
-                    'Please Sign to Track your expenses',
+                    'Please Sign to track your expenses',
                     style: TextStyle(color: Colors.blueGrey, fontSize: 22),
                   ),
 
@@ -118,18 +112,38 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 5),
 
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Forgot Password?",
-                        style: const TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BlocConsumer<LoginBloc, LoginState>(
+                        listener: (context, state) {
+                          if (state is LoginNavigateToForgotActionState) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPage(),
+                              ),
+                            );
+                          }
+                        },
+
+                        builder: (context, state) {
+                          return TextButton(
+                            onPressed: () {
+                              context.read<LoginBloc>().add(
+                                LoginNavigateToForgotActionEvent(),
+                              );
+                            },
+                            child: Text(
+                              "Forgot Password?",
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
+                    ],
                   ),
 
                   const SizedBox(height: 10),
@@ -270,7 +284,9 @@ class LoginPage extends StatelessWidget {
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
 
-
+                          // BlocListener(listener: (context, state) {
+                          //
+                          // },child: ,),
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
                               if (state is LoginNavigateToSignupActionState) {
