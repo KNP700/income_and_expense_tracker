@@ -5,3 +5,4 @@ sealed class SignupOtpPageState {}
 
 final class SignupOtpPageInitial extends SignupOtpPageState {}
 
+class ContinueToCreateAccActionState extends SignupOtpPageState{}

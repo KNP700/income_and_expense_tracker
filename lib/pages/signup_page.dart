@@ -5,7 +5,7 @@ import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_otp_page.dart';
 
-import '../View/signup_otp_page_bloc.dart';
+import '../View/signupOtpPage/signup_otp_page_bloc.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -84,31 +84,35 @@ class SignupPage extends StatelessWidget {
 
                   const SizedBox(height: 40),
 
-                  Container(
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        BlocConsumer<SignupBloc, SignupState>(
-                          listener: (context, state) {
-                            if(state is SignupNavigateToOtpActionState){
-                              Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => SignUpOtpPage(),
-
+                  BlocConsumer<SignupBloc, SignupState>(
+                      listener: (context, state) {
+                        if (state is SignupNavigateToOtpActionState) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => SignUpOtpPage(),
                             ),
-                            );
-                            }
+                          );
+                        }
 
-
-                            // TODO: implement listener
-                            },
-                          builder: (context, state) {
-                            return InkWell(
-                              child: Text(
+                        // TODO: implement listener
+                      },
+                    builder: (context, state) {
+                      return InkWell(
+                        onTap: () {
+                          context.read<SignupBloc>().add(
+                            SignupNavigateToOtpActionEvent(),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
                                 'Continue',
                                 style: TextStyle(
                                   color: Colors.white,
@@ -116,16 +120,11 @@ class SignupPage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              onTap: (){
-                                context.read<SignupBloc>().add(
-                                  SignupNavigateToOtpActionEvent(),
-                                );
-                              },
-                            );
-                          },
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 240),
