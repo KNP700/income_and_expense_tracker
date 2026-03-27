@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
+import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
 import 'package:income_and_expense_tracker/pages/forgot_page.dart';
+import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import '../View/login/login_bloc.dart';
 
@@ -148,27 +151,46 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 10),
 
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.blue,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            "Log In",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                  BlocConsumer<LoginBloc, LoginState>(
+                    listener: (context, state) {
+                      if (state is LoginNavigateIntoHomeState) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return InkWell(
+                        onTap: () {
+                          context.read<LoginBloc>().add(
+                            LoginNavigateIntoHomeEvent(),
+                          );
+                        },
+
+                        child: Container(
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  "Log In",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 15),

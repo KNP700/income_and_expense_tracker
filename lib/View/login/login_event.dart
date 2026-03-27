@@ -10,3 +10,6 @@ class LoginNavigateToSignupActionEvent extends LoginEvent {
 
 
 class LoginNavigateToForgotActionEvent extends LoginEvent{}
+
+
+class LoginNavigateIntoHomeEvent extends LoginEvent{}

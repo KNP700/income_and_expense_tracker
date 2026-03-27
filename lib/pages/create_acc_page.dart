@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/createAccPage/create_acc_page_bloc.dart';
+import 'package:income_and_expense_tracker/pages/login_page.dart';
 
 class CreateAccPage extends StatelessWidget {
   const CreateAccPage({super.key});
@@ -67,8 +68,11 @@ class CreateAccPage extends StatelessWidget {
                           backgroundImage: NetworkImage(
                             'assets/icon/my_image.png',
                           ),
-                    
-                          child: const Text('K', style: TextStyle(fontSize: 40)),
+
+                          child: const Text(
+                            'K',
+                            style: TextStyle(fontSize: 40),
+                          ),
                           onBackgroundImageError: (exception, stackTrace) {},
                         ),
                       ],
@@ -114,6 +118,7 @@ class CreateAccPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "FIRST NAME",
@@ -139,7 +144,7 @@ class CreateAccPage extends StatelessWidget {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                hintText: 'Firstname',
+                                hintText: 'First name',
                                 hintStyle: const TextStyle(
                                   color: Colors.blueGrey,
                                   fontSize: 16,
@@ -154,6 +159,7 @@ class CreateAccPage extends StatelessWidget {
 
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               'LAST NAME',
@@ -178,7 +184,7 @@ class CreateAccPage extends StatelessWidget {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                hintText: 'Lastname',
+                                hintText: 'Last name',
                                 hintStyle: const TextStyle(
                                   color: Colors.blueGrey,
                                   fontSize: 16,
@@ -253,27 +259,49 @@ class CreateAccPage extends StatelessWidget {
 
                   const SizedBox(height: 40),
 
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.blue,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                  BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
+                    listener: (context, state) {
+                      if (state is ContinueCreateAccToSignInState) {
+                        Navigator.of(context).pop(
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return Builder(
+                        builder: (context) {
+                          return InkWell(
+                            onTap: () {
+                              context.read<CreateAccPageBloc>().add(
+                                ContinueCreateAccToSignInEvent(),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Sign Up",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
+                          );
+                        },
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 15),
@@ -287,11 +315,33 @@ class CreateAccPage extends StatelessWidget {
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
 
-                      InkWell(
-                        child: const Text(
-                          "Log In",
-                          style: TextStyle(color: Colors.blue, fontSize: 17),
-                        ),
+                      BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
+                        listener: (context, state) {
+                          if (state is ContinueCreateAccToSignIn2State) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return InkWell(
+                            child: const Text(
+                              "Log In",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 17,
+                              ),
+                            ),
+
+                            onTap: () {
+                              context.read<CreateAccPageBloc>().add(
+                                ContinueCreateAccToSignIn2Event(),
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),

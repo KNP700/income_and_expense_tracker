@@ -5,3 +5,6 @@ sealed class CreateAccPageState {}
 
 final class CreateAccPageInitial extends CreateAccPageState {}
 
+class ContinueCreateAccToSignInState extends CreateAccPageState{}
+
+class ContinueCreateAccToSignIn2State extends CreateAccPageState{}

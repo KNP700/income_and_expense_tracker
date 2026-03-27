@@ -8,3 +8,6 @@ class LoginInitial extends LoginState {}
 class LoginNavigateToSignupActionState extends LoginState {}
 
 class LoginNavigateToForgotActionState extends LoginState{}
+
+class LoginNavigateIntoHomeState extends LoginState{
+}

@@ -109,7 +109,7 @@ class SignUpOtpPage extends StatelessWidget {
                     builder: (context, state) {
                       return InkWell(
                         onTap: () {
-                          context.read<SignupOtpPageBloc>().add(
+                          context.read<SignupOtpPageBloc>().  add(
                             ContinueToCreateAccActionEvent(),
                           );
                         },
