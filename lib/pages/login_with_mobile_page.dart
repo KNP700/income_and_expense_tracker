@@ -1,19 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
-import 'package:income_and_expense_tracker/pages/forgot_otp_page.dart';
-import 'package:income_and_expense_tracker/pages/signup_page.dart';
+import 'package:income_and_expense_tracker/View/loginWithMobile/login_with_mobile_page_bloc.dart';
+import 'package:income_and_expense_tracker/pages/mobile_otp_page.dart';
 
 import '../View/forgotPage/forgot_page_bloc.dart';
 import '../test.dart';
+import 'forgot_otp_page.dart';
 
-class ForgotPage extends StatelessWidget {
-  const ForgotPage({super.key});
+class LoginWithMobilePage extends StatelessWidget {
+  const LoginWithMobilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ForgotPasswordBloc(),
+      create: (context) => LoginWithMobilePageBloc(),
       child: Scaffold(
         backgroundColor: const Color(0XFF0a1625),
         body: SafeArea(
@@ -35,7 +36,7 @@ class ForgotPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   const Text(
-                    'Forgot Password?',
+                    'Login with mobile',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 50,
@@ -44,12 +45,12 @@ class ForgotPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Enter your email address to receive a vertification code.',
+                    'Enter your mobile number to receive a verification code',
                     style: TextStyle(color: Colors.blueGrey, fontSize: 23),
                   ),
                   const SizedBox(height: 30),
                   const Text(
-                    ' Email Address',
+                    ' Mobile Number',
                     style: TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 20,
@@ -60,13 +61,13 @@ class ForgotPage extends StatelessWidget {
                   TextField(
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.phone_android),
                       filled: true,
                       fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      hintText: 'name@example.com',
+                      hintText: '+94*********',
                       hintStyle: const TextStyle(
                         color: Colors.blueGrey,
                         fontSize: 18,
@@ -74,12 +75,12 @@ class ForgotPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
+                  BlocConsumer<LoginWithMobilePageBloc, LoginWithMobilePageState>(
                     listener: (context, state) {
-                      if (state is ForgotPasswordToOtpPageState) {
+                      if (state is MobilePageToOtpState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ForgotOtpPage(),
+                            builder: (context) => MobileOtpPage(),
                           ),
                         );
                       }
@@ -88,8 +89,8 @@ class ForgotPage extends StatelessWidget {
                     builder: (context, state) {
                       return InkWell(
                         onTap: () {
-                          context.read<ForgotPasswordBloc>().add(
-                            ForgotPasswordToOtpPageEvent(),
+                          context.read<LoginWithMobilePageBloc>().add(
+                            MobilePageToOtpEvent(),
                           );
                         },
                         child: Container(
@@ -125,14 +126,14 @@ class ForgotPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Remember your Password?",
+                            "Login with your Email ! ",
                             style: TextStyle(
                               color: Colors.blueGrey,
                               fontSize: 17,
                             ),
                           ),
                           //here
-                          BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
+                          BlocConsumer<LoginWithMobilePageBloc, LoginWithMobilePageState>(
                             listener: (context, state) {
                               if (state is ForgotPasswordNavigateToSigninActionState) {
                                 Navigator.of(context).push(

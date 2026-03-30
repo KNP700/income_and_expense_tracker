@@ -10,13 +10,20 @@ class ForgotPasswordBloc
     extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   ForgotPasswordBloc() : super(ForgotPasswordInitial()) {
     on<ForgotPasswordNavigateToSigninActionEvent>(_move);
+    on<ForgotPasswordToOtpPageEvent>(navi2Otp);
   }
-
 
   void _move(
     ForgotPasswordNavigateToSigninActionEvent event,
     Emitter<ForgotPasswordState> emit,
   ) {
     emit(ForgotPasswordNavigateToSigninActionState());
+  }
+
+  void navi2Otp(
+    ForgotPasswordToOtpPageEvent event,
+    Emitter<ForgotPasswordState> emit,
+  ) {
+    emit(ForgotPasswordToOtpPageState());
   }
 }

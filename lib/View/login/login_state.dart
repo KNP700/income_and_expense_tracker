@@ -15,3 +15,5 @@ class LoginNavigateToForgotActionState extends LoginState{}
 
 class LoginNavigateIntoHomeState extends LoginState{
 }
+
+class  LoginWithMobileToMobileState extends LoginState{}

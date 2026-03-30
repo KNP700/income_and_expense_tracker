@@ -6,3 +6,5 @@ sealed class ForgotPasswordState {}
 class ForgotPasswordInitial extends ForgotPasswordState {}
 
 class ForgotPasswordNavigateToSigninActionState extends ForgotPasswordState{}
+
+class ForgotPasswordToOtpPageState extends ForgotPasswordState{}

@@ -1,19 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
-import 'package:income_and_expense_tracker/pages/forgot_otp_page.dart';
-import 'package:income_and_expense_tracker/pages/signup_page.dart';
+import 'package:income_and_expense_tracker/View/resetPasswordPage/reset_password_page_bloc.dart';
+import 'package:income_and_expense_tracker/pages/login_page.dart';
 
-import '../View/forgotPage/forgot_page_bloc.dart';
-import '../test.dart';
-
-class ForgotPage extends StatelessWidget {
-  const ForgotPage({super.key});
+class ResetPasswordPage extends StatelessWidget {
+  const ResetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ForgotPasswordBloc(),
+      create: (context) => ResetPasswordPageBloc(),
       child: Scaffold(
         backgroundColor: const Color(0XFF0a1625),
         body: SafeArea(
@@ -35,7 +32,7 @@ class ForgotPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   const Text(
-                    'Forgot Password?',
+                    'Reset Password',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 50,
@@ -44,12 +41,12 @@ class ForgotPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Enter your email address to receive a vertification code.',
+                    'Enter your new password below.',
                     style: TextStyle(color: Colors.blueGrey, fontSize: 23),
                   ),
                   const SizedBox(height: 30),
                   const Text(
-                    ' Email Address',
+                    ' New Password',
                     style: TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 20,
@@ -60,27 +57,52 @@ class ForgotPage extends StatelessWidget {
                   TextField(
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.lock),
                       filled: true,
                       fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      hintText: 'name@example.com',
+                      hintText: '*******',
                       hintStyle: const TextStyle(
                         color: Colors.blueGrey,
                         fontSize: 18,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
+                  const SizedBox(height: 30),
+                  const Text(
+                    ' Confirm Password',
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      filled: true,
+                      fillColor: const Color(0XFF1c304a),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      hintText: '*******',
+                      hintStyle: const TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 100),
+                  BlocConsumer<ResetPasswordPageBloc, ResetPasswordPageState>(
                     listener: (context, state) {
-                      if (state is ForgotPasswordToOtpPageState) {
+                      if (state is ResetPasswordToLoginState) {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ForgotOtpPage(),
-                          ),
+                          MaterialPageRoute(builder: (context) => LoginPage()),
                         );
                       }
                       // TODO: implement listener
@@ -88,8 +110,8 @@ class ForgotPage extends StatelessWidget {
                     builder: (context, state) {
                       return InkWell(
                         onTap: () {
-                          context.read<ForgotPasswordBloc>().add(
-                            ForgotPasswordToOtpPageEvent(),
+                          context.read<ResetPasswordPageBloc>().add(
+                            ResetPasswordToLoginEvent(),
                           );
                         },
                         child: Container(
@@ -103,7 +125,7 @@ class ForgotPage extends StatelessWidget {
                             children: [
                               Center(
                                 child: Text(
-                                  "Send Code",
+                                  "Update Password",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -117,7 +139,8 @@ class ForgotPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 370),
+
+                  const SizedBox(height: 230),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -132,9 +155,9 @@ class ForgotPage extends StatelessWidget {
                             ),
                           ),
                           //here
-                          BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
+                          BlocConsumer<ResetPasswordPageBloc, ResetPasswordPageState>(
                             listener: (context, state) {
-                              if (state is ForgotPasswordNavigateToSigninActionState) {
+                              if (state is ResetPasswordLoginButtonToLoginState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => LoginPage(),
@@ -152,8 +175,8 @@ class ForgotPage extends StatelessWidget {
                                   ),
                                 ),
                                 onTap: () {
-                                  context.read<ForgotPasswordBloc>().add(
-                                    ForgotPasswordNavigateToSigninActionEvent(),
+                                  context.read<ResetPasswordPageBloc>().add(
+                                    ResetPasswordToLoginEvent(),
                                   );
                                 },
                               );

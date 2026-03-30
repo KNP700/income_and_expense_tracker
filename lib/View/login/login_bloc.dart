@@ -13,6 +13,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginNavigateToSignupActionEvent>(_onNavigate);
     on<LoginNavigateToForgotActionEvent>(_onNavigate1);
     on<LoginNavigateIntoHomeEvent>(_onNavigate2);
+    on<LoginWithMobileToMobileEvent>(_onNavigate3);
   }
   // LoginBloc() : super(LoginInitial()){
   //   on<LoginNavigateToForgotActionEvent>(_onNavigate);
@@ -39,4 +40,8 @@ void _onNavigate1(
 
 void _onNavigate2(LoginNavigateIntoHomeEvent event, Emitter<LoginState> emit) {
   emit(LoginNavigateIntoHomeState());
+}
+
+void _onNavigate3(LoginWithMobileToMobileEvent event, Emitter<LoginState> emit) {
+  emit(LoginWithMobileToMobileState());
 }

@@ -5,3 +5,4 @@ sealed class ForgotOtpPageState {}
 
 final class ForgotOtpPageInitial extends ForgotOtpPageState {}
 
+final class ForgotOtpPageToResetState extends ForgotOtpPageState{}

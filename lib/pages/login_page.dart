@@ -5,6 +5,7 @@ import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
 import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
 import 'package:income_and_expense_tracker/pages/forgot_page.dart';
 import 'package:income_and_expense_tracker/pages/home_page.dart';
+import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import '../View/login/login_bloc.dart';
 
@@ -129,7 +130,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height:15),
+                      const SizedBox(height: 15),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -152,7 +153,7 @@ class LoginPage extends StatelessWidget {
                                     LoginNavigateToForgotActionEvent(),
                                   );
                                 },
-                                child:  Text(
+                                child: Text(
                                   "Forgot Password?",
                                   style: const TextStyle(
                                     color: Colors.blue,
@@ -172,7 +173,8 @@ class LoginPage extends StatelessWidget {
                           if (state is LoginNavigateIntoHomeState) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => HomePage()),
+                                builder: (context) => HomePage(),
+                              ),
                             );
                           }
                         },
@@ -216,8 +218,10 @@ class LoginPage extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           'Or continue with',
-                          style: TextStyle(color: Colors.blueGrey,
-                              fontSize: 18),
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
 
@@ -285,33 +289,53 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
 
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Color(0XFF1c304a),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/icon/phone_icon.png',
-                                  width: 25,
-                                  height: 25,
-                                  fit: BoxFit.contain,
-                                ),
-                                Center(
-                                  child: Text(
-                                    " login with Mobile",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          BlocConsumer<LoginBloc, LoginState>(
+                            listener: (context, state) {
+                              if (state is LoginWithMobileToMobileState) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginWithMobilePage(),
+                                  ),
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              return InkWell(
+                                onTap: (){
+                                  context.read<LoginBloc>().add(
+                                    LoginWithMobileToMobileEvent(),
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    color: Color(0XFF1c304a),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'assets/icon/phone_icon.png',
+                                        width: 25,
+                                        height: 25,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          " Login with Mobile",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
 
                           SizedBox(height: 0),
@@ -322,7 +346,9 @@ class LoginPage extends StatelessWidget {
                               Text(
                                 "Don't have an account? ",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 17),
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                ),
                               ),
 
                               // BlocListener(listener: (context, state) {
@@ -330,7 +356,8 @@ class LoginPage extends StatelessWidget {
                               // },child: ,),
                               BlocConsumer<LoginBloc, LoginState>(
                                 listener: (context, state) {
-                                  if (state is LoginNavigateToSignupActionState) {
+                                  if (state
+                                      is LoginNavigateToSignupActionState) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => SignupPage(),

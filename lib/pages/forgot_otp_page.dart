@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
+import 'package:income_and_expense_tracker/pages/reset_password_page.dart';
 
+import '../View/forgotOtpPage/forgot_otp_page_bloc.dart';
 import '../View/signupOtpPage/signup_otp_page_bloc.dart';
 import 'create_acc_page.dart';
 
@@ -12,7 +14,7 @@ class ForgotOtpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ForgotOtpPage(),
+      create: (context) => ForgotOtpPageBloc(),
       child: Scaffold(
         backgroundColor: const Color(0XFF0a1625),
         body: SafeArea(
@@ -96,12 +98,12 @@ class ForgotOtpPage extends StatelessWidget {
 
                   const SizedBox(height: 50),
 
-                  BlocConsumer<SignupOtpPageBloc, SignupOtpPageState>(
+                  BlocConsumer<ForgotOtpPageBloc, ForgotOtpPageState>(
                     listener: (context, state) {
-                      if (state is ContinueToCreateAccActionState) {
+                      if (state is ForgotOtpPageToResetState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => CreateAccPage(),
+                            builder: (context) => ResetPasswordPage(),
                           ),
                         );
                       }
@@ -109,8 +111,8 @@ class ForgotOtpPage extends StatelessWidget {
                     builder: (context, state) {
                       return InkWell(
                         onTap: () {
-                          context.read<SignupOtpPageBloc>().  add(
-                            ContinueToCreateAccActionEvent(),
+                          context.read<ForgotOtpPageBloc>().  add(
+                            ForgotOtpPageToResetEvent(),
                           );
                         },
                         child: Container(
