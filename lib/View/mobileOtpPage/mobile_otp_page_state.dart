@@ -4,3 +4,5 @@ part of 'mobile_otp_page_bloc.dart';
 sealed class MobileOtpPageState {}
 
 final class MobileOtpPageInitial extends MobileOtpPageState {}
+
+class AfterMobileOtpNavigationState extends MobileOtpPageState{}
