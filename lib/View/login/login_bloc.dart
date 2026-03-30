@@ -29,7 +29,12 @@ void _onNavigate1(
   LoginNavigateToForgotActionEvent event,
   Emitter<LoginState> emit,
 ) {
+  // ) async {
+  //   emit(LoginInProgress());
+  //
+  //   await Future.delayed(Duration(seconds: 3));
   emit(LoginNavigateToForgotActionState());
+  // emit(LoginFailed());
 }
 
 void _onNavigate2(LoginNavigateIntoHomeEvent event, Emitter<LoginState> emit) {

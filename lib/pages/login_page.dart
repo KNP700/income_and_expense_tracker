@@ -13,308 +13,133 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return BlocProvider(
-      create: (context) => LoginBloc(),
-      child: Scaffold(
-        backgroundColor: const Color(0XFF0a1625),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Image.asset(
-                      'assets/images/wallet logo for loging page.png',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Welcome',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 0),
-
-                  const Text(
-                    'Please Sign to track your expenses',
-                    style: TextStyle(color: Colors.blueGrey, fontSize: 22),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Text(
-                    'Email Address',
-                    style: TextStyle(
-                      color: Colors.blueGrey,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  TextField(
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      filled: true,
-                      fillColor: Color(0XFF1c304a),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      hintText: 'name@example.com',
-                      hintStyle: const TextStyle(
-                        color: Colors.blueGrey,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Text(
-                    'Password',
-                    style: TextStyle(
-                      color: Colors.blueGrey,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  TextField(
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Color(0XFF1c304a),
-
-                      prefixIcon: const Icon(Icons.lock),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      hintText: '***********',
-                      hintStyle: const TextStyle(
-                        color: Colors.blueGrey,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 5),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+    return PopScope(
+      canPop: false, // Prevents back navigation
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        // Optional: show dialog or call bloc to handle back attempt
+      },
+      child: BlocProvider(
+        create: (context) => LoginBloc(),
+        child: Scaffold(
+          backgroundColor: const Color(0XFF0a1625),
+          body: BlocListener<LoginBloc, LoginState>(
+            listener: (context, state) {
+              // if (state is LoginFailed) {
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     SnackBar(
+              //       content: Text(state.message),
+              //       backgroundColor: Colors.red,
+              //     ),
+              //   );
+              // }
+            },
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BlocConsumer<LoginBloc, LoginState>(
-                        listener: (context, state) {
-                          if (state is LoginNavigateToForgotActionState) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPage(),
-                              ),
-                            );
-                          }
-                        },
-
-                        builder: (context, state) {
-                          return TextButton(
-                            onPressed: () {
-                              context.read<LoginBloc>().add(
-                                LoginNavigateToForgotActionEvent(),
-                              );
-                            },
-                            child: Text(
-                              "Forgot Password?",
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 16,
-                              ),
-                            ),
-                          );
-                        },
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Image.asset(
+                          'assets/images/wallet logo for loging page.png',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ],
-                  ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Welcome',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
 
-                  const SizedBox(height: 10),
+                      const SizedBox(height: 0),
 
-                  BlocConsumer<LoginBloc, LoginState>(
-                    listener: (context, state) {
-                      if (state is LoginNavigateIntoHomeState) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      return InkWell(
-                        onTap: () {
-                          context.read<LoginBloc>().add(
-                            LoginNavigateIntoHomeEvent(),
-                          );
-                        },
+                      const Text(
+                        'Please Sign to track your expenses',
+                        style: TextStyle(color: Colors.blueGrey, fontSize: 22),
+                      ),
 
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue,
+                      const SizedBox(height: 20),
+
+                      const Text(
+                        'Email Address',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      TextField(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.email),
+                          filled: true,
+                          fillColor: Color(0XFF1c304a),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  "Log In",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          hintText: 'name@example.com',
+                          hintStyle: const TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 20,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
 
-                  const SizedBox(height: 15),
+                      const SizedBox(height: 20),
 
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Or continue with',
-                      style: TextStyle(color: Colors.blueGrey, fontSize: 18),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  Column(
-                    spacing: 20,
-                    children: [
-                      // const SizedBox(height: 25),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Color(0XFF1c304a),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icon/google_icon.png',
-                              width: 25,
-                              height: 25,
-                              fit: BoxFit.contain,
-                            ),
-                            Center(
-                              child: Text(
-                                " Google",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                      const Text(
+                        'Password',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
                         ),
                       ),
 
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Color(0XFF1c304a),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icon/apple_icon.png',
-                              width: 25,
-                              height: 25,
-                              fit: BoxFit.contain,
-                            ),
-                            Center(
-                              child: Text(
-                                " Apple",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                      const SizedBox(height: 10),
+
+                      TextField(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Color(0XFF1c304a),
+
+                          prefixIcon: const Icon(Icons.lock),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          hintText: '***********',
+                          hintStyle: const TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
 
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Color(0XFF1c304a),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icon/phone_icon.png',
-                              width: 25,
-                              height: 25,
-                              fit: BoxFit.contain,
-                            ),
-                            Center(
-                              child: Text(
-                                " login with Mobile",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(height: 0),
+                      const SizedBox(height:15),
 
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            "Don't have an account? ",
-                            style: TextStyle(color: Colors.white, fontSize: 17),
-                          ),
-
-                          // BlocListener(listener: (context, state) {
-                          //
-                          // },child: ,),
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
-                              if (state is LoginNavigateToSignupActionState) {
+                              if (state is LoginNavigateToForgotActionState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => SignupPage(),
+                                    builder: (context) => ForgotPage(),
                                   ),
                                 );
                               }
@@ -322,26 +147,222 @@ class LoginPage extends StatelessWidget {
 
                             builder: (context, state) {
                               return InkWell(
-                                child: Text(
-                                  "Sign up",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 17,
-                                  ),
-                                ),
                                 onTap: () {
                                   context.read<LoginBloc>().add(
-                                    LoginNavigateToSignupActionEvent(),
+                                    LoginNavigateToForgotActionEvent(),
                                   );
                                 },
+                                child:  Text(
+                                  "Forgot Password?",
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               );
                             },
                           ),
                         ],
                       ),
+
+                      const SizedBox(height: 15),
+
+                      BlocConsumer<LoginBloc, LoginState>(
+                        listener: (context, state) {
+                          if (state is LoginNavigateIntoHomeState) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return InkWell(
+                            onTap: () {
+                              context.read<LoginBloc>().add(
+                                LoginNavigateIntoHomeEvent(),
+                              );
+                            },
+
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Log In",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Or continue with',
+                          style: TextStyle(color: Colors.blueGrey,
+                              fontSize: 18),
+                        ),
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      Column(
+                        spacing: 20,
+                        children: [
+                          // const SizedBox(height: 25),
+                          Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Color(0XFF1c304a),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/icon/google_icon.png',
+                                  width: 25,
+                                  height: 25,
+                                  fit: BoxFit.contain,
+                                ),
+                                Center(
+                                  child: Text(
+                                    " Google",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Color(0XFF1c304a),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/icon/apple_icon.png',
+                                  width: 25,
+                                  height: 25,
+                                  fit: BoxFit.contain,
+                                ),
+                                Center(
+                                  child: Text(
+                                    " Apple",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Color(0XFF1c304a),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/icon/phone_icon.png',
+                                  width: 25,
+                                  height: 25,
+                                  fit: BoxFit.contain,
+                                ),
+                                Center(
+                                  child: Text(
+                                    " login with Mobile",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: 0),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Don't have an account? ",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17),
+                              ),
+
+                              // BlocListener(listener: (context, state) {
+                              //
+                              // },child: ,),
+                              BlocConsumer<LoginBloc, LoginState>(
+                                listener: (context, state) {
+                                  if (state is LoginNavigateToSignupActionState) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => SignupPage(),
+                                      ),
+                                    );
+                                  }
+                                },
+
+                                builder: (context, state) {
+                                  return InkWell(
+                                    child: Text(
+                                      "Sign up",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      context.read<LoginBloc>().add(
+                                        LoginNavigateToSignupActionEvent(),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

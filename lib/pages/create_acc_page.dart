@@ -262,7 +262,7 @@ class CreateAccPage extends StatelessWidget {
                   BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
                     listener: (context, state) {
                       if (state is ContinueCreateAccToSignInState) {
-                        Navigator.of(context).pop(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) => LoginPage()),
                         );
                       }
