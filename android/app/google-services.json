@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "201631963713",
+    "project_id": "income-and-expense-track-1e04c",
+    "storage_bucket": "income-and-expense-track-1e04c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201631963713:android:a0f484b8007add9f1104c0",
+        "android_client_info": {
+          "package_name": "com.IncomeAndExpenseTracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201631963713-f2qrifpsgbsg3m43tlpt41u0j05pt6np.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IncomeAndExpenseTracker",
+            "certificate_hash": "d4c6a7b8f7478c07a2bb81b329e9da4b1aa60977"
+          }
+        },
+        {
+          "client_id": "201631963713-bca6k25tgrbh6tonv1qt40iki9c35cis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhvR0E4AH_dMB1gAnllC78gUAjmBlfb3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201631963713-bca6k25tgrbh6tonv1qt40iki9c35cis.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "201631963713-ipjbo6v238f5fhq42e46g99fqcm3c5pu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.incomeAndExpenseTracker"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201631963713:android:26ccab1965dd0fe81104c0",
+        "android_client_info": {
+          "package_name": "com.example.income_and_expense_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201631963713-bca6k25tgrbh6tonv1qt40iki9c35cis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhvR0E4AH_dMB1gAnllC78gUAjmBlfb3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201631963713-bca6k25tgrbh6tonv1qt40iki9c35cis.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "201631963713-ipjbo6v238f5fhq42e46g99fqcm3c5pu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.incomeAndExpenseTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

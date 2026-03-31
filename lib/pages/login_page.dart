@@ -45,11 +45,16 @@ class LoginPage extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Image.asset(
-                          'assets/images/wallet logo for loging page.png',
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Image.asset(
+                            'assets/icon/back_icon.png',
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
