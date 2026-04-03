@@ -8,6 +8,8 @@ import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import '../View/login/login_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../data/repositories/auth_repository.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -21,7 +23,11 @@ class LoginPage extends StatelessWidget {
         // Optional: show dialog or call bloc to handle back attempt
       },
       child: BlocProvider(
-        create: (context) => LoginBloc(),
+        create: (context) =>
+            LoginBloc(
+              authRepository: RepositoryProvider.of<AuthRepository>(context),
+            ),
+
         child: Scaffold(
           backgroundColor: const Color(0XFF0a1625),
           body: BlocListener<LoginBloc, LoginState>(
@@ -176,7 +182,7 @@ class LoginPage extends StatelessWidget {
                       BlocConsumer<LoginBloc, LoginState>(
                         listener: (context, state) {
                           if (state is LoginNavigateIntoHomeState) {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) => HomePage(),
                               ),
@@ -236,33 +242,63 @@ class LoginPage extends StatelessWidget {
                         spacing: 20,
                         children: [
                           // const SizedBox(height: 25),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Color(0XFF1c304a),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/icon/google_icon.png',
-                                  width: 25,
-                                  height: 25,
-                                  fit: BoxFit.contain,
-                                ),
-                                Center(
-                                  child: Text(
-                                    " Google",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                          BlocConsumer<LoginBloc, LoginState>(
+                            listener: (context, state) {
+                              if (state is LoginSuccessState) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              } else if (state is LoginFailureState) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(state.error),
+                                      backgroundColor: Colors.red,
+                                      behavior: SnackBarBehavior.floating,
+                                      duration: const Duration(seconds: 3),
                                     ),
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              return InkWell(
+                                onTap: () {
+                                  context.read<LoginBloc>().add(
+                                      GoogleSignInEvent());
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0XFF1c304a),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'assets/icon/google_icon.png',
+                                        width: 25,
+                                        height: 25,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      const Center(
+                                        child: Text(
+                                          "Google",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
 
                           Container(
@@ -306,7 +342,7 @@ class LoginPage extends StatelessWidget {
                             },
                             builder: (context, state) {
                               return InkWell(
-                                onTap: (){
+                                onTap: () {
                                   context.read<LoginBloc>().add(
                                     LoginWithMobileToMobileEvent(),
                                   );
@@ -362,7 +398,7 @@ class LoginPage extends StatelessWidget {
                               BlocConsumer<LoginBloc, LoginState>(
                                 listener: (context, state) {
                                   if (state
-                                      is LoginNavigateToSignupActionState) {
+                                  is LoginNavigateToSignupActionState) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => SignupPage(),

@@ -16,3 +16,6 @@ class LoginNavigateIntoHomeEvent extends LoginEvent{}
 
 
 class LoginWithMobileToMobileEvent extends LoginEvent{}
+
+
+class GoogleSignInEvent extends LoginEvent {}   //GoogleSignInRequested

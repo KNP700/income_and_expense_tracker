@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/repositories/auth_repository.dart'; // Make sure this path is correct!
 
-// import 'login/login_bloc.dart';
+// Your existing imports
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 
@@ -9,39 +10,50 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial()) {
+  final AuthRepository authRepository;
+
+  LoginBloc({required this.authRepository}) : super(LoginInitial()) {
     on<LoginNavigateToSignupActionEvent>(_onNavigate);
     on<LoginNavigateToForgotActionEvent>(_onNavigate1);
     on<LoginNavigateIntoHomeEvent>(_onNavigate2);
     on<LoginWithMobileToMobileEvent>(_onNavigate3);
+
+    on<GoogleSignInEvent>(_onGoogleSignIn);
   }
-  // LoginBloc() : super(LoginInitial()){
-  //   on<LoginNavigateToForgotActionEvent>(_onNavigate);
-}
 
-void _onNavigate(
-  LoginNavigateToSignupActionEvent event,
-  Emitter<LoginState> emit,
-) {
-  emit(LoginNavigateToSignupActionState());
-}
+  void _onNavigate(
+      LoginNavigateToSignupActionEvent event, Emitter<LoginState> emit) {
+    emit(LoginNavigateToSignupActionState());
+  }
 
-void _onNavigate1(
-  LoginNavigateToForgotActionEvent event,
-  Emitter<LoginState> emit,
-) {
-  // ) async {
-  //   emit(LoginInProgress());
-  //
-  //   await Future.delayed(Duration(seconds: 3));
-  emit(LoginNavigateToForgotActionState());
-  // emit(LoginFailed());
-}
+  void _onNavigate1(
+      LoginNavigateToForgotActionEvent event, Emitter<LoginState> emit) {
+    emit(LoginNavigateToForgotActionState());
+  }
 
-void _onNavigate2(LoginNavigateIntoHomeEvent event, Emitter<LoginState> emit) {
-  emit(LoginNavigateIntoHomeState());
-}
+  void _onNavigate2(
+      LoginNavigateIntoHomeEvent event, Emitter<LoginState> emit) {
+    emit(LoginNavigateIntoHomeState());
+  }
 
-void _onNavigate3(LoginWithMobileToMobileEvent event, Emitter<LoginState> emit) {
-  emit(LoginWithMobileToMobileState());
+  void _onNavigate3(
+      LoginWithMobileToMobileEvent event, Emitter<LoginState> emit) {
+    emit(LoginWithMobileToMobileState());
+  }
+
+  void _onGoogleSignIn(
+      GoogleSignInEvent event, Emitter<LoginState> emit) async {
+    emit(LoginLoadingState());
+    try {
+      final userCredential = await authRepository.signInWithGoogle();
+
+      if (userCredential != null) {
+        emit(LoginSuccessState());
+      } else {
+        emit(LoginFailureState("Google Sign-In Failed."));
+      }
+    } catch (e) {
+      emit(LoginFailureState(e.toString()));
+    }
+  }
 }
