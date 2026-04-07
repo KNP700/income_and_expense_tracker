@@ -5,11 +5,16 @@ import 'package:income_and_expense_tracker/View/mobileOtpPage/mobile_otp_page_bl
 import 'package:income_and_expense_tracker/pages/home_page.dart';
 
 class MobileOtpPage extends StatelessWidget {
-  const MobileOtpPage({super.key});
+
+   MobileOtpPage({super.key, required this.verificationId});
+  final String verificationId;
+
+  final _otpController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    // TODO: implement buildF
     return BlocProvider(
         create: (context) => MobileOtpPageBloc(),
         child: Scaffold(
@@ -87,7 +92,11 @@ class MobileOtpPage extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               context.read<MobileOtpPageBloc>().add(
-                                AfterMobileOtpNavigationEvent(),
+                                SignupVerifyOtpEvent(
+                                  verificationId: verificationId,
+                                  otpCode: _otpController.text,
+
+                                ),
                               );
                             },
                             child: Container(
@@ -96,7 +105,7 @@ class MobileOtpPage extends StatelessWidget {
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(

@@ -75,6 +75,11 @@ class AuthRepository {
     }
   }
 
+  Future<bool> checkIfUserAlreadyLogged(String uid)async{
+    final doc = await _db.collection('users').doc(uid).get();
+    return doc.exists;
+  }
+
 
 
 

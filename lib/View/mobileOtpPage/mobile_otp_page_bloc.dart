@@ -16,5 +16,6 @@ void Navigate(
   Emitter<MobileOtpPageState> emit,
 ) {
   emit(AfterMobileOtpNavigationState());
-  // TODO: implement event handler
+
 }
+

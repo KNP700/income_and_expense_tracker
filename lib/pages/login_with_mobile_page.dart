@@ -10,7 +10,10 @@ import '../test.dart';
 import 'forgot_otp_page.dart';
 
 class LoginWithMobilePage extends StatelessWidget {
-  const LoginWithMobilePage({super.key});
+   LoginWithMobilePage({super.key});
+
+  final _phoneController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,17 +87,30 @@ class LoginWithMobilePage extends StatelessWidget {
                   BlocConsumer<LoginWithMobilePageBloc, LoginWithMobilePageState>(
                     listener: (context, state) {
                       if (state is MobilePageToOtpState) {
-                        Navigator.of(context).push(
+                        Navigator.push(
+                          context,
                           MaterialPageRoute(
-                            builder: (context) => MobileOtpPage(),
+                            builder: (context) => MobileOtpPage(verificationId: state.verificationId),
                           ),
                         );
                       }
-                      // TODO: implement listener
+
                     },
                     builder: (context, state) {
                       return InkWell(
                         onTap: () {
+
+                          final phone = _phoneController.text.trim();
+                          bool isValid = RegExp(r"^\+[1-9]\d{10,14}$").hasMatch(phone);
+
+                          if(isValid){
+                            context.read<LoginWithMobilePageBloc>().add(PhoneNumberEntered(phoneNumber:phone));
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content:Text("Enter Valid Number :")),);
+                          }
+
+
                           context.read<LoginWithMobilePageBloc>().add(
                             MobilePageToOtpEvent(),
                           );
@@ -105,7 +121,7 @@ class LoginWithMobilePage extends StatelessWidget {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
