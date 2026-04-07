@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
+import 'package:income_and_expense_tracker/data/repositories/auth_repository.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_otp_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../View/signupOtpPage/signup_otp_page_bloc.dart';
+import 'create_acc_page.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+  SignupPage({super.key});
+
+  final _emailController = TextEditingController();
+  final _otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignupBloc(),
+      create: (context) => SignupBloc(authRepository: AuthRepository()),
       child: Scaffold(
         backgroundColor: const Color(0XFF0a1625),
         body: SafeArea(
@@ -38,9 +44,7 @@ class SignupPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 40),
-
                   const Text(
                     'Create Account',
                     style: TextStyle(
@@ -49,16 +53,12 @@ class SignupPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   const Text(
                     'Enter your email to get started',
                     style: TextStyle(color: Colors.blueGrey, fontSize: 25),
                   ),
-
                   const SizedBox(height: 30),
-
                   const Text(
                     ' Email Address',
                     style: TextStyle(
@@ -67,11 +67,11 @@ class SignupPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   TextField(
+                    controller: _emailController,
                     style: const TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.email),
                       filled: true,
@@ -86,27 +86,44 @@ class SignupPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 40),
-
                   BlocConsumer<SignupBloc, SignupState>(
-                      listener: (context, state) {
-                        if (state is SignupNavigateToOtpActionState) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SignUpOtpPage(),
-                            ),
-                          );
-                        }
+                    listener: (context, state) {
+                      if (state is SignupNavigateToOtpActionState) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CreateAccPage(),
+                          ),
+                        );
+                      }
 
-                        // TODO: implement listener
-                      },
+                      // TODO: implement listener
+                    },
                     builder: (context, state) {
                       return InkWell(
-                        onTap: () {
-                          context.read<SignupBloc>().add(
-                            SignupNavigateToOtpActionEvent(),
-                          );
+                        onTap: () async {
+                          final email = _emailController.text.trim();
+
+                          if (email.isNotEmpty && email.contains('@')) {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('user_email', email);
+
+                            context.read<SignupBloc>().add(
+                                  EmailSubmitted(email),
+                                );
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Check your email for the verification link!")),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Please enter a valid email address")),
+                            );
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(15),
@@ -114,7 +131,7 @@ class SignupPage extends StatelessWidget {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
@@ -131,9 +148,7 @@ class SignupPage extends StatelessWidget {
                       );
                     },
                   ),
-
                   const SizedBox(height: 240),
-
                   const Center(
                     child: Text(
                       'Or Sign Up With',
@@ -144,9 +159,7 @@ class SignupPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 30),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -176,9 +189,7 @@ class SignupPage extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       const SizedBox(width: 50),
-
                       Container(
                         padding: const EdgeInsets.all(25),
                         width: 190,
@@ -207,9 +218,7 @@ class SignupPage extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 40),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -246,8 +255,8 @@ class SignupPage extends StatelessWidget {
                                 ),
                                 onTap: () {
                                   context.read<SignupBloc>().add(
-                                    SignupNavigateToSigninActionEvent(),
-                                  );
+                                        SignupNavigateToSigninActionEvent(),
+                                      );
                                 },
                               );
                             },
