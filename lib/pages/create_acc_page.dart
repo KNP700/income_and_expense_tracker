@@ -2,16 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/createAccPage/create_acc_page_bloc.dart';
+import 'package:income_and_expense_tracker/data/repositories/auth_repository.dart';
+import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 
 class CreateAccPage extends StatelessWidget {
-  const CreateAccPage({super.key});
+   CreateAccPage({super.key});
+
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return BlocProvider(
-      create: (context) => CreateAccPageBloc(),
+      create: (context) => CreateAccPageBloc(authRepository: AuthRepository()),
       child: Scaffold(
         backgroundColor: const Color(0XFF0a1625),
         body: SafeArea(
@@ -94,6 +101,7 @@ class CreateAccPage extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   TextField(
+                    controller: _usernameController,
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.person),
@@ -133,6 +141,7 @@ class CreateAccPage extends StatelessWidget {
                             const SizedBox(height: 10),
 
                             TextField(
+                              controller: _firstNameController,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -173,6 +182,7 @@ class CreateAccPage extends StatelessWidget {
                             const SizedBox(height: 10),
 
                             TextField(
+                              controller: _lastNameController,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -211,6 +221,7 @@ class CreateAccPage extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   TextField(
+                    controller: _passwordController,
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
@@ -261,19 +272,29 @@ class CreateAccPage extends StatelessWidget {
 
                   BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
                     listener: (context, state) {
-                      if (state is ContinueCreateAccToSignInState) {
+                      if (state is CreateAccSuccessState) {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => HomePage()),
                         );
                       }
-                    },
+                      if (state is CreateAccErrorState){
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage),),);
+                      }
+                      },
+
+
                     builder: (context, state) {
                       return Builder(
                         builder: (context) {
                           return InkWell(
                             onTap: () {
                               context.read<CreateAccPageBloc>().add(
-                                ContinueCreateAccToSignInEvent(),
+                                CreateAccDetailsSubmitted(
+                                  username: _usernameController.text.trim(),
+                                  firstName: _firstNameController.text.trim(),
+                                  lastName: _lastNameController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                ),
                               );
                             },
                             child: Container(
@@ -282,7 +303,7 @@ class CreateAccPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20),
                                 color: Colors.blue,
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(

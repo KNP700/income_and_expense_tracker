@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-
-
 class AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -37,20 +36,47 @@ class AuthRepository {
     }
   }
 
-  Future<void> signUp({required String email, required String password}) async {
-    try {
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
+  // Future<void> signUp({required String email, required String password}) async {
+  //   try {
+  //     FirebaseAuth.instance
+  //         .createUserWithEmailAndPassword(email: email, password: password);
+  //   } on FirebaseAuthException catch (e) {
+  //   } catch (e) {
+  //     throw Exception(e.toString());
+  //   }
+  // }
 
 // Future<void> sendOtpToEmail (String email, String Otp)async{
 //     await Future.delayed(const Duration(seconds: 2));
 //     print("Sending Otp to $email");
 // }
+
+  Future<void> createAccount({
+    required String userName,
+    required String firstName,
+    required String lastName,
+    required String password, required String username,
+  }) async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      await user.updateDisplayName("$firstName $lastName");
+
+      await user.updatePassword(password);
+
+      await _db.collection('users').doc(user.uid).set({
+        'uid': user.uid,
+        'email': user.email,
+        'firstName': firstName,
+        'lastName': lastName,
+        'username': userName,
+        'createdAt': FieldValue.serverTimestamp(), // save with time in firestore cloud
+      });
+    }
+  }
+
+
+
 
 
   Future<void> sendEmailLink(String email) async {
@@ -82,7 +108,3 @@ class AuthRepository {
     return await _auth.signInWithEmailLink(email: email, emailLink: link);
   }
 }
-
-
-
-
