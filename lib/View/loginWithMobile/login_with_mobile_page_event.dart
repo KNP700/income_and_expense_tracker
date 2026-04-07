@@ -10,3 +10,11 @@ class PhoneNumberEntered extends LoginWithMobilePageEvent {
 
   PhoneNumberEntered({required this.phoneNumber});
 }
+
+
+class PhoneNumberSubmitted extends LoginWithMobilePageEvent{
+  final String phone;
+
+  PhoneNumberSubmitted(this.phone);
+
+}

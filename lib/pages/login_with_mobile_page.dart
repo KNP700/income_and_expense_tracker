@@ -4,16 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/loginWithMobile/login_with_mobile_page_bloc.dart';
 import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/mobile_otp_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../View/forgotPage/forgot_page_bloc.dart';
 import '../test.dart';
 import 'forgot_otp_page.dart';
 
 class LoginWithMobilePage extends StatelessWidget {
-   LoginWithMobilePage({super.key});
+  LoginWithMobilePage({super.key});
 
   final _phoneController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +68,7 @@ class LoginWithMobilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   TextField(
+                    controller: _phoneController,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.phone_android),
@@ -90,30 +91,42 @@ class LoginWithMobilePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MobileOtpPage(verificationId: state.verificationId),
+                            builder: (context) => MobileOtpPage(
+                                verificationId: state.verificationId),
                           ),
                         );
                       }
-
                     },
                     builder: (context, state) {
                       return InkWell(
-                        onTap: () {
-
+                        onTap: () async {
                           final phone = _phoneController.text.trim();
-                          bool isValid = RegExp(r"^\+[1-9]\d{10,14}$").hasMatch(phone);
 
-                          if(isValid){
-                            context.read<LoginWithMobilePageBloc>().add(PhoneNumberEntered(phoneNumber:phone));
-                          }else{
+                          bool isValid =
+                          RegExp(r"^\+[1-9]\d{10,14}$").hasMatch(phone);
+
+                          if (isValid) {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('phone_number', phone);
+
+                            context.read<LoginWithMobilePageBloc>().add(
+                              PhoneNumberSubmitted(phone ),
+                            );
+
                             ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content:Text("Enter Valid Number :")),);
+                              const SnackBar(
+                                  content: Text("Check Your phone to Get OTP!")),
+                            );
+
+                            context.read<LoginWithMobilePageBloc>().add(
+                              MobilePageToOtpEvent(),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Enter Valid Number !")),
+                            );
                           }
-
-
-                          context.read<LoginWithMobilePageBloc>().add(
-                            MobilePageToOtpEvent(),
-                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(15),
@@ -155,9 +168,11 @@ class LoginWithMobilePage extends StatelessWidget {
                             ),
                           ),
                           //here
-                          BlocConsumer<LoginWithMobilePageBloc, LoginWithMobilePageState>(
+                          BlocConsumer<LoginWithMobilePageBloc,
+                              LoginWithMobilePageState>(
                             listener: (context, state) {
-                              if (state is ForgotPasswordNavigateToSigninActionState) {
+                              if (state
+                              is ForgotPasswordNavigateToSigninActionState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => HomePage(),
@@ -175,8 +190,8 @@ class LoginWithMobilePage extends StatelessWidget {
                                   ),
                                 ),
                                 onTap: () {
-                                  context.read<ForgotPasswordBloc>().add(
-                                    ForgotPasswordNavigateToSigninActionEvent(),
+                                  context.read<LoginWithMobilePageBloc>().add(
+                                    ForgotPasswordNavigateToSigninActionEvent() as LoginWithMobilePageEvent,
                                   );
                                 },
                               );

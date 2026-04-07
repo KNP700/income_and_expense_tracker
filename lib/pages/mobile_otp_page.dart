@@ -125,7 +125,7 @@ class MobileOtpPage extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 370),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
 
                         children: [
@@ -135,7 +135,7 @@ class MobileOtpPage extends StatelessWidget {
                           ),
 
                           InkWell(
-                            child: const Text(
+                            child: Text(
                               "Resend Code",
                               style: TextStyle(color: Colors.blue, fontSize: 17),
                             ),
