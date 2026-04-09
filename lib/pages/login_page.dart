@@ -164,9 +164,9 @@ class LoginPage extends StatelessWidget {
                                     LoginNavigateToForgotActionEvent(),
                                   );
                                 },
-                                child: Text(
+                                child: const Text(
                                   "Forgot Password?",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.blue,
                                     fontSize: 16,
                                   ),
@@ -203,7 +203,7 @@ class LoginPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20),
                                 color: Colors.blue,
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(
@@ -225,7 +225,7 @@ class LoginPage extends StatelessWidget {
 
                       const SizedBox(height: 15),
 
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           'Or continue with',

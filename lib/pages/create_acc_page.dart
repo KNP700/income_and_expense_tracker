@@ -30,7 +30,7 @@ class CreateAccPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 30),
-                  Align(
+                  const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       " Create Account",
@@ -71,8 +71,8 @@ class CreateAccPage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 60,
-                          backgroundColor: Color(0xFF223143),
-                          backgroundImage: NetworkImage(
+                          backgroundColor: const Color(0xFF223143),
+                          backgroundImage: const NetworkImage(
                             'assets/icon/my_image.png',
                           ),
 
