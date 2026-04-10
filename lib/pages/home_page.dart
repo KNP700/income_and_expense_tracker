@@ -62,100 +62,165 @@ class HomePage extends StatelessWidget {
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 30),
-                    const Text(
-                      "Your Workspaces",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      "Select a ledger to manage your finance",
-                      style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF58b0aa), Color(0xFF1b3d3a)],
-                          stops: [0.1, 1.0],
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const SizedBox(height: 30),
+
+                  Expanded(
+                    child: SingleChildScrollView(
                       child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/wallet logo for loging page.png',
-                                width: 50,
-                                height: 50,
-                              ),
-                              const Spacer(),
-                              const Text(
-                                "Default",
-                                style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 55),
                           const Text(
-                            "Personal Wallet",
+                            "Your Workspaces",
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 27,
                               color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           const Text(
-                            "Current Balance",
+                            "Select a ledger to manage your finance",
                             style: TextStyle(
+                              color: Colors.blueGrey,
                               fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 350),
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.blue,
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Create new Ledger ",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
                             ),
                           ),
+                          const SizedBox(height: 30),
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF58b0aa), Color(0xFF1b3d3a)],
+                                stops: [0.1, 1.0],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/wallet logo for loging page.png',
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                    const Spacer(),
+                                    const Text(
+                                      "Default",
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 55),
+                                const Text(
+                                  "Personal Wallet",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 27,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const Text(
+                                  "Current Balance",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF58b0aa), Color(0xFF1b3d3a)],
+                                stops: [0.1, 1.0],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/wallet logo for loging page.png',
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                    const Spacer(),
+                                    const Text(
+                                      "Default",
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 55),
+                                const Text(
+                                  "Personal Wallet",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 27,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const Text(
+                                  "Current Balance",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 350),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  // const SizedBox(height: 350),
+
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.blue,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Create new Ledger ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -175,7 +240,7 @@ class HomePage extends StatelessWidget {
                 label: 'Ledger',
               ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: 'Profile'),
+                  icon: Icon(Icons.pie_chart), label: 'Report'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.settings), label: 'Settings')
             ],
