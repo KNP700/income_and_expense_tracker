@@ -82,14 +82,15 @@ class HomePage extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 30), // Added spacing
                   Container(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [Colors.white, Color(0xFF074f4a)],
+                        colors: [Color(0xFF58b0aa), Color(0xFF1b3d3a)],
+                        stops: [0.1, 1.0],
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -109,7 +110,7 @@ class HomePage extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 19,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey,
+                                color: Colors.white70,
                               ),
                             ),
                           ],
@@ -119,7 +120,35 @@ class HomePage extends StatelessWidget {
                           "Personal Wallet",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 25,
+                            fontSize: 27,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Text(
+                          "Current Balance",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 350),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.blue,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Create new Ledger ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ],
