@@ -21,17 +21,6 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Image.asset(
-                    'assets/icon/back_icon.png',
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
             ),
             title: const Padding(
               padding: EdgeInsets.only(top: 25.0),
@@ -39,7 +28,7 @@ class HomePage extends StatelessWidget {
                 "Select Ledger",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 30,
+                  fontSize: 45,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -148,7 +137,7 @@ class HomePage extends StatelessWidget {
                               gradient: const LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: [Color(0xFF58b0aa), Color(0xFF1b3d3a)],
+                                colors: [Color(0xFFa1684d), Color(0xFF9d3f13)],
                                 stops: [0.1, 1.0],
                               ),
                               borderRadius: BorderRadius.circular(20),
@@ -165,7 +154,7 @@ class HomePage extends StatelessWidget {
                                     ),
                                     const Spacer(),
                                     const Text(
-                                      "Default",
+                                      "Shopping",
                                       style: TextStyle(
                                         fontSize: 19,
                                         fontWeight: FontWeight.bold,
@@ -176,7 +165,7 @@ class HomePage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 55),
                                 const Text(
-                                  "Personal Wallet",
+                                  "Shopping",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 27,
@@ -193,7 +182,59 @@ class HomePage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 350),
+                          const SizedBox(height: 30),
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFFed9791), Color(0xFFeb4034)],
+                                stops: [0.1, 1.0],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/wallet logo for loging page.png',
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                    const Spacer(),
+                                    const Text(
+                                      "Gift",
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 55),
+                                const Text(
+                                  "Gift",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 27,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const Text(
+                                  "Current Balance",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 30),
                         ],
                       ),
                     ),
