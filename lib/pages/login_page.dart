@@ -10,6 +10,7 @@ import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import '../View/login/login_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../data/repositories/auth_repository.dart';
+import 'navigationBottomPage.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -184,7 +185,7 @@ class LoginPage extends StatelessWidget {
                           if (state is LoginNavigateIntoHomeState) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => HomePage(),
+                                builder: (context) => Navigationbottompage(),
                               ),
                             );
                           }

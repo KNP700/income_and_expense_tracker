@@ -13,9 +13,10 @@ class CreateAccPageBloc extends Bloc<CreateAccPageEvent, CreateAccPageState> {
   CreateAccPageBloc({required this.authRepository}) : super(CreateAccPageInitial()) {
     on<ContinueCreateAccToSignInEvent>(_onNavigate);
     on<ContinueCreateAccToSignIn2Event>(_onNavigate1);
-    on<CreateAccDetailsSubmitted>(_onNavigate2);
-  }
 
+    // 1. Updated the function name here to match the new one below
+    on<CreateAccDetailsSubmitted>(_onSubmitAccountDetails);
+  }
 
   void _onNavigate(
       ContinueCreateAccToSignInEvent event,
@@ -31,22 +32,23 @@ class CreateAccPageBloc extends Bloc<CreateAccPageEvent, CreateAccPageState> {
     emit(ContinueCreateAccToSignIn2State());
   }
 
-
-  Future<void> _onNavigate2(
+  // 2. Renamed function for better readability
+  Future<void> _onSubmitAccountDetails(
       CreateAccDetailsSubmitted event,
       Emitter<CreateAccPageState> emit,
       ) async {
     emit(CreateAccLoadingState());
 
     try {
-
       await authRepository.createAccount(
         firstName: event.firstName,
         lastName: event.lastName,
         username: event.username,
-        password: event.password, userName: '',
+        password: event.password,
+        // 3. Removed the broken `userName: ''`
       );
-      emit(CreateAccSuccessState()); // Navigate to Home
+
+      emit(CreateAccSuccessState());
     } catch (e) {
       emit(CreateAccErrorState(e.toString()));
     }

@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../View/home/home_bloc.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  class HomePage extends StatelessWidget {
+    const HomePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeBloc(),
-      child: Scaffold(
-          backgroundColor: const Color(0XFF0a1625),
+    @override
+    Widget build(BuildContext context) {
+      return BlocProvider(
+        create: (context) => HomeBloc(),
+          child: Scaffold(
+              backgroundColor: const Color(0XFF0a1625),
           appBar: AppBar(
             backgroundColor: const Color(0XFF0a1625),
             centerTitle: true,
@@ -265,27 +265,28 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: const Color(0XFF0a1625),
-            unselectedItemColor: Colors.blueGrey,
-            selectedItemColor: Colors.white,
-            showSelectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_balance_wallet),
-                label: 'Ledger',
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.pie_chart), label: 'Report'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: 'Settings')
-            ],
-          )),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   backgroundColor: const Color(0XFF0a1625),
+          //   unselectedItemColor: Colors.blueGrey,
+          //   selectedItemColor: Colors.white,
+          //   showSelectedLabels: true,
+          //   type: BottomNavigationBarType.fixed,
+          //   items: const [
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: 'Home',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.account_balance_wallet),
+          //       label: 'Ledger',
+          //     ),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(Icons.pie_chart), label: 'Report'),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(Icons.settings), label: 'Settings')
+          //   ],
+          // )
+          ),
     );
   }
 }
