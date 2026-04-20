@@ -185,7 +185,7 @@ class LoginPage extends StatelessWidget {
                           if (state is LoginNavigateIntoHomeState) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => Navigationbottompage(),
+                                builder: (context) => const Navigationbottompage(),
                               ),
                             );
                           }

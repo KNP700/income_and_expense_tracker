@@ -57,11 +57,17 @@ class Navigationbottompage extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
                   label: 'Settings',
+
+
                 ),
               ],
             ),
           );
         },
+
+
+
+
       ),
     );
   }

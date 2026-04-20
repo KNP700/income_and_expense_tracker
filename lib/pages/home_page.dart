@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
               child: CircleAvatar(
                 radius: 25,
                 backgroundColor: Color(0xFF223143),
-                backgroundImage: AssetImage('assets/icon/my_image.png'),
+                // backgroundImage: AssetImage('assets/icon/my_image.png'),
                 child: Text(
                   'K',
                   style: TextStyle(fontSize: 25, color: Colors.white),
@@ -246,7 +246,7 @@ class HomePage extends StatelessWidget {
                 BlocConsumer<HomeBloc, HomeState>(
                   listener: (context, state) {
                     if (state is HomeNavigationToCreateNewLedgerState) {
-                      Navigator.of(context).pop(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const CreateLedgerPage(),
                         ),
