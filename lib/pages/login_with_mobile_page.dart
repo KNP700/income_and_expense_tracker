@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../View/forgotPage/forgot_page_bloc.dart';
 import '../test.dart';
+import 'NavigationBottomPage.dart';
 import 'forgot_otp_page.dart';
 
 class LoginWithMobilePage extends StatelessWidget {
@@ -175,7 +176,7 @@ class LoginWithMobilePage extends StatelessWidget {
                               is ForgotPasswordNavigateToSigninActionState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => HomePage(),
+                                    builder: (context) => Navigationbottompage(),
                                   ),
                                 );
                               }

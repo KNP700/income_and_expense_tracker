@@ -5,3 +5,5 @@ sealed class HomeState {}
 
 final class HomeInitial extends HomeState {}
 
+class  HomeNavigationToCreateNewLedgerState extends HomeState{}
+

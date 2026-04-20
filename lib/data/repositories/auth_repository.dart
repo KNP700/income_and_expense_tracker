@@ -60,6 +60,15 @@ class AuthRepository {
     return doc.exists;
   }
 
+  Future<void> logOut() async {
+    try {
+      await _googleSignIn.signOut();
+      await _auth.signOut();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<void> sendEmailLink(String email) async {
     var acs = ActionCodeSettings(
       url: 'https://income-and-expense-track-1e04c.firebaseapp.com',
