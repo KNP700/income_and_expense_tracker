@@ -13,3 +13,5 @@ class CreateAccDetailsSubmitted extends CreateAccPageEvent {
   CreateAccDetailsSubmitted({
       required this.firstName, required this.lastName, required this.username, required this.password});
 }
+
+

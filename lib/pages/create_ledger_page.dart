@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
+import 'package:income_and_expense_tracker/pages/create_ledger2_page.dart';
+import '../View/createLedgerPage/create_ledger_page_bloc.dart';
 
 class CreateLedgerPage extends StatefulWidget {
   const CreateLedgerPage({super.key});
@@ -8,6 +12,7 @@ class CreateLedgerPage extends StatefulWidget {
 }
 
 class _CreateLedgerPageState extends State<CreateLedgerPage> {
+  final TextEditingController _nameController = TextEditingController();
   int _selectedIconIndex = 0;
   bool _isShared = false;
 
@@ -20,225 +25,287 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
   ];
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0D171C),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Create New Ledger',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
+    return BlocProvider(
+      create: (context) => CreateLedgerPageBloc(
+        ledgerRepository: context.read<LedgerRepository>(),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'LEDGER NAME',
+      child: Builder(builder: (context) {
+        return BlocListener<CreateLedgerPageBloc, CreateLedgerPageState>(
+          listener: (context, state) {
+            if (state is CreateLedgerToNewLedgerState) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const CreateLedger2Page()),
+              );
+            } else if (state is CreateLedgerPageSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Navigate to Create Ledger!')),
+              );
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const CreateLedger2Page()),
+              );
+            } else if (state is CreateLedgerPageError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: Scaffold(
+            backgroundColor: const Color(0xFF0D171C),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
+                onPressed: () => Navigator.pop(context),
+              ),
+              title: const Text(
+                'Create New Ledger',
                 style: TextStyle(
-                  color: Color(0xFF7A8D9C),
-                  fontSize: 12,
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  letterSpacing: 1.0,
                 ),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color(0xFF15202B),
-                  hintText: 'e.g., Summer Vacation',
-                  hintStyle: const TextStyle(color: Color(0xFF4A5A69)),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'SELECT ICON',
-                    style: TextStyle(
-                      color: Color(0xFF7A8D9C),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  Text(
-                    'View All',
-                    style: TextStyle(
-                      color:  Colors.blue.withOpacity(0.8),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  _icons.length,
-                  (index) => _buildIconOption(
-                    index,
-                    _icons[index]['icon'],
-                    _icons[index]['label'],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              const Text(
-                'CURRENCY',
-                style: TextStyle(
-                  color: Color(0xFF7A8D9C),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1.0,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF15202B),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              centerTitle: true,
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'USD - US Dollar (\$)',
+                    const Text(
+                      'LEDGER NAME',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                        color: Color(0xFF7A8D9C),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.0,
                       ),
                     ),
-                    Icon(
-                      Icons.unfold_more_rounded,
-                      color: Color(0xFF7A8D9C),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _nameController,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFF15202B),
+                        hintText: 'e.g., Summer Vacation',
+                        hintStyle: const TextStyle(color: Color(0xFF4A5A69)),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF15202B),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'SELECT ICON',
+                          style: TextStyle(
+                            color: Color(0xFF7A8D9C),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        Text(
+                          'View All',
+                          style: TextStyle(
+                            color: Colors.blue.withOpacity(0.8),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                        _icons.length,
+                            (index) => _buildIconOption(
+                          index,
+                          _icons[index]['icon'],
+                          _icons[index]['label'],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    const Text(
+                      'CURRENCY',
+                      style: TextStyle(
+                        color: Color(0xFF7A8D9C),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0D171C),
-                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xFF15202B),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
-                        Icons.group_add_rounded,
-                        color: Colors.blue,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Shared Ledger',
+                            'USD - US Dollar (\$)',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          SizedBox(height: 4),
-                          Text(
-                            'Invite friends to track together',
-                            style: TextStyle(
-                              color: Color(0xFF7A8D9C),
-                              fontSize: 12,
-                            ),
+                          Icon(
+                            Icons.unfold_more_rounded,
+                            color: Color(0xFF7A8D9C),
                           ),
                         ],
                       ),
                     ),
-                    Switch(
-                      value: _isShared,
-                      activeColor: Colors.white,
-                      activeTrackColor:  Colors.blue,
-                      inactiveThumbColor: Colors.white,
-                      inactiveTrackColor: const Color(0xFF2A3948),
-                      onChanged: (value) {
-                        setState(() {
-                          _isShared = value;
-                        });
+                    const SizedBox(height: 32),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF15202B),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF0D171C),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.group_add_rounded,
+                              color: Colors.blue,
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Shared Ledger',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'Invite friends to track together',
+                                  style: TextStyle(
+                                    color: Color(0xFF7A8D9C),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Switch(
+                            value: _isShared,
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: const Color(0xFF2A3948),
+                            onChanged: (value) {
+                              setState(() {
+                                _isShared = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    BlocBuilder<CreateLedgerPageBloc, CreateLedgerPageState>(
+                      builder: (context, state) {
+                        bool isLoading = state is CreateLedgerPageLoading;
+                        return GestureDetector(
+                          onTap: isLoading
+                              ? null
+                              : () {
+                            context.read<CreateLedgerPageBloc>().add(
+                              CreateLedgerSubmitted(
+                                name: _nameController.text,
+                                iconLabel: _icons[_selectedIconIndex]['label'],
+                                currency: 'USD',
+                                isShared: _isShared,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: isLoading ? Colors.grey : Colors.blue,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF00E5FF).withOpacity(0.2),
+                                  blurRadius: 20,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            alignment: Alignment.center,
+                            child: isLoading
+                                ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 2,
+                              ),
+                            )
+                                : const Text(
+                              'Create Ledger',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: double.infinity,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF00E5FF).withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'Create Ledger',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -257,22 +324,20 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected
-                  ?  Colors.blue
-                  : const Color(0xFF15202B),
+              color: isSelected ? Colors.blue : const Color(0xFF15202B),
               boxShadow: isSelected
                   ? [
-                      BoxShadow(
-                        color: const Color(0xFF00E5FF).withOpacity(0.3),
-                        blurRadius: 15,
-                        spreadRadius: 2,
-                      ),
-                    ]
+                BoxShadow(
+                  color: const Color(0xFF00E5FF).withOpacity(0.3),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                ),
+              ]
                   : [],
             ),
             child: Icon(
               icon,
-              color: isSelected ? Colors.black :  Colors.blue,
+              color: isSelected ? Colors.black : Colors.blue,
               size: 28,
             ),
           ),
