@@ -116,7 +116,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: _selectedTab == 0
-                      ? const Color(0xFF00E5FF)
+                      ?  Colors.blue
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -139,7 +139,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: _selectedTab == 1
-                      ? const Color(0xFF00E5FF)
+                      ? Colors.blue
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: _selectedTab == 1
@@ -183,16 +183,16 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
             ),
           ),
 
-          SizedBox(
-            width: 200,
-            height: 200,
-            child: CircularProgressIndicator(
-              value: 0.35,
-              strokeWidth: 12,
-              color: Color(0xFFFF52A2),
-              backgroundColor: Colors.transparent,
-            ),
-          ),
+          // SizedBox(
+          //   width: 200,
+          //   height: 200,
+          //   child: CircularProgressIndicator(
+          //     value: 0.35,
+          //     strokeWidth: 12,
+          //     color: Color(0xFFFF52A2),
+          //     backgroundColor: Colors.transparent,
+          //   ),
+          // ),
 
           SizedBox(
             width: 200,
@@ -200,7 +200,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
             child: CircularProgressIndicator(
               value: 0.8,
               strokeWidth: 12,
-              color: Color(0xFF00E5FF),
+              color: Colors.blue,
               backgroundColor: Colors.transparent,
             ),
           ),
@@ -237,7 +237,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       decoration: BoxDecoration(
-        color: const Color(0xFF00E5FF),
+        color: Colors.blue,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -299,7 +299,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
               color: isSelected
-                  ? const Color(0xFF103036)
+                  ?  Colors.blue
                   : const Color(0xFF15202B),
               borderRadius: BorderRadius.circular(20),
             ),
@@ -307,7 +307,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
               filters[index],
               style: TextStyle(
                 color: isSelected
-                    ? const Color(0xFF00E5FF)
+                    ? Colors.black
                     : const Color(0xFF7A8D9C),
                 fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -329,7 +329,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
             Text(
               'COLLABORATORS',
               style: TextStyle(
-                color: Color(0xFF7A8D9C),
+                color: Colors.blue,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
@@ -338,7 +338,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
             Text(
               '4 Total',
               style: TextStyle(
-                color: Color(0xFF00E5FF),
+                color: Colors.blue,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
@@ -408,7 +408,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       childAspectRatio: 1.2,
-      // Adjusts the height of the cards
+
       children: [
         _buildCategoryCard(
           title: 'Transport',
@@ -516,7 +516,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
         width: double.infinity,
         height: 56,
         decoration: BoxDecoration(
-          color: const Color(0xFF00E5FF),
+          color:  Colors.blue,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
