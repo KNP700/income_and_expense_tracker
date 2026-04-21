@@ -89,7 +89,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                   Text(
                     'View All',
                     style: TextStyle(
-                      color: const Color(0xFF00E5FF).withOpacity(0.8),
+                      color:  Colors.blue.withOpacity(0.8),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -163,7 +163,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                       ),
                       child: const Icon(
                         Icons.group_add_rounded,
-                        color: Color(0xFF00E5FF),
+                        color: Colors.blue,
                         size: 24,
                       ),
                     ),
@@ -194,7 +194,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     Switch(
                       value: _isShared,
                       activeColor: Colors.white,
-                      activeTrackColor: const Color(0xFF00E5FF),
+                      activeTrackColor:  Colors.blue,
                       inactiveThumbColor: Colors.white,
                       inactiveTrackColor: const Color(0xFF2A3948),
                       onChanged: (value) {
@@ -213,7 +213,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                   width: double.infinity,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00E5FF),
+                    color: Colors.blue,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -258,7 +258,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isSelected
-                  ? const Color(0xFF00E5FF)
+                  ?  Colors.blue
                   : const Color(0xFF15202B),
               boxShadow: isSelected
                   ? [
@@ -272,7 +272,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
             ),
             child: Icon(
               icon,
-              color: isSelected ? Colors.black : const Color(0xFF7A8D9C),
+              color: isSelected ? Colors.black :  Colors.blue,
               size: 28,
             ),
           ),

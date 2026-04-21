@@ -23,6 +23,11 @@ class SignupEmailLinkSentState extends SignupState {
   const SignupEmailLinkSentState(this.email);
 }
 
+class SignupEmailSentSuccess extends SignupState{}
+
+class SignupError extends SignupState{}
+
+class SignupLoading extends SignupState{}
 
 enum SignupStep { email, otp, details }
 

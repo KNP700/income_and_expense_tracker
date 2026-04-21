@@ -87,8 +87,11 @@ class SignupPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 40),
+
+
                   BlocConsumer<SignupBloc, SignupState>(
                     listener: (context, state) {
+
                       if (state is SignupNavigateToOtpActionState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -97,51 +100,70 @@ class SignupPage extends StatelessWidget {
                         );
                       }
 
-                      // TODO: implement listener
+                      if (state is SignupEmailSentSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Check your email for the verification link!"),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      }
+
+                      if (state is SignupError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.errorMessage),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     builder: (context, state) {
                       return InkWell(
-                        onTap: () async {
+                        onTap: state is SignupLoading ? null : () async {
                           final email = _emailController.text.trim();
 
                           if (email.isNotEmpty && email.contains('@')) {
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('user_email', email);
 
-                            context.read<SignupBloc>().add(
-                                  EmailSubmitted(email),
-                                );
+                            if (!context.mounted) return;
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "Check your email for the verification link!")),
-                            );
+                            context.read<SignupBloc>().add(EmailSubmitted(email));
+
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "Please enter a valid email address")),
+                              const SnackBar(content: Text("Please enter a valid email address")),
                             );
                           }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
-                            color: Colors.blue,
+                            color: state is SignupLoading ? Colors.blue.withOpacity(0.7) : Colors.blue,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                'Continue',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              if (state is SignupLoading)
+                                const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 3,
+                                  ),
+                                )
+                              else
+                                const Text(
+                                  'Continue',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),

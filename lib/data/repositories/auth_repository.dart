@@ -71,7 +71,7 @@ class AuthRepository {
 
   Future<void> sendEmailLink(String email) async {
     var acs = ActionCodeSettings(
-      url: 'https://income-and-expense-track-1e04c.firebaseapp.com',
+      url: 'https://income-and-expense-track-1e04c.firebaseapp.com/auth/action',
       handleCodeInApp: true,
       iOSBundleId: 'com.example.incomeAndExpenseTracker',
       androidPackageName: 'com.example.income_and_expense_tracker',

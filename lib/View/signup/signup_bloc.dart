@@ -4,9 +4,7 @@ import 'dart:math';
 import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/auth_repository.dart';
 
-
 part 'signup_event.dart';
-
 part 'signup_state.dart';
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
@@ -39,29 +37,31 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     //   }
     // });
 
-
     on<EmailSubmitted>((event, emit) async {
       emit(SignupLoadingState());
       try {
         await authRepository.sendEmailLink(event.email);
-      } catch(e) {
+        emit(SignupEmailSentSuccess());
+      } catch (e) {
         emit(SignupErrorState(e.toString()));
       }
     });
 
+    on<SignupNavigateToSigninActionEvent>(_onNavigate);
+    on<SignupNavigateToOtpActionEvent>(_onNavigate1);
+  }
 
+  void _onNavigate(
+      SignupNavigateToSigninActionEvent event,
+      Emitter<SignupState> emit,
+      ) {
+    emit(SignupNavigateToSigninActionState());
+  }
 
-  on<SignupNavigateToSigninActionEvent>(_onNavigate);
-
-  on<SignupNavigateToOtpActionEvent>(_onNavigate1);
-}}
-
-void _onNavigate(SignupNavigateToSigninActionEvent event,
-    Emitter<SignupState> emit,) {
-  emit(SignupNavigateToSigninActionState());
-}
-
-void _onNavigate1(SignupNavigateToOtpActionEvent event,
-    Emitter<SignupState> emit,) {
-  emit(SignupNavigateToOtpActionState());
+  void _onNavigate1(
+      SignupNavigateToOtpActionEvent event,
+      Emitter<SignupState> emit,
+      ) {
+    emit(SignupNavigateToOtpActionState());
+  }
 }

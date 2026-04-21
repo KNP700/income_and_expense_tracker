@@ -18,11 +18,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // Prevents back navigation
+      canPop: false,
       onPopInvoked: (didPop) {
         if (didPop) return;
-        // Optional: show dialog or call bloc to handle back attempt
-      },
+       },
       child: BlocProvider(
         create: (context) =>
             LoginBloc(
@@ -50,20 +49,20 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Image.asset(
-                            'assets/icon/back_icon.png',
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: GestureDetector(
+                      //     onTap: () {
+                      //       Navigator.pop(context);
+                      //     },
+                      //     child: Image.asset(
+                      //       'assets/icon/back_icon.png',
+                      //       width: 40,
+                      //       height: 40,
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 10),
                       const Text(
                         'Welcome',

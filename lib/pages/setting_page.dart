@@ -48,7 +48,8 @@ class _SettingPageState extends State<SettingPage> {
                         const CircleAvatar(
                           radius: 45,
                           backgroundColor: Color(0xFF223143),
-                          backgroundImage: AssetImage('assets/icon/my_image.png'),
+                          backgroundImage:
+                              AssetImage('assets/icon/my_image.png'),
                         ),
                         Positioned(
                           bottom: 0,
@@ -56,7 +57,7 @@ class _SettingPageState extends State<SettingPage> {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: const BoxDecoration(
-                              color: Color(0xFF00E5FF),
+                              color: Colors.blue,
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -79,7 +80,8 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     const SizedBox(height: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: const Color(0xFF15202B),
                         borderRadius: BorderRadius.circular(20),
@@ -88,7 +90,7 @@ class _SettingPageState extends State<SettingPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'USD (\$)',
+                            'LKR (Rs)',
                             style: TextStyle(
                               color: Color(0xFF7A8D9C),
                               fontSize: 12,
@@ -137,13 +139,14 @@ class _SettingPageState extends State<SettingPage> {
                       title: 'Notifications',
                       subtitle: 'Daily spending alerts',
                       value: _isNotificationsEnabled,
-                      onChanged: (val) => setState(() => _isNotificationsEnabled = val),
+                      onChanged: (val) =>
+                          setState(() => _isNotificationsEnabled = val),
                     ),
                     _buildDivider(),
                     _buildNavigationTile(
                       icon: Icons.attach_money,
                       title: 'Currency Format',
-                      subtitle: 'USD (\$)',
+                      subtitle: 'LKR (Rs)',
                     ),
                   ],
                 ),
@@ -171,7 +174,8 @@ class _SettingPageState extends State<SettingPage> {
                       title: 'Biometric Lock',
                       subtitle: 'FaceID / TouchID',
                       value: _isBiometricEnabled,
-                      onChanged: (val) => setState(() => _isBiometricEnabled = val),
+                      onChanged: (val) =>
+                          setState(() => _isBiometricEnabled = val),
                     ),
                     _buildDivider(),
                     _buildNavigationTile(
@@ -224,17 +228,6 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              const Center(
-                child: Text(
-                  'Version 2.4.0 (Build 3902)',
-                  style: TextStyle(
-                    color: Color(0xFF4A5A69),
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -268,7 +261,7 @@ class _SettingPageState extends State<SettingPage> {
               color: const Color(0xFF0D171C),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: const Color(0xFF00E5FF), size: 20),
+            child: Icon(icon, color:  Colors.blue, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -297,7 +290,7 @@ class _SettingPageState extends State<SettingPage> {
           Switch(
             value: value,
             activeColor: Colors.white,
-            activeTrackColor: const Color(0xFF00E5FF),
+            activeTrackColor:  Colors.blue,
             inactiveThumbColor: Colors.white,
             inactiveTrackColor: const Color(0xFF2A3948),
             onChanged: onChanged,
@@ -323,7 +316,7 @@ class _SettingPageState extends State<SettingPage> {
               color: const Color(0xFF0D171C),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: const Color(0xFF00E5FF), size: 20),
+            child: Icon(icon, color:  Colors.blue, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
