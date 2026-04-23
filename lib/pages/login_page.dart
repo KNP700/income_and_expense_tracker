@@ -7,7 +7,6 @@ import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import '../View/login/login_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../data/repositories/auth_repository.dart';
 import 'navigationBottomPage.dart';
 
@@ -16,7 +15,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Detect if the current theme is dark mode
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return PopScope(
@@ -58,16 +56,12 @@ class LoginPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       const SizedBox(height: 0),
-
                       const Text(
                         'Please Sign to track your expenses',
                         style: TextStyle(color: Colors.blueGrey, fontSize: 22),
                       ),
-
                       const SizedBox(height: 20),
-
                       const Text(
                         'Email Address',
                         style: TextStyle(
@@ -76,18 +70,14 @@ class LoginPage extends StatelessWidget {
                           fontSize: 22,
                         ),
                       ),
-
                       const SizedBox(height: 10),
-
                       const TextField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email),
                           hintText: 'name@example.com',
                         ),
                       ),
-
                       const SizedBox(height: 20),
-
                       const Text(
                         'Password',
                         style: TextStyle(
@@ -96,9 +86,7 @@ class LoginPage extends StatelessWidget {
                           fontSize: 22,
                         ),
                       ),
-
                       const SizedBox(height: 10),
-
                       const TextField(
                         obscureText: true,
                         decoration: InputDecoration(
@@ -106,9 +94,7 @@ class LoginPage extends StatelessWidget {
                           hintText: '**********',
                         ),
                       ),
-
                       const SizedBox(height: 15),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -126,8 +112,8 @@ class LoginPage extends StatelessWidget {
                               return InkWell(
                                 onTap: () {
                                   context.read<LoginBloc>().add(
-                                    LoginNavigateToForgotActionEvent(),
-                                  );
+                                        LoginNavigateToForgotActionEvent(),
+                                      );
                                 },
                                 child: const Text(
                                   "Forgot Password?",
@@ -141,16 +127,14 @@ class LoginPage extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 15),
-
                       BlocConsumer<LoginBloc, LoginState>(
                         listener: (context, state) {
                           if (state is LoginNavigateIntoHomeState) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                const Navigationbottompage(),
+                                    const Navigationbottompage(),
                               ),
                             );
                           }
@@ -159,8 +143,8 @@ class LoginPage extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               context.read<LoginBloc>().add(
-                                LoginNavigateIntoHomeEvent(),
-                              );
+                                    LoginNavigateIntoHomeEvent(),
+                                  );
                             },
                             child: Container(
                               padding: const EdgeInsets.all(12),
@@ -187,9 +171,7 @@ class LoginPage extends StatelessWidget {
                           );
                         },
                       ),
-
                       const SizedBox(height: 15),
-
                       const Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -200,9 +182,7 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 15),
-
                       Column(
                         spacing: 20,
                         children: [
@@ -212,7 +192,7 @@ class LoginPage extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                    const Navigationbottompage(),
+                                        const Navigationbottompage(),
                                   ),
                                 );
                               } else if (state is LoginFailureState) {
@@ -227,53 +207,36 @@ class LoginPage extends StatelessWidget {
                               }
                             },
                             builder: (context, state) {
-                              return InkWell(
-                                onTap: () {
+                              return ElevatedButton(
+                                onPressed: () {
                                   context
                                       .read<LoginBloc>()
                                       .add(GoogleSignInEvent());
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: isDarkMode ? const Color(0XFF1c304a) : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: isDarkMode ? null : Border.all(color: const Color(0xFFD1D8E0), width: 1),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/icon/google_icon.png',
-                                        width: 25,
-                                        height: 25,
-                                        fit: BoxFit.contain,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/icon/google_icon.png',
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      "Google",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      const SizedBox(width: 10),
-                                      Center(
-                                        child: Text(
-                                          "Google",
-                                          style: TextStyle(
-                                            color: isDarkMode ? Colors.white : Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               );
                             },
                           ),
-
-                          Container(
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: isDarkMode ? const Color(0XFF1c304a) : Colors.transparent,
-                              borderRadius: BorderRadius.circular(20),
-                              border: isDarkMode ? null : Border.all(color: const Color(0xFFD1D8E0), width: 1),
-                            ),
+                          ElevatedButton(
+                            onPressed: () {},
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -288,7 +251,9 @@ class LoginPage extends StatelessWidget {
                                   child: Text(
                                     "Apple",
                                     style: TextStyle(
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -297,7 +262,6 @@ class LoginPage extends StatelessWidget {
                               ],
                             ),
                           ),
-
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
                               if (state is LoginWithMobileToMobileState) {
@@ -309,61 +273,57 @@ class LoginPage extends StatelessWidget {
                               }
                             },
                             builder: (context, state) {
-                              return InkWell(
-                                onTap: () {
+                              return ElevatedButton(
+                                onPressed: () {
                                   context.read<LoginBloc>().add(
-                                    LoginWithMobileToMobileEvent(),
-                                  );
+                                        LoginWithMobileToMobileEvent(),
+                                      );
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: isDarkMode ? const Color(0XFF1c304a) : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: isDarkMode ? null : Border.all(color: const Color(0xFFD1D8E0), width: 1),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/icon/phone_icon.png',
-                                        width: 25,
-                                        height: 25,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Center(
-                                        child: Text(
-                                          "Login with Mobile",
-                                          style: TextStyle(
-                                            color: isDarkMode ? Colors.white : Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/icon/phone_icon.png',
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Center(
+                                      child: Text(
+                                        "Login with Mobile",
+                                        style: TextStyle(
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               );
                             },
                           ),
-
                           const SizedBox(height: 0),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Don't have an account? ",
                                 style: TextStyle(
-                                  color: Theme.of(context).textTheme.bodySmall?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color,
                                   fontSize: 17,
                                 ),
                               ),
                               BlocConsumer<LoginBloc, LoginState>(
                                 listener: (context, state) {
-                                  if (state is LoginNavigateToSignupActionState) {
+                                  if (state
+                                      is LoginNavigateToSignupActionState) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => SignupPage(),
@@ -382,8 +342,8 @@ class LoginPage extends StatelessWidget {
                                     ),
                                     onTap: () {
                                       context.read<LoginBloc>().add(
-                                        LoginNavigateToSignupActionEvent(),
-                                      );
+                                            LoginNavigateToSignupActionEvent(),
+                                          );
                                     },
                                   );
                                 },

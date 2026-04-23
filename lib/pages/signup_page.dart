@@ -18,10 +18,12 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return BlocProvider(
       create: (context) => SignupBloc(authRepository: AuthRepository()),
       child: Scaffold(
-        backgroundColor: const Color(0XFF0a1625),
+        backgroundColor: Theme.of(context).cardColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -45,10 +47,10 @@ class SignupPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  const Text(
+                  Text(
                     'Create Account',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontSize: 50,
                       fontWeight: FontWeight.bold,
                     ),
@@ -70,28 +72,18 @@ class SignupPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   TextField(
                     controller: _emailController,
-                    style: const TextStyle(color: Colors.white),
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      filled: true,
-                      fillColor: const Color(0XFF1c304a),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.email),
                       hintText: 'name@example.com',
-                      hintStyle: const TextStyle(
+                      hintStyle: TextStyle(
                         color: Colors.blueGrey,
                         fontSize: 18,
                       ),
                     ),
                   ),
                   const SizedBox(height: 40),
-
-
                   BlocConsumer<SignupBloc, SignupState>(
                     listener: (context, state) {
-
                       if (state is SignupNavigateToOtpActionState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -103,7 +95,8 @@ class SignupPage extends StatelessWidget {
                       if (state is SignupEmailSentSuccess) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Check your email for the verification link!"),
+                            content: Text(
+                                "Check your email for the verification link!"),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -120,27 +113,35 @@ class SignupPage extends StatelessWidget {
                     },
                     builder: (context, state) {
                       return InkWell(
-                        onTap: state is SignupLoading ? null : () async {
-                          final email = _emailController.text.trim();
+                        onTap: state is SignupLoading
+                            ? null
+                            : () async {
+                                final email = _emailController.text.trim();
 
-                          if (email.isNotEmpty && email.contains('@')) {
-                            final prefs = await SharedPreferences.getInstance();
-                            await prefs.setString('user_email', email);
+                                if (email.isNotEmpty && email.contains('@')) {
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  await prefs.setString('user_email', email);
 
-                            if (!context.mounted) return;
+                                  if (!context.mounted) return;
 
-                            context.read<SignupBloc>().add(EmailSubmitted(email));
-
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Please enter a valid email address")),
-                            );
-                          }
-                        },
+                                  context
+                                      .read<SignupBloc>()
+                                      .add(EmailSubmitted(email));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Please enter a valid email address")),
+                                  );
+                                }
+                              },
                         child: Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
-                            color: state is SignupLoading ? Colors.blue.withOpacity(0.7) : Colors.blue,
+                            color: state is SignupLoading
+                                ? Colors.blue.withOpacity(0.7)
+                                : Colors.blue,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -185,13 +186,8 @@ class SignupPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(25),
-                        width: 190,
-                        decoration: BoxDecoration(
-                          color: const Color(0XFF1c304a),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                      ElevatedButton(
+                        onPressed: () {},
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -200,10 +196,10 @@ class SignupPage extends StatelessWidget {
                               width: 25,
                               height: 25,
                             ),
-                            const Text(
+                            Text(
                               ' Google',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: isDarkMode ? Colors.white : Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -212,13 +208,8 @@ class SignupPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 50),
-                      Container(
-                        padding: const EdgeInsets.all(25),
-                        width: 190,
-                        decoration: BoxDecoration(
-                          color: const Color(0XFF1c304a),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                      ElevatedButton(
+                        onPressed: () {},
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -227,10 +218,10 @@ class SignupPage extends StatelessWidget {
                               width: 25,
                               height: 25,
                             ),
-                            const Text(
+                            Text(
                               ' Apple',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: isDarkMode ? Colors.white : Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),

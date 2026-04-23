@@ -14,19 +14,24 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0D171C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).appBarTheme.iconTheme?.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Settings',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.titleLarge?.color,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -45,11 +50,12 @@ class _SettingPageState extends State<SettingPage> {
                   children: [
                     Stack(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 45,
-                          backgroundColor: Color(0xFF223143),
+                          backgroundColor:
+                          Theme.of(context).colorScheme.surfaceContainer,
                           backgroundImage:
-                              AssetImage('assets/icon/my_image.png'),
+                          const AssetImage('assets/icon/my_image.png'),
                         ),
                         Positioned(
                           bottom: 0,
@@ -62,7 +68,7 @@ class _SettingPageState extends State<SettingPage> {
                             ),
                             child: const Icon(
                               Icons.edit,
-                              color: Colors.black,
+                              color: Colors.white,
                               size: 16,
                             ),
                           ),
@@ -70,10 +76,10 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Kaveen Perera',
+                    Text(
+                      'Kaveen Nimsara',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
@@ -83,23 +89,29 @@ class _SettingPageState extends State<SettingPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF15202B),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'LKR (Rs)',
+                            '(LKR)',
                             style: TextStyle(
-                              color: Color(0xFF7A8D9C),
+                              color: isDarkMode
+                                  ? const Color(0xFF7A8D9C)
+                                  : Colors.blue,
                               fontSize: 12,
                             ),
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Icon(
                             Icons.keyboard_arrow_down,
-                            color: Color(0xFF7A8D9C),
+                            color: isDarkMode
+                                ? const Color(0xFF7A8D9C)
+                                : Colors.blue,
                             size: 16,
                           ),
                         ],
@@ -109,10 +121,10 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               const SizedBox(height: 32),
-              const Text(
+              Text(
                 'PREFERENCES',
                 style: TextStyle(
-                  color: Color(0xFF7A8D9C),
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2,
@@ -121,20 +133,26 @@ class _SettingPageState extends State<SettingPage> {
               const SizedBox(height: 12),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF15202B),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
+                  border: isDarkMode
+                      ? null
+                      : Border.all(color: Theme.of(context).dividerColor, width: 1),
                 ),
+
                 child: Column(
                   children: [
                     _buildSwitchTile(
+                      context: context,
                       icon: Icons.dark_mode,
                       title: 'Dark Mode',
                       subtitle: 'Reduce eye strain',
                       value: _isDarkMode,
                       onChanged: (val) => setState(() => _isDarkMode = val),
                     ),
-                    _buildDivider(),
+                    _buildDivider(context),
                     _buildSwitchTile(
+                      context: context,
                       icon: Icons.notifications,
                       title: 'Notifications',
                       subtitle: 'Daily spending alerts',
@@ -142,8 +160,9 @@ class _SettingPageState extends State<SettingPage> {
                       onChanged: (val) =>
                           setState(() => _isNotificationsEnabled = val),
                     ),
-                    _buildDivider(),
+                    _buildDivider(context),
                     _buildNavigationTile(
+                      context: context,
                       icon: Icons.attach_money,
                       title: 'Currency Format',
                       subtitle: 'LKR (Rs)',
@@ -152,10 +171,10 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'SECURITY',
                 style: TextStyle(
-                  color: Color(0xFF7A8D9C),
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2,
@@ -164,12 +183,17 @@ class _SettingPageState extends State<SettingPage> {
               const SizedBox(height: 12),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF15202B),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor,
+                    width: isDarkMode ? 0 : 1,
+                  ),
                 ),
                 child: Column(
                   children: [
                     _buildSwitchTile(
+                      context: context,
                       icon: Icons.fingerprint,
                       title: 'Biometric Lock',
                       subtitle: 'FaceID / TouchID',
@@ -177,19 +201,21 @@ class _SettingPageState extends State<SettingPage> {
                       onChanged: (val) =>
                           setState(() => _isBiometricEnabled = val),
                     ),
-                    _buildDivider(),
+                    _buildDivider(context),
                     _buildNavigationTile(
+                      context: context,
                       icon: Icons.restore,
                       title: 'Change Password',
+                      subtitle: 'Last changed 3 months ago',
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'ABOUT',
                 style: TextStyle(
-                  color: Color(0xFF7A8D9C),
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2,
@@ -198,10 +224,15 @@ class _SettingPageState extends State<SettingPage> {
               const SizedBox(height: 12),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF15202B),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor,
+                    width: isDarkMode ? 0 : 1,
+                  ),
                 ),
                 child: _buildNavigationTile(
+                  context: context,
                   icon: Icons.help_outline,
                   title: 'Help & Support',
                   trailingIcon: Icons.open_in_new,
@@ -215,8 +246,14 @@ class _SettingPageState extends State<SettingPage> {
                   height: 55,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF15202B),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDarkMode
+                          ? Colors.transparent
+                          : Colors.red.shade100,
+                      width: 1,
+                    ),
                   ),
                   child: const Text(
                     'Log Out',
@@ -228,6 +265,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
               ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -235,9 +273,9 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _buildDivider() {
-    return const Divider(
-      color: Color(0xFF2A3948),
+  Widget _buildDivider(BuildContext context) {
+    return Divider(
+      color: Theme.of(context).dividerColor,
       height: 1,
       indent: 60,
       endIndent: 16,
@@ -245,12 +283,15 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _buildSwitchTile({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String subtitle,
     required bool value,
     required Function(bool) onChanged,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -258,10 +299,10 @@ class _SettingPageState extends State<SettingPage> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D171C),
+              color: Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color:  Colors.blue, size: 20),
+            child: Icon(icon, color: Colors.blue, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -270,8 +311,8 @@ class _SettingPageState extends State<SettingPage> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -279,8 +320,8 @@ class _SettingPageState extends State<SettingPage> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Color(0xFF7A8D9C),
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                     fontSize: 12,
                   ),
                 ),
@@ -290,9 +331,11 @@ class _SettingPageState extends State<SettingPage> {
           Switch(
             value: value,
             activeColor: Colors.white,
-            activeTrackColor:  Colors.blue,
+            activeTrackColor: Colors.blue,
             inactiveThumbColor: Colors.white,
-            inactiveTrackColor: const Color(0xFF2A3948),
+            inactiveTrackColor:
+            isDarkMode ? const Color(0xFF2A3948) : Colors.grey.shade300,
+            trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
             onChanged: onChanged,
           ),
         ],
@@ -301,6 +344,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _buildNavigationTile({
+    required BuildContext context,
     required IconData icon,
     required String title,
     String? subtitle,
@@ -313,10 +357,10 @@ class _SettingPageState extends State<SettingPage> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D171C),
+              color: Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color:  Colors.blue, size: 20),
+            child: Icon(icon, color: Colors.blue, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -325,8 +369,8 @@ class _SettingPageState extends State<SettingPage> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -335,8 +379,8 @@ class _SettingPageState extends State<SettingPage> {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                      color: Color(0xFF7A8D9C),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                       fontSize: 12,
                     ),
                   ),

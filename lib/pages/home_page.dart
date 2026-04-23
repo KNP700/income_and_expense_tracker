@@ -9,12 +9,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return BlocProvider(
       create: (context) => HomeBloc(),
       child: Scaffold(
-        backgroundColor: const Color(0XFF0a1625),
+        backgroundColor: Theme.of(context).cardColor,
         appBar: AppBar(
-          backgroundColor: const Color(0XFF0a1625),
           centerTitle: true,
           automaticallyImplyLeading: false,
           leadingWidth: 80,
@@ -23,13 +24,13 @@ class HomePage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          title: const Padding(
-            padding: EdgeInsets.only(top: 25.0),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 25.0),
             child: Text(
               "Select Ledger",
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 45,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+                fontSize: 50,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -64,10 +65,10 @@ class HomePage extends StatelessWidget {
                       // mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                         Text(
                           "Your Workspaces",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
                           ),

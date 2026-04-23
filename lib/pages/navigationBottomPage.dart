@@ -12,6 +12,7 @@ class Navigationbottompage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final List<Widget> pageList=[
       const HomePage(),
       const LedgerPage(),
@@ -27,7 +28,7 @@ class Navigationbottompage extends StatelessWidget {
       child: BlocBuilder<NavigationBloc, TabNavigation>(
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: const Color(0XFF0a1625),
+            backgroundColor: Theme.of(context).cardColor,
             body: pageList[state.tabIndex],
             //swaping page remember kaveeeennn, its happening by indexing buttons
 
