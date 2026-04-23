@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
-import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
 import 'package:income_and_expense_tracker/pages/forgot_page.dart';
 import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
@@ -17,6 +16,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detect if the current theme is dark mode
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -47,20 +49,6 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: GestureDetector(
-                      //     onTap: () {
-                      //       Navigator.pop(context);
-                      //     },
-                      //     child: Image.asset(
-                      //       'assets/icon/back_icon.png',
-                      //       width: 40,
-                      //       height: 40,
-                      //       fit: BoxFit.cover,
-                      //     ),
-                      //   ),
-                      // ),
                       const SizedBox(height: 10),
                       Text(
                         'Welcome',
@@ -138,8 +126,8 @@ class LoginPage extends StatelessWidget {
                               return InkWell(
                                 onTap: () {
                                   context.read<LoginBloc>().add(
-                                        LoginNavigateToForgotActionEvent(),
-                                      );
+                                    LoginNavigateToForgotActionEvent(),
+                                  );
                                 },
                                 child: const Text(
                                   "Forgot Password?",
@@ -162,7 +150,7 @@ class LoginPage extends StatelessWidget {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const Navigationbottompage(),
+                                const Navigationbottompage(),
                               ),
                             );
                           }
@@ -171,8 +159,8 @@ class LoginPage extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               context.read<LoginBloc>().add(
-                                    LoginNavigateIntoHomeEvent(),
-                                  );
+                                LoginNavigateIntoHomeEvent(),
+                              );
                             },
                             child: Container(
                               padding: const EdgeInsets.all(12),
@@ -218,14 +206,13 @@ class LoginPage extends StatelessWidget {
                       Column(
                         spacing: 20,
                         children: [
-                          // const SizedBox(height: 25),
                           BlocConsumer<LoginBloc, LoginState>(
                             listener: (context, state) {
                               if (state is LoginSuccessState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const Navigationbottompage(),
+                                    const Navigationbottompage(),
                                   ),
                                 );
                               } else if (state is LoginFailureState) {
@@ -249,8 +236,9 @@ class LoginPage extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
-                                    color: const Color(0XFF1c304a),
+                                    color: isDarkMode ? const Color(0XFF1c304a) : Colors.transparent,
                                     borderRadius: BorderRadius.circular(20),
+                                    border: isDarkMode ? null : Border.all(color: const Color(0xFFD1D8E0), width: 1),
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -262,11 +250,11 @@ class LoginPage extends StatelessWidget {
                                         fit: BoxFit.contain,
                                       ),
                                       const SizedBox(width: 10),
-                                      const Center(
+                                      Center(
                                         child: Text(
                                           "Google",
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: isDarkMode ? Colors.white : Colors.black,
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -280,10 +268,11 @@ class LoginPage extends StatelessWidget {
                           ),
 
                           Container(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
-                              color: Color(0XFF1c304a),
+                              color: isDarkMode ? const Color(0XFF1c304a) : Colors.transparent,
                               borderRadius: BorderRadius.circular(20),
+                              border: isDarkMode ? null : Border.all(color: const Color(0xFFD1D8E0), width: 1),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -294,11 +283,12 @@ class LoginPage extends StatelessWidget {
                                   height: 25,
                                   fit: BoxFit.contain,
                                 ),
+                                const SizedBox(width: 10),
                                 Center(
                                   child: Text(
-                                    " Apple",
+                                    "Apple",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: isDarkMode ? Colors.white : Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -322,14 +312,15 @@ class LoginPage extends StatelessWidget {
                               return InkWell(
                                 onTap: () {
                                   context.read<LoginBloc>().add(
-                                        LoginWithMobileToMobileEvent(),
-                                      );
+                                    LoginWithMobileToMobileEvent(),
+                                  );
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(15),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
-                                    color: Color(0XFF1c304a),
+                                    color: isDarkMode ? const Color(0XFF1c304a) : Colors.transparent,
                                     borderRadius: BorderRadius.circular(20),
+                                    border: isDarkMode ? null : Border.all(color: const Color(0xFFD1D8E0), width: 1),
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -340,11 +331,12 @@ class LoginPage extends StatelessWidget {
                                         height: 25,
                                         fit: BoxFit.contain,
                                       ),
+                                      const SizedBox(width: 10),
                                       Center(
                                         child: Text(
-                                          " Login with Mobile",
+                                          "Login with Mobile",
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: isDarkMode ? Colors.white : Colors.black,
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -365,21 +357,13 @@ class LoginPage extends StatelessWidget {
                               Text(
                                 "Don't have an account? ",
                                 style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.color,
+                                  color: Theme.of(context).textTheme.bodySmall?.color,
                                   fontSize: 17,
                                 ),
                               ),
-
-                              // BlocListener(listener: (context, state) {
-                              //
-                              // },child: ,),
                               BlocConsumer<LoginBloc, LoginState>(
                                 listener: (context, state) {
-                                  if (state
-                                      is LoginNavigateToSignupActionState) {
+                                  if (state is LoginNavigateToSignupActionState) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => SignupPage(),
@@ -389,7 +373,7 @@ class LoginPage extends StatelessWidget {
                                 },
                                 builder: (context, state) {
                                   return InkWell(
-                                    child: Text(
+                                    child: const Text(
                                       "Sign up",
                                       style: TextStyle(
                                         color: Colors.blue,
@@ -398,8 +382,8 @@ class LoginPage extends StatelessWidget {
                                     ),
                                     onTap: () {
                                       context.read<LoginBloc>().add(
-                                            LoginNavigateToSignupActionEvent(),
-                                          );
+                                        LoginNavigateToSignupActionEvent(),
+                                      );
                                     },
                                   );
                                 },

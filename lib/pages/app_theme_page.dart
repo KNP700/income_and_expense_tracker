@@ -15,6 +15,14 @@ class AppThemePage {
       primary: Color(0xFF15202B),
       secondary: Color(0xFF7A8D9C),
     ),
+
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(color: Colors.white),
+      titleLarge: TextStyle(color: Colors.white),
+      bodyLarge: TextStyle(color: Colors.white),
+      bodyMedium: TextStyle(color: Colors.white70),
+      bodySmall: TextStyle(color: Colors.blueGrey),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: const Color(0xFF15202B),
@@ -37,18 +45,7 @@ class AppThemePage {
         borderSide: const BorderSide(color: Colors.white38, width: 1),
       ),
     ),
-    //
-    // colorScheme: const ColorScheme.light(
-    //   primary: Colors.blue,
-    //   onPrimary: Colors.white,
-    //   secondary: Color(0xFF7A8D9C),
-    // ),
-
   );
-
-
-
-
 
 
 
@@ -95,9 +92,5 @@ class AppThemePage {
         borderSide: const BorderSide(color: Color(0xFFD1D8E0), width: 1),
       ),
     ),
-
-
-
-
   );
 }
