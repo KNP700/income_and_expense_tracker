@@ -13,14 +13,12 @@ class Navigationbottompage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final List<Widget> pageList=[
+    final List<Widget> pageList = [
       const HomePage(),
       const LedgerPage(),
       const ReportPage(),
       const SettingPage(),
-
     ];
-
 
     // TODO: implement build
     return BlocProvider(
@@ -33,9 +31,9 @@ class Navigationbottompage extends StatelessWidget {
             //swaping page remember kaveeeennn, its happening by indexing buttons
 
             bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: const Color(0XFF0a1625),
+              backgroundColor: Theme.of(context).cardColor,
               unselectedItemColor: Colors.blueGrey,
-              selectedItemColor: Colors.white,
+              selectedItemColor: isDarkMode ? Colors.white : Colors.black,
               showSelectedLabels: true,
               type: BottomNavigationBarType.fixed,
               currentIndex: state.tabIndex,
@@ -58,17 +56,11 @@ class Navigationbottompage extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
                   label: 'Settings',
-
-
                 ),
               ],
             ),
           );
         },
-
-
-
-
       ),
     );
   }
