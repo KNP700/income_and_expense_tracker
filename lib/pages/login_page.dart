@@ -21,15 +21,13 @@ class LoginPage extends StatelessWidget {
       canPop: false,
       onPopInvoked: (didPop) {
         if (didPop) return;
-       },
+      },
       child: BlocProvider(
-        create: (context) =>
-            LoginBloc(
-              authRepository: RepositoryProvider.of<AuthRepository>(context),
-            ),
-
+        create: (context) => LoginBloc(
+          authRepository: RepositoryProvider.of<AuthRepository>(context),
+        ),
         child: Scaffold(
-          backgroundColor: const Color(0XFF0a1625),
+          backgroundColor: Theme.of(context).cardColor,
           body: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
               // if (state is LoginFailed) {
@@ -64,10 +62,10 @@ class LoginPage extends StatelessWidget {
                       //   ),
                       // ),
                       const SizedBox(height: 10),
-                      const Text(
+                      Text(
                         'Welcome',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
                         ),
@@ -93,20 +91,10 @@ class LoginPage extends StatelessWidget {
 
                       const SizedBox(height: 10),
 
-                      TextField(
-                        style: const TextStyle(color: Colors.white),
+                      const TextField(
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.email),
-                          filled: true,
-                          fillColor: Color(0XFF1c304a),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
+                          prefixIcon: Icon(Icons.email),
                           hintText: 'name@example.com',
-                          hintStyle: const TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 20,
-                          ),
                         ),
                       ),
 
@@ -123,21 +111,11 @@ class LoginPage extends StatelessWidget {
 
                       const SizedBox(height: 10),
 
-                      TextField(
-                        style: const TextStyle(color: Colors.white),
+                      const TextField(
+                        obscureText: true,
                         decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Color(0XFF1c304a),
-
-                          prefixIcon: const Icon(Icons.lock),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          hintText: '***********',
-                          hintStyle: const TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 20,
-                          ),
+                          prefixIcon: Icon(Icons.lock),
+                          hintText: '**********',
                         ),
                       ),
 
@@ -151,18 +129,17 @@ class LoginPage extends StatelessWidget {
                               if (state is LoginNavigateToForgotActionState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => ForgotPage(),
+                                    builder: (context) => const ForgotPage(),
                                   ),
                                 );
                               }
                             },
-
                             builder: (context, state) {
                               return InkWell(
                                 onTap: () {
                                   context.read<LoginBloc>().add(
-                                    LoginNavigateToForgotActionEvent(),
-                                  );
+                                        LoginNavigateToForgotActionEvent(),
+                                      );
                                 },
                                 child: const Text(
                                   "Forgot Password?",
@@ -184,7 +161,8 @@ class LoginPage extends StatelessWidget {
                           if (state is LoginNavigateIntoHomeState) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => const Navigationbottompage(),
+                                builder: (context) =>
+                                    const Navigationbottompage(),
                               ),
                             );
                           }
@@ -193,10 +171,9 @@ class LoginPage extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               context.read<LoginBloc>().add(
-                                LoginNavigateIntoHomeEvent(),
-                              );
+                                    LoginNavigateIntoHomeEvent(),
+                                  );
                             },
-
                             child: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
@@ -247,25 +224,27 @@ class LoginPage extends StatelessWidget {
                               if (state is LoginSuccessState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => const Navigationbottompage(),
+                                    builder: (context) =>
+                                        const Navigationbottompage(),
                                   ),
                                 );
                               } else if (state is LoginFailureState) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(state.error),
-                                      backgroundColor: Colors.red,
-                                      behavior: SnackBarBehavior.floating,
-                                      duration: const Duration(seconds: 3),
-                                    ),
+                                  SnackBar(
+                                    content: Text(state.error),
+                                    backgroundColor: Colors.red,
+                                    behavior: SnackBarBehavior.floating,
+                                    duration: const Duration(seconds: 3),
+                                  ),
                                 );
                               }
                             },
                             builder: (context, state) {
                               return InkWell(
                                 onTap: () {
-                                  context.read<LoginBloc>().add(
-                                      GoogleSignInEvent());
+                                  context
+                                      .read<LoginBloc>()
+                                      .add(GoogleSignInEvent());
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(15),
@@ -273,7 +252,6 @@ class LoginPage extends StatelessWidget {
                                     color: const Color(0XFF1c304a),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -344,8 +322,8 @@ class LoginPage extends StatelessWidget {
                               return InkWell(
                                 onTap: () {
                                   context.read<LoginBloc>().add(
-                                    LoginWithMobileToMobileEvent(),
-                                  );
+                                        LoginWithMobileToMobileEvent(),
+                                      );
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(15),
@@ -379,7 +357,7 @@ class LoginPage extends StatelessWidget {
                             },
                           ),
 
-                          SizedBox(height: 0),
+                          const SizedBox(height: 0),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -387,7 +365,10 @@ class LoginPage extends StatelessWidget {
                               Text(
                                 "Don't have an account? ",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color,
                                   fontSize: 17,
                                 ),
                               ),
@@ -398,7 +379,7 @@ class LoginPage extends StatelessWidget {
                               BlocConsumer<LoginBloc, LoginState>(
                                 listener: (context, state) {
                                   if (state
-                                  is LoginNavigateToSignupActionState) {
+                                      is LoginNavigateToSignupActionState) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => SignupPage(),
@@ -406,7 +387,6 @@ class LoginPage extends StatelessWidget {
                                     );
                                   }
                                 },
-
                                 builder: (context, state) {
                                   return InkWell(
                                     child: Text(
@@ -418,8 +398,8 @@ class LoginPage extends StatelessWidget {
                                     ),
                                     onTap: () {
                                       context.read<LoginBloc>().add(
-                                        LoginNavigateToSignupActionEvent(),
-                                      );
+                                            LoginNavigateToSignupActionEvent(),
+                                          );
                                     },
                                   );
                                 },

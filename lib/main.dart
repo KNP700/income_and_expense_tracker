@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/View/theme/theme_bloc.dart';
+import 'package:income_and_expense_tracker/pages/app_theme_page.dart';
 import 'package:income_and_expense_tracker/pages/start_view.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/ledger_repository.dart';
@@ -11,6 +13,7 @@ import 'data/repositories/ledger_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -23,7 +26,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   final _appLinks = AppLinks();
   StreamSubscription? _linkSubscription;
 
@@ -34,7 +36,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _initDeepLinks() {
-
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       final String link = uri.toString();
 
@@ -47,7 +48,6 @@ class _MyAppState extends State<MyApp> {
 
   void _handleAuthLink(String link) {
     // TODO: Add logic to sign in and navigate
-
   }
 
   @override
@@ -63,10 +63,13 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(create: (context) => AuthRepository()),
         RepositoryProvider(create: (context) => LedgerRepository()),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Income Tracker',
-        home: StartView(),
+        theme: AppThemePage.lightTheme,
+        darkTheme: AppThemePage.darkTheme,
+        themeMode: ThemeMode.system,
+        home: const StartView(),
       ),
     );
   }

@@ -13,6 +13,7 @@ class _LedgerDashboardPageState extends State<CreateLedger2Page> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xFF0B141A),
       body: SafeArea(

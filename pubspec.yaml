@@ -25,6 +25,7 @@ dependencies:
   cloud_firestore: 5.6.12
   equatable: ^2.0.0
   flutter_svg: ^2.2.4
+  display_mode: ^0.0.2
 #  ccl_core: ^0.8.2
 
 dev_dependencies:
