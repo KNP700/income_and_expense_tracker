@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/pages/app_theme_page.dart';
 import 'package:income_and_expense_tracker/pages/start_view.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/ledger_firestore_repository.dart';
 import 'data/repositories/ledger_repository.dart';
+import 'data/repositories/local_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +62,12 @@ class _MyAppState extends State<MyApp> {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(create: (context) => AuthRepository()),
-        RepositoryProvider(create: (context) => LedgerRepository()),
+        RepositoryProvider(
+          create: (context) => LedgerRepository(
+            localDataSource: LocalRepository(),
+            remoteDataSource: LedgerFirestoreRepository(),
+          ),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
