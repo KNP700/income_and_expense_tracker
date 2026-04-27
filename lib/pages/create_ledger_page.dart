@@ -16,7 +16,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
   int _selectedIconIndex = 0;
   bool _isShared = false;
 
-  String _Currency = 'LKR -Rs';
+  String _Currency = 'LKR - Rs';
 
   final List<Map<String, dynamic>> _icons = [
     {'icon': Icons.category, 'label': 'General'},

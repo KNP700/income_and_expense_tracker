@@ -37,4 +37,8 @@ class LedgerRepository {
   Future<List<LedgerModel>> getLedgers() async {
     return await localDataSource.getLedgersLocal();
   }
+
+  Future<void> deleteLedger(int id)async{
+    await localDataSource.deleteLedgerLocal(id);
+  }
 }

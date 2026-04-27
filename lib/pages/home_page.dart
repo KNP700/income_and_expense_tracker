@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/pages/create_ledger_page.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import '../View/home/home_bloc.dart';
 import '../data/model/ledger_model/ledger_model.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +19,45 @@ class _HomePageState extends State<HomePage> {
     [const Color(0xFFa1684d), const Color(0xFF9d3f13)],
     [const Color(0xFFed9791), const Color(0xFFeb4034)],
   ];
+
+  void _deleteLedger(BuildContext context, int ledgerId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text("Delete Ledger"),
+          content: const Text("Are you sure you want to delete this ledger"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text("cancel", style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(dialogContext);
+
+                await context.read<LedgerRepository>().deleteLedger(ledgerId);
+
+                setState(() {});
+
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Ledger Deleted"),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
+              },
+              child: const Text("Delete",
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,17 +173,28 @@ class _HomePageState extends State<HomePage> {
                                       height: 50,
                                     ),
                                     const Spacer(),
-                                    Text(ledger.iconLabel ?? 'General',
+                                    Text(
+                                      ledger.iconLabel ?? 'General',
                                       style: const TextStyle(
                                         fontSize: 19,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white70,
                                       ),
                                     ),
+                                    const SizedBox(width: 8),
+                                    IconButton(
+                                      icon: const Icon(
+                                          Icons.delete_outline_rounded,
+                                          color: Colors.white),
+                                      onPressed: () {
+                                        _deleteLedger(context, ledger.id);
+                                      },
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(height: 55),
-                                Text(ledger.name ?? 'Unnamed Ledger',
+                                const SizedBox(height: 40),
+                                Text(
+                                  ledger.name ?? 'Unnamed Ledger',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 27,

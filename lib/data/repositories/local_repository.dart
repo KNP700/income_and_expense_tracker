@@ -30,6 +30,14 @@ class LocalRepository {
     });
   }
 
+  Future<void> deleteLedgerLocal(int id) async{
+    final isar = await db;
+    await isar.writeTxn(()async{
+      await isar.ledgerModels.delete(id);
+    });
+  }
+
+
   Future<List<LedgerModel>> getLedgersLocal() async {
     final isar = await db;
     return await isar.ledgerModels.where().findAll();
