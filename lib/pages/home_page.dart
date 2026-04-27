@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/pages/create_ledger_page.dart';
-
+import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import '../View/home/home_bloc.dart';
+import '../data/model/ledger_model/ledger_model.dart';
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final List<List<Color>> _cardGradients = [
+    [const Color(0xFF58b0aa), const Color(0xFF1b3d3a)],
+    [const Color(0xFFa1684d), const Color(0xFF9d3f13)],
+    [const Color(0xFFed9791), const Color(0xFFeb4034)],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeBloc(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           automaticallyImplyLeading: false,
@@ -41,7 +52,6 @@ class HomePage extends StatelessWidget {
               child: CircleAvatar(
                 radius: 25,
                 backgroundColor: Color(0xFF223143),
-                // backgroundImage: AssetImage('assets/icon/my_image.png'),
                 child: Text(
                   'K',
                   style: TextStyle(fontSize: 25, color: Colors.white),
@@ -58,187 +68,102 @@ class HomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 const SizedBox(height: 30),
+                Text(
+                  "Your Workspaces",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Text(
+                  "Select a ledger to manage your finance",
+                  style: TextStyle(
+                    color: Colors.blueGrey,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 30),
 
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                         Text(
-                          "Your Workspaces",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
+                  child: FutureBuilder<List<LedgerModel>>(
+                    future: context.read<LedgerRepository>().getLedgers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            "No ledgers found. Create one below!",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.blueGrey),
                           ),
-                        ),
-                        const Text(
-                          "Select a ledger to manage your finance",
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFF58b0aa), Color(0xFF1b3d3a)],
-                              stops: [0.1, 1.0],
+                        );
+                      }
+
+                      final ledgers = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: ledgers.length,
+                        itemBuilder: (context, index) {
+                          final LedgerModel ledger = ledgers[index];
+                          final gradientColors =
+                              _cardGradients[index % _cardGradients.length];
+
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 30),
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: gradientColors,
+                                stops: const [0.1, 1.0],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/wallet logo for loging page.png',
-                                    width: 50,
-                                    height: 50,
-                                  ),
-                                  const Spacer(),
-                                  const Text(
-                                    "Default",
-                                    style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white70,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/wallet logo for loging page.png',
+                                      width: 50,
+                                      height: 50,
                                     ),
+                                    const Spacer(),
+                                    Text(ledger.iconLabel ?? 'General',
+                                      style: const TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 55),
+                                Text(ledger.name ?? 'Unnamed Ledger',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 27,
+                                    color: Colors.white,
                                   ),
-                                ],
-                              ),
-                              const SizedBox(height: 55),
-                              const Text(
-                                "Personal Wallet",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 27,
-                                  color: Colors.white,
                                 ),
-                              ),
-                              const Text(
-                                "Current Balance",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFFa1684d), Color(0xFF9d3f13)],
-                              stops: [0.1, 1.0],
+                                Text(
+                                  "Currency: ${ledger.currency}",
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
                             ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/wallet logo for loging page.png',
-                                    width: 50,
-                                    height: 50,
-                                  ),
-                                  const Spacer(),
-                                  const Text(
-                                    "Shopping",
-                                    style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 55),
-                              const Text(
-                                "Shopping",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 27,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const Text(
-                                "Current Balance",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFFed9791), Color(0xFFeb4034)],
-                              stops: [0.1, 1.0],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/wallet logo for loging page.png',
-                                    width: 50,
-                                    height: 50,
-                                  ),
-                                  const Spacer(),
-                                  const Text(
-                                    "Gift",
-                                    style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 55),
-                              const Text(
-                                "Gift",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 27,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const Text(
-                                "Current Balance",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                      ],
-                    ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
 
@@ -247,11 +172,15 @@ class HomePage extends StatelessWidget {
                 BlocConsumer<HomeBloc, HomeState>(
                   listener: (context, state) {
                     if (state is HomeNavigationToCreateNewLedgerState) {
-                      Navigator.of(context).push(
+                      Navigator.of(context)
+                          .push(
                         MaterialPageRoute(
                           builder: (context) => const CreateLedgerPage(),
                         ),
-                      );
+                      )
+                          .then((_) {
+                        setState(() {});
+                      });
                     }
                   },
                   builder: (context, state) {

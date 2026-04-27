@@ -2,8 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repositories/auth_repository.dart'; // Make sure this path is correct!
 
 // Your existing imports
-import 'package:income_and_expense_tracker/pages/signup_page.dart';
-import 'package:income_and_expense_tracker/pages/login_page.dart';
 
 part 'login_event.dart';
 

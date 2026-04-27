@@ -14,11 +14,13 @@ class SignupLoadingState extends SignupState {
 }
 
 class SignupErrorState extends SignupState {
+  @override
   final String errorMessage;
   const SignupErrorState(this.errorMessage);
 }
 
 class SignupEmailLinkSentState extends SignupState {
+  @override
   final String email;
   const SignupEmailLinkSentState(this.email);
 }

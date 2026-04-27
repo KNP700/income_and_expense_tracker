@@ -1,7 +1,7 @@
 part of 'login_bloc.dart';
 
 
-sealed class LoginState {}
+ class LoginState {}
 
 class LoginInitial extends LoginState {}
 

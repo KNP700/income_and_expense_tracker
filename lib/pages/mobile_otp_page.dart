@@ -82,7 +82,7 @@ class MobileOtpPage extends StatelessWidget {
                           if (state is AfterMobileOtpNavigationState) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => HomePage(),
+                                builder: (context) => const HomePage(),
                               ),
                             );
                           }

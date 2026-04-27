@@ -106,7 +106,7 @@ class CreateAccPage extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.person),
                       filled: true,
-                      fillColor: Color(0XFF1c304a),
+                      fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -128,10 +128,10 @@ class CreateAccPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "FIRST NAME",
                               textAlign: TextAlign.left,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.blueGrey,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -209,7 +209,7 @@ class CreateAccPage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  Text(
+                  const Text(
                     'PASSWORD',
                     style: TextStyle(
                       color: Colors.blueGrey,
@@ -240,7 +240,7 @@ class CreateAccPage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  Text(
+                  const Text(
                     'CONFIRM PASSWORD',
                     style: TextStyle(
                       color: Colors.blueGrey,
@@ -274,7 +274,7 @@ class CreateAccPage extends StatelessWidget {
                     listener: (context, state) {
                       if (state is CreateAccSuccessState) {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => const HomePage()),
                         );
                       }
                       if (state is CreateAccErrorState){
@@ -298,7 +298,7 @@ class CreateAccPage extends StatelessWidget {
                               );
                             },
                             child: Container(
-                              padding: EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Colors.blue,
@@ -331,7 +331,7 @@ class CreateAccPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
 
                     children: [
-                      Text(
+                      const Text(
                         "Already have an account? ",
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),

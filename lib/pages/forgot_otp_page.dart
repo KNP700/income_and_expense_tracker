@@ -108,7 +108,7 @@ class ForgotOtpPage extends StatelessWidget {
                       if (state is ForgotOtpPageToResetState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ResetPasswordPage(),
+                            builder: (context) => const ResetPasswordPage(),
                           ),
                         );
                       }
@@ -121,13 +121,13 @@ class ForgotOtpPage extends StatelessWidget {
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.blue,
                           ),
 
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
@@ -147,9 +147,9 @@ class ForgotOtpPage extends StatelessWidget {
                     },
                   ),
 
-                  SizedBox(height: 150),
+                  const SizedBox(height: 150),
 
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
 
                     children: [
@@ -159,7 +159,7 @@ class ForgotOtpPage extends StatelessWidget {
                       ),
 
                       InkWell(
-                        child: const Text(
+                        child: Text(
                           "Resend Code",
                           style: TextStyle(color: Colors.blue, fontSize: 17),
                         ),

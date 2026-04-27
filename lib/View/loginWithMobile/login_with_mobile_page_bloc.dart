@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
-import '../forgotPage/forgot_page_bloc.dart';
 
 part 'login_with_mobile_page_event.dart';
 

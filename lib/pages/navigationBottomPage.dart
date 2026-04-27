@@ -14,7 +14,7 @@ class Navigationbottompage extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final List<Widget> pageList = [
-      const HomePage(),
+       const HomePage(),
       const LedgerPage(),
       const ReportPage(),
       const SettingPage(),

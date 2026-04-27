@@ -1,9 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:income_and_expense_tracker/View/home/home_bloc.dart';
 import 'package:income_and_expense_tracker/pages/forgot_page.dart';
-import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
 import 'package:income_and_expense_tracker/pages/signup_page.dart';
 import '../View/login/login_bloc.dart';

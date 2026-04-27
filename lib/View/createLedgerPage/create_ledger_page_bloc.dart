@@ -17,7 +17,7 @@ class CreateLedgerPageBloc extends Bloc<CreateLedgerPageEvent, CreateLedgerPageS
           name: event.name,
           iconLabel: event.iconLabel,
           currency: event.currency,
-          isShared: event.isShared,
+          // isShared: event.isShared,
         );
         emit(CreateLedgerPageSuccess());
       } catch (e) {

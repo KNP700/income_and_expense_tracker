@@ -85,7 +85,7 @@ class ForgotPage extends StatelessWidget {
                       if (state is ForgotPasswordToOtpPageState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ForgotOtpPage(),
+                            builder: (context) => const ForgotOtpPage(),
                           ),
                         );
                       }
@@ -104,7 +104,7 @@ class ForgotPage extends StatelessWidget {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
@@ -143,7 +143,7 @@ class ForgotPage extends StatelessWidget {
                               if (state is ForgotPasswordNavigateToSigninActionState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
+                                    builder: (context) => const LoginPage(),
                                   ),
                                 );
                               }

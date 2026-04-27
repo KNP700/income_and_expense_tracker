@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'dart:math';
-import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/auth_repository.dart';
 
 part 'signup_event.dart';

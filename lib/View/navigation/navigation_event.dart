@@ -1,7 +1,7 @@
 part of 'navigation_bloc.dart';
 
 @immutable
-sealed class NavigationEvent {}
+ class NavigationEvent {}
 
 
 class TabChange extends NavigationEvent{

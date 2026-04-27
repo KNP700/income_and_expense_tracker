@@ -4,3 +4,5 @@ part of 'create_ledger2_page_bloc.dart';
 sealed class CreateLedger2PageState {}
 
 final class CreateLedger2PageInitial extends CreateLedger2PageState {}
+
+class createLegerToAddTransactionState extends CreateLedger2PageState{}

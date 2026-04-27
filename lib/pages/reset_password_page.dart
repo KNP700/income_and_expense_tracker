@@ -107,7 +107,7 @@ class ResetPasswordPage extends StatelessWidget {
                     listener: (context, state) {
                       if (state is ResetPasswordToLoginState) {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       }
                       // TODO: implement listener
@@ -125,7 +125,7 @@ class ResetPasswordPage extends StatelessWidget {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
@@ -165,7 +165,7 @@ class ResetPasswordPage extends StatelessWidget {
                               if (state is ResetPasswordLoginButtonToLoginState) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
+                                    builder: (context) => const LoginPage(),
                                   ),
                                 );
                               }

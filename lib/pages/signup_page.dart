@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:income_and_expense_tracker/View/login/login_bloc.dart';
 import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/auth_repository.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
-import 'package:income_and_expense_tracker/pages/signup_otp_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../View/signupOtpPage/signup_otp_page_bloc.dart';
 import 'create_acc_page.dart';
 
 class SignupPage extends StatelessWidget {

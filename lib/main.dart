@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:income_and_expense_tracker/View/theme/theme_bloc.dart';
 import 'package:income_and_expense_tracker/pages/app_theme_page.dart';
 import 'package:income_and_expense_tracker/pages/start_view.dart';
 import 'data/repositories/auth_repository.dart';
