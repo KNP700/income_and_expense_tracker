@@ -62,7 +62,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                     onPressed: () => setState(() => _selectedTab = 1),
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          _selectedTab == 1 ? Colors.blue : Colors.grey[800],
+                          _selectedTab == 1 ? Colors.red : Colors.grey[800],
                     ),
                     child: Text('Expenses',
                         style: TextStyle(

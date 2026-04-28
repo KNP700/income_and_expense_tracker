@@ -14,7 +14,13 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
   String paymentMethod = 'CASH';
 
   final List<String> payers = ['Me', 'Nimsara', 'Perera'];
-  final List<String> categories = ['TRANSPORT', 'FOOD', 'STAY', 'GIFT', 'OTHER'];
+  final List<String> categories = [
+    'TRANSPORT',
+    'FOOD',
+    'STAY',
+    'GIFT',
+    'OTHER'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.history, color: Colors.cyanAccent),
+            icon: const Icon(Icons.history, color: Colors.blue),
             onPressed: () {},
           ),
         ],
@@ -41,12 +47,16 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                 children: [
                   const Text(
                     'AMOUNT (Rs)',
-                    style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   const TextField(
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       hintText: '0',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -56,35 +66,43 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: isExpense ? Colors.red : Colors.grey[800],
+                            backgroundColor:
+                                isExpense ? Colors.red : Colors.grey[800],
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           onPressed: () => setState(() => isExpense = true),
-                          child: const Text('EXPENSE', style: TextStyle(color: Colors.white)),
+                          child: const Text('EXPENSE',
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: !isExpense ? Colors.cyanAccent : Colors.grey[800],
+                            backgroundColor: !isExpense
+                                ? Colors.blue
+                                : Colors.grey[800],
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           onPressed: () => setState(() => isExpense = false),
-                          child: Text('INCOME', style: TextStyle(color: !isExpense ? Colors.black : Colors.white)),
+                          child: Text('INCOME',
+                              style: TextStyle(
+                                  color: !isExpense
+                                      ? Colors.black
+                                      : Colors.white)),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
-
-                  const Text('PAID BY', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                  const Text('PAID BY',
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 10,
@@ -92,7 +110,7 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                       return ChoiceChip(
                         label: Text(payer),
                         selected: selectedPayer == payer,
-                        selectedColor: Colors.cyanAccent,
+                        selectedColor: Colors.blue,
                         onSelected: (selected) {
                           setState(() => selectedPayer = payer);
                         },
@@ -100,8 +118,9 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                     }).toList(),
                   ),
                   const SizedBox(height: 24),
-
-                  const Text('CATEGORY', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                  const Text('CATEGORY',
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: selectedCategory,
@@ -118,11 +137,13 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                         child: Text(cat),
                       );
                     }).toList(),
-                    onChanged: (value) => setState(() => selectedCategory = value!),
+                    onChanged: (value) =>
+                        setState(() => selectedCategory = value!),
                   ),
                   const SizedBox(height: 24),
-
-                  const Text('PAYMENT METHOD', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                  const Text('PAYMENT METHOD',
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -130,8 +151,9 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                         child: ChoiceChip(
                           label: const Center(child: Text('CASH')),
                           selected: paymentMethod == 'CASH',
-                          selectedColor: Colors.cyanAccent,
-                          onSelected: (_) => setState(() => paymentMethod = 'CASH'),
+                          selectedColor: Colors.blue,
+                          onSelected: (_) =>
+                              setState(() => paymentMethod = 'CASH'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -139,14 +161,14 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                         child: ChoiceChip(
                           label: const Center(child: Text('CARD')),
                           selected: paymentMethod == 'CARD',
-                          selectedColor: Colors.cyanAccent,
-                          onSelected: (_) => setState(() => paymentMethod = 'CARD'),
+                          selectedColor: Colors.blue,
+                          onSelected: (_) =>
+                              setState(() => paymentMethod = 'CARD'),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
-
                   ElevatedButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.camera_alt),
@@ -158,8 +180,9 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
-                  const Text('NOTES', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                  const Text('NOTES',
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   const TextField(
                     maxLines: 3,
@@ -176,21 +199,23 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                 ],
               ),
             ),
-
             SizedBox(
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.cyanAccent,
+                  backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 child: const Text(
                   'Save Transaction',
-                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
