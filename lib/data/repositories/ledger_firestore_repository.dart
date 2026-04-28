@@ -10,7 +10,8 @@ class LedgerFirestoreRepository {
     required String iconLabel,
     required String currency,
     required bool isShared,
-  }) async {
+  })
+  async {
     try {
       User? user = _auth.currentUser;
 
@@ -31,4 +32,38 @@ class LedgerFirestoreRepository {
       print("Firestore Error >>>>>>>>>>>>>>>>: $e");
     }
   }
+  
+  
+  Future<void>saveTransactionRemote({
+    required int ledgerId,
+    required double amount,
+    required bool isExpense,
+    required String paidBy,
+    required String category,
+    required String paymentMethod,
+    required String notes,
+})
+async {
+    try{
+      User? user = _auth.currentUser;
+      
+      if(user != null){
+        await _db.collection('transactions').add({
+          'userId': user.uid,
+          'ledgerId': ledgerId,
+          'amount':amount,
+          'isExpense':isExpense,
+          'paidBy': paidBy,
+          'category': category,
+          'paymentMethod': paymentMethod,
+          'notes': notes,
+
+        });
+      }
+    }catch(e){
+      print
+        ("-------------------->Error-----------------$e");
+    }
 }
+}
+

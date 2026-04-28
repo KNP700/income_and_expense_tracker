@@ -41,20 +41,24 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
       child: Builder(builder: (context) {
         return BlocListener<CreateLedgerPageBloc, CreateLedgerPageState>(
           listener: (context, state) {
+            // FIXED: Cleaned up the bracket mess and duplicate error states here
             if (state is CreateLedgerToNewLedgerState) {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const CreateLedger2Page()),
-              );
-            } else if (state is CreateLedgerPageSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Navigate to Create Ledger!')),
+                const SnackBar(
+                  content: Text('ledger created successfully'),
+                  backgroundColor: Colors.green,
+                ),
               );
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const CreateLedger2Page()),
-              );
+
+              // FIXED: Changed malformed pop code to this
+              Navigator.of(context).pop();
+
             } else if (state is CreateLedgerPageError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                ),
               );
             }
           },
@@ -68,7 +72,9 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('LEDGER NAME', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                  const Text('LEDGER NAME',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.grey)),
                   const SizedBox(height: 8),
                   TextField(
                     controller: _nameController,
@@ -78,9 +84,9 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
-
-                  const Text('SELECT ICON', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                  const Text('SELECT ICON',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.grey)),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,7 +96,9 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                         children: [
                           IconButton(
                             icon: Icon(_icons[index]['icon']),
-                            color: _selectedIconIndex == index ? Colors.blue : Colors.grey,
+                            color: _selectedIconIndex == index
+                                ? Colors.blue
+                                : Colors.grey,
                             iconSize: 32,
                             onPressed: () {
                               setState(() {
@@ -101,7 +109,9 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                           Text(
                             _icons[index]['label'],
                             style: TextStyle(
-                              color: _selectedIconIndex == index ? Colors.blue : Colors.grey,
+                              color: _selectedIconIndex == index
+                                  ? Colors.blue
+                                  : Colors.grey,
                               fontSize: 12,
                             ),
                           ),
@@ -110,13 +120,14 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
-
-                  const Text('CURRENCY', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                  const Text('CURRENCY',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.grey)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     initialValue: _Currency,
-                    decoration: const InputDecoration(border: OutlineInputBorder()),
+                    decoration:
+                    const InputDecoration(border: OutlineInputBorder()),
                     items: ['LKR - Rs', 'USD - \$'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -124,22 +135,21 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                       );
                     }).toList(),
                     onChanged: (newValue) {
-                      if(newValue != null){
+                      if (newValue != null) {
                         setState(() {
                           _Currency = newValue;
                         });
                       }
-
                     },
                   ),
                   const SizedBox(height: 24),
-
-
                   Card(
                     child: SwitchListTile(
-                      title: const Text('Shared Ledger', style: TextStyle(fontWeight: FontWeight.bold)),
+                      title: const Text('Shared Ledger',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: const Text('Invite friends to track together'),
-                      secondary: const Icon(Icons.group_add, color: Colors.blue),
+                      secondary:
+                      const Icon(Icons.group_add, color: Colors.blue),
                       value: _isShared,
                       activeThumbColor: Colors.blue,
                       onChanged: (value) {
@@ -149,10 +159,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                       },
                     ),
                   ),
-
                   const Spacer(),
-
-
                   BlocBuilder<CreateLedgerPageBloc, CreateLedgerPageState>(
                     builder: (context, state) {
                       bool isLoading = state is CreateLedgerPageLoading;
@@ -169,11 +176,12 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                           onPressed: isLoading
                               ? null
                               : () {
-                            if(_nameController.text.trim().isEmpty){
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: Text("Enter Ledger Name"),
-                                backgroundColor: Colors.redAccent,
-                              ),
+                            if (_nameController.text.trim().isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Enter Ledger Name"),
+                                  backgroundColor: Colors.redAccent,
+                                ),
                               );
                               return;
                             }
@@ -181,17 +189,22 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                             context.read<CreateLedgerPageBloc>().add(
                               CreateLedgerSubmitted(
                                 name: _nameController.text.trim(),
-                                iconLabel: _icons[_selectedIconIndex]['label'],
+                                iconLabel: _icons[_selectedIconIndex]
+                                ['label'],
                                 currency: _Currency,
                                 isShared: _isShared,
                               ),
                             );
                           },
                           child: isLoading
-                              ? const CircularProgressIndicator(color: Colors.white)
+                              ? const CircularProgressIndicator(
+                              color: Colors.white)
                               : const Text(
                             'Create Ledger',
-                            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       );

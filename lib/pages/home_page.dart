@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/pages/create_ledger2_page.dart';
 import 'package:income_and_expense_tracker/pages/create_ledger_page.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import '../View/home/home_bloc.dart';
@@ -63,7 +64,9 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider(
       create: (context) => HomeBloc(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .scaffoldBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           automaticallyImplyLeading: false,
@@ -78,7 +81,11 @@ class _HomePageState extends State<HomePage> {
             child: Text(
               "Select Ledger",
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge?.color,
+                color: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.color,
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
               ),
@@ -109,7 +116,11 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   "Your Workspaces",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    color: Theme
+                        .of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color,
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                   ),
@@ -136,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             "No ledgers found. Create one below!",
                             style:
-                                TextStyle(fontSize: 16, color: Colors.blueGrey),
+                            TextStyle(fontSize: 16, color: Colors.blueGrey),
                           ),
                         );
                       }
@@ -147,67 +158,80 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           final LedgerModel ledger = ledgers[index];
                           final gradientColors =
-                              _cardGradients[index % _cardGradients.length];
+                          _cardGradients[index % _cardGradients.length];
 
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: gradientColors,
-                                stops: const [0.1, 1.0],
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context, MaterialPageRoute(
+                                builder: (context) =>
+                                    CreateLedger2Page(ledgerId: ledger.id,
+                                      ledgerName: ledger.name ??
+                                          'Unnamed Ledger',
+                                    ),
                               ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/wallet logo for loging page.png',
-                                      width: 50,
-                                      height: 50,
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      ledger.iconLabel ?? 'General',
-                                      style: const TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white70,
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 30),
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: gradientColors,
+                                  stops: const [0.1, 1.0],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/wallet logo for loging page.png',
+                                        width: 50,
+                                        height: 50,
                                       ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      icon: const Icon(
-                                          Icons.delete_outline_rounded,
-                                          color: Colors.white),
-                                      onPressed: () {
-                                        _deleteLedger(context, ledger.id);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 40),
-                                Text(
-                                  ledger.name ?? 'Unnamed Ledger',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 27,
-                                    color: Colors.white,
+                                      const Spacer(),
+                                      Text(
+                                        ledger.iconLabel ?? 'General',
+                                        style: const TextStyle(
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      IconButton(
+                                        icon: const Icon(
+                                            Icons.delete_outline_rounded,
+                                            color: Colors.white),
+                                        onPressed: () {
+                                          _deleteLedger(context, ledger.id);
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Text(
-                                  "Currency: ${ledger.currency}",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
+                                  const SizedBox(height: 40),
+                                  Text(
+                                    ledger.name ?? 'Unnamed Ledger',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 27,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                )
-                              ],
+                                  Text(
+                                    "Currency: ${ledger.currency}",
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -236,8 +260,8 @@ class _HomePageState extends State<HomePage> {
                     return InkWell(
                       onTap: () {
                         context.read<HomeBloc>().add(
-                              HomeNavigationToCreateNewLedgerEvent(),
-                            );
+                          HomeNavigationToCreateNewLedgerEvent(),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.all(20),

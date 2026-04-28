@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
+import 'package:income_and_expense_tracker/pages/home_page.dart';
 
 class AddTransactionPage extends StatefulWidget {
-  const AddTransactionPage({super.key});
+  final int ledgerId;
+
+  const AddTransactionPage({super.key, required this.ledgerId});
 
   @override
   State<AddTransactionPage> createState() => _SimpleAddTransactionState();
 }
 
 class _SimpleAddTransactionState extends State<AddTransactionPage> {
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
+
   bool isExpense = true;
   String selectedPayer = 'Me';
   String selectedCategory = 'FOOD';
@@ -21,6 +29,48 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
     'GIFT',
     'OTHER'
   ];
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  void _saveTransaction() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    final double amount = double.tryParse(_amountController.text) ?? 0.0;
+
+    if (amount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Enter Valid Amount "), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    await context.read<LedgerRepository>().addTransaction(
+          ledgerId: widget.ledgerId,
+          amount: amount,
+          isExpense: isExpense,
+          paidBy: selectedPayer,
+          category: selectedCategory,
+          paymentMethod: paymentMethod,
+          notes: _notesController.text.trim(),
+        );
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("saved"), backgroundColor: Colors.green),
+      );
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const HomePage()),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +101,14 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                         color: Colors.grey, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const TextField(
+                  TextField(
+                    controller: _amountController,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: '0',
                       hintStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(),
@@ -84,9 +135,8 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: !isExpense
-                                ? Colors.blue
-                                : Colors.grey[800],
+                            backgroundColor:
+                                !isExpense ? Colors.blue : Colors.grey[800],
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           onPressed: () => setState(() => isExpense = false),
@@ -184,7 +234,8 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                       style: TextStyle(
                           color: Colors.grey, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  const TextField(
+                   TextField(
+                    controller: _notesController,
                     maxLines: 3,
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -203,7 +254,7 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed:_saveTransaction,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(

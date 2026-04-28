@@ -12,6 +12,37 @@ class LedgerRepository {
     required this.remoteDataSource,
   });
 
+  Future<void> addTransaction({
+    required int ledgerId,
+    required double amount,
+    required bool isExpense,
+    required String paidBy,
+    required String category,
+    required String paymentMethod,
+    required String notes,
+  }) async {
+    await localDataSource.addTransaction(ledgerId: ledgerId,
+        amount: amount,
+        isExpense: isExpense,
+        paidBy: paidBy,
+        categories: category,
+        paymentMethod: paymentMethod,
+        notes: notes,
+
+    );
+        await remoteDataSource.saveTransactionRemote(
+          ledgerId: ledgerId,
+          amount: amount,
+          isExpense: isExpense,
+          paidBy: paidBy,
+          category: category,
+          paymentMethod: paymentMethod,
+          notes: notes,
+
+        );
+  }
+
+
   Future<void> createLedger({
     required String name,
     required String iconLabel,
@@ -38,7 +69,7 @@ class LedgerRepository {
     return await localDataSource.getLedgersLocal();
   }
 
-  Future<void> deleteLedger(int id)async{
+  Future<void> deleteLedger(int id) async {
     await localDataSource.deleteLedgerLocal(id);
   }
 }

@@ -3,7 +3,16 @@ import 'package:income_and_expense_tracker/pages/add_transaction_page.dart';
 
 
 class CreateLedger2Page extends StatefulWidget {
-  const CreateLedger2Page({super.key});
+
+  final int ledgerId;
+  final String ledgerName;
+
+  CreateLedger2Page({
+    super.key,
+  required this.ledgerId,
+  required this.ledgerName,
+  });
+
 
   @override
   State<CreateLedger2Page> createState() => _SimpleLedgerPageState();
@@ -19,13 +28,13 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Trip',
-                style: TextStyle(
+            Text(widget.ledgerName,
+                style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold)),
-            Text('April 10 - April 19, 2026',
+            const Text('April 10 - April 19, 2026',
                 style: TextStyle(color: Colors.grey, fontSize: 12)),
           ],
         ),
@@ -205,7 +214,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AddTransactionPage(),
+                  MaterialPageRoute(builder: (context) => AddTransactionPage(ledgerId: widget.ledgerId),
                   ),
                 );
               },
