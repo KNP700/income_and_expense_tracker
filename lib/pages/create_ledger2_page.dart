@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:income_and_expense_tracker/pages/add_transaction_page.dart';
 
 
 class CreateLedger2Page extends StatefulWidget {
@@ -199,10 +200,15 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
             //         ),
             //       );
             //     }
-            //   },
+            //   },n
             //   builder: (context, state) {
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AddTransactionPage(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.add_circle, color: Colors.black),
               label: const Text('Add Transaction',
                   style: TextStyle(
