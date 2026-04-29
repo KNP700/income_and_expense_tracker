@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
+import 'package:income_and_expense_tracker/pages/NavigationBottomPage.dart';
 import 'package:income_and_expense_tracker/pages/create_ledger2_page.dart';
 import '../View/createLedgerPage/create_ledger_page_bloc.dart';
 
@@ -42,7 +43,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
         return BlocListener<CreateLedgerPageBloc, CreateLedgerPageState>(
           listener: (context, state) {
 
-            if (state is CreateLedgerToNewLedgerState) {
+            if (state is CreateLedgerPageSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('ledger created successfully'),
@@ -67,6 +68,12 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
             appBar: AppBar(
               title: const Text('Create New Ledger'),
               centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).push(const Navigationbottompage() as Route<Object?>);
+                },
+              ),
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),

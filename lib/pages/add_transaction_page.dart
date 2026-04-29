@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
+import 'package:income_and_expense_tracker/pages/NavigationBottomPage.dart';
+import 'package:income_and_expense_tracker/pages/create_ledger2_page.dart';
 import 'package:income_and_expense_tracker/pages/home_page.dart';
 
 class AddTransactionPage extends StatefulWidget {
@@ -65,9 +67,9 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
         const SnackBar(content: Text("saved"), backgroundColor: Colors.green),
       );
 
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const HomePage()),
-        (Route<dynamic> route) => false,
+      Navigator.of(context).pop(
+        // MaterialPageRoute(builder: (context) => const Navigationbottompage()),
+        // (Route<dynamic> route) => false,
       );
     }
   }
