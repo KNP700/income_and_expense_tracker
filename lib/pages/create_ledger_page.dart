@@ -50,7 +50,9 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                 ),
               );
 
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context)=> CreateLedger2Page(ledgerId: 0, ledgerName: _nameController.text.trim()))
+              );
 
             } else if (state is CreateLedgerPageError) {
               ScaffoldMessenger.of(context).showSnackBar(

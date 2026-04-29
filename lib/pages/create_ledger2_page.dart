@@ -139,16 +139,18 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                const Text(
-                  'TOTAL SPENT',
-                  style: TextStyle(
+                Text(
+                  _selectedTab == 0 ? 'Total Income' : 'Total Spent',
+                  style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
                       fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Rs.${totalExpense.toStringAsFixed(2)}',
+                  _selectedTab == 0
+                      ? 'Rs.${totalIncome.toStringAsFixed(2)}'
+                      : 'Rs.${totalExpense.toStringAsFixed(1)}',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 36,
@@ -215,29 +217,29 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                         style: TextStyle(color: Colors.grey)),
                   )
                 else
-                  ...displayList.map((transactions) {
+                  ...displayList.map((transaction) {
                     return Card(
                       color: const Color(0xFF15202B),
                       margin: const EdgeInsets.only(bottom: 10),
                       child: ListTile(
                         leading: Icon(
-                          _getCategoryIcon(transactions.category),
-                          color: _getCategoryColor(transactions.category),
+                          _getCategoryIcon(transaction.category),
+                          color: _getCategoryColor(transaction.category),
                         ),
-                        title: Text(transactions.category,
+                        title: Text(transaction.category,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
                         subtitle: Text(
-                            transactions.notes?.isNotEmpty == true
-                                ? transactions.notes!
-                                : transactions.paidBy,
+                            transaction.notes?.isNotEmpty == true
+                                ? transaction.notes!
+                                : transaction.paidBy,
                             style: const TextStyle(
                                 color: Colors.grey, fontSize: 10)),
                         trailing: Text(
-                          'Rs ${transactions.amount.toStringAsFixed(0)}',
+                          'Rs ${transaction.amount.toStringAsFixed(0)}',
                           style: TextStyle(
-                            color: transactions.isExpense
+                            color: transaction.isExpense
                                 ? Colors.redAccent
                                 : Colors.greenAccent,
                             fontSize: 16,
