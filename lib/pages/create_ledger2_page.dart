@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/data/model/transaction_model/transaction_model.dart';
+import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/add_transaction_page.dart';
 
-
 class CreateLedger2Page extends StatefulWidget {
-
   final int ledgerId;
   final String ledgerName;
 
   CreateLedger2Page({
     super.key,
-  required this.ledgerId,
-  required this.ledgerName,
+    required this.ledgerId,
+    required this.ledgerName,
   });
-
 
   @override
   State<CreateLedger2Page> createState() => _SimpleLedgerPageState();
@@ -20,6 +20,36 @@ class CreateLedger2Page extends StatefulWidget {
 
 class _SimpleLedgerPageState extends State<CreateLedger2Page> {
   int _selectedTab = 1;
+
+  IconData _getCategoryIcon(String category) {
+    switch (category.toUpperCase()) {
+      case 'Transport':
+        return Icons.train;
+      case 'Food':
+        return Icons.restaurant;
+      case 'Stay':
+        return Icons.bed;
+      case 'Gift':
+        return Icons.card_giftcard;
+      default:
+        return Icons.category;
+    }
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category.toUpperCase()) {
+      case 'Transport':
+        return Colors.orange;
+      case 'Food ':
+        return Colors.cyan;
+      case 'Stay':
+        return Colors.purple;
+      case 'Gift':
+        return Colors.pink;
+      default:
+        return Colors.blue;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,194 +75,277 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
           SizedBox(width: 16),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
+      body: FutureBuilder<List<TransactionModel>>(
+        future: context.read<LedgerRepository>().getTransactions(widget.ledgerId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final transactions = snapshot.data ?? [];
+
+          double totalIncome = 0;
+          double totalExpense = 0;
+
+          for (var t in transactions) {
+            if (t.isExpense) {
+              totalExpense += t.amount;
+            } else {
+              totalIncome += t.amount;
+            }
+          }
+
+          double remainingBalance = totalIncome - totalExpense;
+
+          bool showExpenses = _selectedTab == 1;
+          final displayList = transactions
+              .where((t) => t.isExpense == showExpenses)
+              .toList();
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => setState(() => _selectedTab = 0),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => setState(() => _selectedTab = 0),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
                           _selectedTab == 0 ? Colors.blue : Colors.grey[800],
+                        ),
+                        child: Text('Income',
+                            style: TextStyle(
+                                color: _selectedTab == 0
+                                    ? Colors.black
+                                    : Colors.white)),
+                      ),
                     ),
-                    child: Text('Income',
-                        style: TextStyle(
-                            color: _selectedTab == 0
-                                ? Colors.black
-                                : Colors.white)),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => setState(() => _selectedTab = 1),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => setState(() => _selectedTab = 1),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
                           _selectedTab == 1 ? Colors.red : Colors.grey[800],
+                        ),
+                        child: Text('Expenses',
+                            style: TextStyle(
+                                color: _selectedTab == 1
+                                    ? Colors.black
+                                    : Colors.white)),
+                      ),
                     ),
-                    child: Text('Expenses',
-                        style: TextStyle(
-                            color: _selectedTab == 1
-                                ? Colors.black
-                                : Colors.white)),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            const Text(
-              'TOTAL SPENT',
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Rs. 20,000',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 40),
-            Card(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: ListTile(
-                  title: Text('REMAINING BALANCE',
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold)),
-                  subtitle: Text('Rs. 15,000',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold)),
-                  trailing: Icon(Icons.account_balance_wallet,
-                      color: Colors.black, size: 36),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            const Row(
-              children: [
-                Text('COLLABORATORS',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold)),
-                Spacer(),
-                CircleAvatar(backgroundColor: Colors.green, radius: 15),
-                SizedBox(width: 5),
-                CircleAvatar(backgroundColor: Colors.grey, radius: 15),
-                SizedBox(width: 5),
-                CircleAvatar(backgroundColor: Colors.white, radius: 15),
-                SizedBox(width: 5),
-                CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Icon(Icons.add, color: Colors.white, size: 18)),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text('CATEGORIES',
+                const SizedBox(height: 40),
+                const Text(
+                  'TOTAL SPENT',
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
-                      fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(height: 10),
-            const Card(
-              color: Color(0xFF15202B),
-              child: ListTile(
-                leading: Icon(Icons.train, color: Colors.orange),
-                title: Text('Transport',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                subtitle: Text('EXPENSE',
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
-                trailing: Text('Rs 2,000',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-              ),
-            ),
-            const Card(
-              color: Color(0xFF15202B),
-              child: ListTile(
-                leading: Icon(Icons.restaurant, color: Colors.cyan),
-                title: Text('Food',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                subtitle: Text('EXPENSE',
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
-                trailing: Text('Rs 500',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-              ),
-            ),
-            const Card(
-              color: Color(0xFF15202B),
-              child: ListTile(
-                leading: Icon(Icons.bed, color: Colors.purple),
-                title: Text('Stay',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                subtitle: Text('EXPENSE',
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
-                trailing: Text('Rs 5,000',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-              ),
-            ),
-            const SizedBox(height: 30),
-            // BlocConsumer<CreateLedger2PageBloc, CreateLedger2PageState>(
-            //   listener: (context, state) {
-            //     if (state is createLegerToAddTransactionState) {
-            //       Navigator.of(context).push(
-            //         MaterialPageRoute(
-            //           builder: (context) => const AddTransactionPage(),
-            //         ),
-            //       );
-            //     }
-            //   },n
-            //   builder: (context, state) {
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AddTransactionPage(ledgerId: widget.ledgerId),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Rs.${totalExpense.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 40),
+                Card(
+                  color: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ListTile(
+                      title: const Text('REMAINING BALANCE',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold)),
+                      subtitle: Text(
+                          'Rs.${remainingBalance.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold)),
+                      trailing: const Icon(Icons.account_balance_wallet,
+                          color: Colors.black, size: 36),
+                    ),
                   ),
-                );
-              },
-              icon: const Icon(Icons.add_circle, color: Colors.black),
-              label: const Text('Add Transaction',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                minimumSize: const Size(double.infinity, 56),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-              ),
+                ),
+                const SizedBox(height: 30),
+                const Row(
+                  children: [
+                    Text('COLLABORATORS',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold)),
+                    Spacer(),
+                    CircleAvatar(backgroundColor: Colors.green, radius: 15),
+                    SizedBox(width: 5),
+                    CircleAvatar(backgroundColor: Colors.grey, radius: 15),
+                    SizedBox(width: 5),
+                    CircleAvatar(backgroundColor: Colors.white, radius: 15),
+                    SizedBox(width: 5),
+                    CircleAvatar(
+                        backgroundColor: Colors.black,
+                        child: Icon(Icons.add, color: Colors.white, size: 18)),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('TRANSACTIONS',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(height: 10),
+                if (displayList.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text("No Transactions yet",
+                        style: TextStyle(color: Colors.grey)),
+                  )
+                else
+                  ...displayList.map((transactions) {
+                    return Card(
+                      color: const Color(0xFF15202B),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: ListTile(
+                        leading: Icon(
+                          _getCategoryIcon(transactions.category),
+                          color: _getCategoryColor(transactions.category),
+                        ),
+                        title: Text(transactions.category,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                        subtitle: Text(
+                            transactions.notes?.isNotEmpty == true
+                                ? transactions.notes!
+                                : transactions.paidBy,
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 10)),
+                        trailing: Text(
+                          'Rs ${transactions.amount.toStringAsFixed(0)}',
+                          style: TextStyle(
+                            color: transactions.isExpense
+                                ? Colors.redAccent
+                                : Colors.greenAccent,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                //
+                //
+                // const Card(
+                //   color: Color(0xFF15202B),
+                //   child: ListTile(
+                //     leading: Icon(Icons.train, color: Colors.orange),
+                //     title: Text('Transport',
+                //         style: TextStyle(
+                //             color: Colors.white, fontWeight: FontWeight
+                //             .bold)),
+                //     subtitle: Text('EXPENSE',
+                //         style: TextStyle(color: Colors.grey,
+                //             fontSize: 10)),
+                //     trailing: Text('Rs 2,000',
+                //         style: TextStyle(
+                //             color: Colors.white,
+                //             fontSize: 16,
+                //             fontWeight: FontWeight.bold)),
+                //   ),
+                // ),
+                // const Card(
+                //   color: Color(0xFF15202B),
+                //   child: ListTile(
+                //     leading: Icon(Icons.restaurant, color: Colors.cyan),
+                //     title: Text('Food',
+                //         style: TextStyle(
+                //             color: Colors.white, fontWeight: FontWeight
+                //             .bold)),
+                //     subtitle: Text('EXPENSE',
+                //         style: TextStyle(color: Colors.grey,
+                //             fontSize: 10)),
+                //     trailing: Text('Rs 500',
+                //         style: TextStyle(
+                //             color: Colors.white,
+                //             fontSize: 16,
+                //             fontWeight: FontWeight.bold)),
+                //   ),
+                // ),
+                // const Card(
+                //   color: Color(0xFF15202B),
+                //   child: ListTile(
+                //     leading: Icon(Icons.bed, color: Colors.purple),
+                //     title: Text('Stay',
+                //         style: TextStyle(
+                //             color: Colors.white, fontWeight: FontWeight
+                //             .bold)),
+                //     subtitle: Text('EXPENSE',
+                //         style: TextStyle(color: Colors.grey,
+                //             fontSize: 10)),
+                //     trailing: Text('Rs 5,000',
+                //         style: TextStyle(
+                //             color: Colors.white,
+                //             fontSize: 16,
+                //             fontWeight: FontWeight.bold)),
+                //   ),
+                // ),
+                // const SizedBox(height: 30),
+                // // BlocConsumer<CreateLedger2PageBloc, CreateLedger2PageState>(
+                // //   listener: (context, state) {
+                // //     if (state is createLegerToAddTransactionState) {
+                // //       Navigator.of(context).push(
+                // //         MaterialPageRoute(
+                // //           builder: (context) => const AddTransactionPage(),
+                // //         ),
+                // //       );
+                // //     }
+                // //   },n
+                // //   builder: (context, state) {
+                const SizedBox(height: 30),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(
+                      MaterialPageRoute(
+                        builder: (context) => AddTransactionPage(
+                            ledgerId: widget.ledgerId),
+                      ),
+                    )
+                        .then((_) {
+                      setState(() {});
+                    });
+                  },
+                  icon: const Icon(Icons.add_circle, color: Colors.black),
+                  label: const Text('Add Transaction',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

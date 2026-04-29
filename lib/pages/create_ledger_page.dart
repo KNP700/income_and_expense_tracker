@@ -41,7 +41,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
       child: Builder(builder: (context) {
         return BlocListener<CreateLedgerPageBloc, CreateLedgerPageState>(
           listener: (context, state) {
-            // FIXED: Cleaned up the bracket mess and duplicate error states here
+
             if (state is CreateLedgerToNewLedgerState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -50,7 +50,6 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                 ),
               );
 
-              // FIXED: Changed malformed pop code to this
               Navigator.of(context).pop();
 
             } else if (state is CreateLedgerPageError) {

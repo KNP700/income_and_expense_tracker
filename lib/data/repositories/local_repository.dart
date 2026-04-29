@@ -14,6 +14,13 @@ class LocalRepository {
     db = openDB();
   }
 
+  Future<List<TransactionModel>>getTransactionsLocal(int ledgerId) async {
+    final isar =await db;
+
+    return await isar.transactionModels.filter().ledgerIdEqualTo(ledgerId).findAll();
+  }
+
+
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
       final dir = await getApplicationDocumentsDirectory();

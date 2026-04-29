@@ -1,3 +1,4 @@
+import 'package:income_and_expense_tracker/data/model/transaction_model/transaction_model.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_firestore_repository.dart';
 
 import '../model/ledger_model/ledger_model.dart';
@@ -72,4 +73,8 @@ class LedgerRepository {
   Future<void> deleteLedger(int id) async {
     await localDataSource.deleteLedgerLocal(id);
   }
-}
+
+  Future<List<TransactionModel>>getTransactions(int ledgerId) async {
+    return await localDataSource.getTransactionsLocal(ledgerId);
+  }
+  }
