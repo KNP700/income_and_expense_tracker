@@ -8,7 +8,7 @@ class CreateLedger2Page extends StatefulWidget {
   final int ledgerId;
   final String ledgerName;
 
-  CreateLedger2Page({
+  const CreateLedger2Page({
     super.key,
     required this.ledgerId,
     required this.ledgerName,

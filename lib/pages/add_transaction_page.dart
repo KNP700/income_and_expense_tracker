@@ -175,7 +175,7 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                           color: Colors.grey, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: selectedCategory,
+                    initialValue: selectedCategory,
                     dropdownColor: Colors.grey[900],
                     style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
@@ -239,8 +239,8 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                    TextField(
                     controller: _notesController,
                     maxLines: 3,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
                       hintText: 'Add details about this transaction...',
                       hintStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(),

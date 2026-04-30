@@ -3,7 +3,6 @@
 import 'package:income_and_expense_tracker/data/model/transaction_model/transaction_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:isar_community/isar.dart' as db;
-import 'package:path_provider/path_provider.dart';
 import 'package:isar_community/isar.dart';
 import '../model/ledger_model/ledger_model.dart';
 

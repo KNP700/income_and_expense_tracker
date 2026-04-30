@@ -1,12 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:income_and_expense_tracker/View/signup/signup_bloc.dart';
 import 'package:income_and_expense_tracker/pages/reset_password_page.dart';
 
 import '../View/forgotOtpPage/forgot_otp_page_bloc.dart';
-import '../View/signupOtpPage/signup_otp_page_bloc.dart';
-import 'create_acc_page.dart';
 
 class ForgotOtpPage extends StatelessWidget {
   const ForgotOtpPage({super.key});
