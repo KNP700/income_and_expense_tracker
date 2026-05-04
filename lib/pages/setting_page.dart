@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:income_and_expense_tracker/pages/login_page.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -124,9 +126,27 @@ class _SettingPageState extends State<SettingPage> {
 
 
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              try {
+                await FirebaseAuth.instance.signOut();
 
+                if (context.mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => LoginPage()), (
+                      route) => false,
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error -- >$e"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
             },
+
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade50,
               minimumSize: const Size(double.infinity, 50),
@@ -134,7 +154,8 @@ class _SettingPageState extends State<SettingPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text('Log Out', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold)),
+            child: const Text('Log Out', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold)
+            ),
           ),
           const SizedBox(height: 20),
         ],

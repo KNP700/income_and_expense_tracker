@@ -73,7 +73,7 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
-                  Navigator.of(context).push(const Navigationbottompage() as Route<Object?>);
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -153,22 +153,22 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  Card(
-                    child: SwitchListTile(
-                      title: const Text('Shared Ledger',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: const Text('Invite friends to track together'),
-                      secondary:
-                      const Icon(Icons.group_add, color: Colors.blue),
-                      value: _isShared,
-                      activeThumbColor: Colors.blue,
-                      onChanged: (value) {
-                        setState(() {
-                          _isShared = value;
-                        });
-                      },
-                    ),
-                  ),
+                  // Card(
+                  //   child: SwitchListTile(
+                  //     title: const Text('Shared Ledger',
+                  //         style: TextStyle(fontWeight: FontWeight.bold)),
+                  //     subtitle: const Text('Invite friends to track together'),
+                  //     secondary:
+                  //     const Icon(Icons.group_add, color: Colors.blue),
+                  //     value: _isShared,
+                  //     activeThumbColor: Colors.blue,
+                  //     onChanged: (value) {
+                  //       setState(() {
+                  //         _isShared = value;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
                   const Spacer(),
                   BlocBuilder<CreateLedgerPageBloc, CreateLedgerPageState>(
                     builder: (context, state) {

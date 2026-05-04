@@ -71,13 +71,15 @@ class AuthRepository {
 
   Future<void> sendEmailLink(String email) async {
     var acs = ActionCodeSettings(
-      url: 'https://income-and-expense-track-1e04c.firebaseapp.com/auth/action',
+      url: 'https://income-and-expense-track-1e04c.firebaseapp.com/',
       handleCodeInApp: true,
       iOSBundleId: 'com.example.incomeAndExpenseTracker',
       androidPackageName: 'com.example.income_and_expense_tracker',
       androidInstallApp: true,
       androidMinimumVersion: '12',
     );
+
+    await FirebaseAuth.instance.currentUser?.sendEmailVerification(acs);
 
     try {
       await _auth.sendSignInLinkToEmail(
