@@ -113,26 +113,36 @@ class SignupPage extends StatelessWidget {
                         onTap: state is SignupLoading
                             ? null
                             : () async {
-                                final email = _emailController.text.trim();
+                          final email = _emailController.text.trim();
 
-                                if (email.isNotEmpty && email.contains('@')) {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  await prefs.setString('user_email', email);
+                          if (email.isNotEmpty && email.contains('@')) {
+                            final prefs =
+                            await SharedPreferences.getInstance();
+                            await prefs.setString('user_email', email);
 
-                                  if (!context.mounted) return;
+                            if (!context.mounted) return;
 
-                                  context
-                                      .read<SignupBloc>()
-                                      .add(EmailSubmitted(email));
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Please enter a valid email address")),
-                                  );
-                                }
-                              },
+                            // context
+                            //     .read<SignupBloc>()
+                            //     .add(EmailSubmitted(email));
+                            // ------------------------------------
+
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CreateAccPage(),
+                              ),
+                            );
+                            // -----------------------------
+
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Please enter a valid email address")),
+                            );
+                          }
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
@@ -242,8 +252,6 @@ class SignupPage extends StatelessWidget {
                               fontSize: 17,
                             ),
                           ),
-
-                          //here
                           BlocConsumer<SignupBloc, SignupState>(
                             listener: (context, state) {
                               if (state is SignupNavigateToSigninActionState) {
@@ -265,8 +273,8 @@ class SignupPage extends StatelessWidget {
                                 ),
                                 onTap: () {
                                   context.read<SignupBloc>().add(
-                                        SignupNavigateToSigninActionEvent(),
-                                      );
+                                    SignupNavigateToSigninActionEvent(),
+                                  );
                                 },
                               );
                             },

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -13,7 +14,29 @@ class _SettingPageState extends State<SettingPage> {
 
   bool _isDarkMode = true;
   bool _isNotificationsEnabled = false;
-  bool _isBiometricEnabled = true;
+  bool _isBiometricEnabled = false;
+
+
+  @override
+  void initState(){
+    super.initState();
+    _detectBiometricType();
+  }
+
+  Future<void> _detectBiometricType()async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isBiometricEnabled = prefs.getBool('use biometric')?? false;
+    });
+  }
+
+  Future<void> __toggleLock(bool value) async{
+    final prefs =  await SharedPreferences.getInstance();
+    await prefs.setBool('use biomatric', value);
+    setState(() {
+      _isBiometricEnabled = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +118,8 @@ class _SettingPageState extends State<SettingPage> {
                   subtitle: const Text('FaceID / TouchID'),
                   value: _isBiometricEnabled,
                   onChanged: (val) {
-                    setState(() {
-                      _isBiometricEnabled = val;
-                    });
+                    __toggleLock(val) ;
+
                   },
                 ),
                 const Divider(height: 1),

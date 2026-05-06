@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repositories/auth_repository.dart'; // Make sure this path is correct!
 
-// Your existing imports
-
 part 'login_event.dart';
 
 part 'login_state.dart';
@@ -16,6 +14,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginNavigateIntoHomeEvent>(_onNavigate2);
     on<LoginWithMobileToMobileEvent>(_onNavigate3);
 
+    on<LoginSubmittedEvent>(_onLoginSubmitted);
     on<GoogleSignInEvent>(_onGoogleSignIn);
   }
 
@@ -50,6 +49,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         emit(LoginFailureState("Google Sign-In Failed."));
       }
+    } catch (e) {
+      emit(LoginFailureState(e.toString()));
+    }
+  }
+
+  Future<void> _onLoginSubmitted(
+      LoginSubmittedEvent event, Emitter<LoginState> emit) async {
+    emit(LoginLoadingState());
+    try {
+      await authRepository.loginWithEmailAndPassword(
+        event.email,
+        event.password,
+      );
+
+      emit(LoginSuccessState());
     } catch (e) {
       emit(LoginFailureState(e.toString()));
     }

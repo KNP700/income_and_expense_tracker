@@ -23,7 +23,6 @@ class AuthRepository {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
       return await _auth.signInWithCredential(credential);
     } catch (e) {
       throw Exception(e.toString());
@@ -36,8 +35,9 @@ class AuthRepository {
     required String lastName,
     required String password,
   }) async {
-    User? user = _auth.currentUser;
-
+    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: username, password: password);
+    User? user = userCredential.user;
     if (user != null) {
       await user.updateDisplayName("$firstName $lastName");
       await user.updatePassword(password);
@@ -47,7 +47,6 @@ class AuthRepository {
         'email': user.email,
         'firstName': firstName,
         'lastName': lastName,
-        'username': username,
         'createdAt': FieldValue.serverTimestamp(),
       });
     } else {
@@ -95,7 +94,7 @@ class AuthRepository {
     return _auth.isSignInWithEmailLink(link);
   }
 
-  Future<UserCredential> signInWithEmailLink(String email, String link) async {
-    return await _auth.signInWithEmailLink(email: email, emailLink: link);
+  Future<UserCredential> loginWithEmailAndPassword(String email, String password) async {
+    return await _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 }

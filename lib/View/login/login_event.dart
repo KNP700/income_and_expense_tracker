@@ -18,4 +18,15 @@ class LoginNavigateIntoHomeEvent extends LoginEvent{}
 class LoginWithMobileToMobileEvent extends LoginEvent{}
 
 
-class GoogleSignInEvent extends LoginEvent {}   //GoogleSignInRequested
+class GoogleSignInEvent extends LoginEvent {}
+
+
+class LoginSubmittedEvent extends LoginEvent {
+  final String email;
+  final String password;
+
+  LoginSubmittedEvent({
+    required this.email,
+    required this.password,
+  });
+}

@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                     .textTheme
                     .bodyLarge
                     ?.color,
-                fontSize: 50,
+                fontSize: 35,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                         .textTheme
                         .bodyMedium
                         ?.color,
-                    fontSize: 40,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

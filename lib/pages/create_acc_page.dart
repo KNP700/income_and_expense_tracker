@@ -4,18 +4,49 @@ import 'package:income_and_expense_tracker/View/createAccPage/create_acc_page_bl
 import 'package:income_and_expense_tracker/data/repositories/auth_repository.dart';
 import 'package:income_and_expense_tracker/pages/home_page.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CreateAccPage extends StatelessWidget {
-   CreateAccPage({super.key});
+import 'NavigationBottomPage.dart';
 
+class CreateAccPage extends StatefulWidget {
+  const CreateAccPage({super.key});
+
+  @override
+  State<CreateAccPage> createState() => _CreateAccPageState();
+}
+
+class _CreateAccPageState extends State<CreateAccPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _loadSavedEmail();
+  }
+
+  Future<void> _loadSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString('user_email') ?? '';
+    if (!mounted) return;
+    setState(() {
+      _emailController.text = savedEmail;
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return BlocProvider(
       create: (context) => CreateAccPageBloc(authRepository: AuthRepository()),
       child: Scaffold(
@@ -40,10 +71,7 @@ class CreateAccPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
-                  // const SizedBox(width: 10),
                   const Text(
                     "  Join us to start tracking your finances.",
                     style: TextStyle(
@@ -52,19 +80,7 @@ class CreateAccPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 30),
-                  // Container(
-                  //   width: 100,
-                  //   height: 100,
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle,
-                  //     image: DecorationImage(
-                  //         image: AssetImage('assets/icon/username_icon.png'),
-                  //         fit: BoxFit.fill
-                  //     ),
-                  //   ),
-                  // ),
                   Center(
                     child: Stack(
                       children: [
@@ -74,7 +90,6 @@ class CreateAccPage extends StatelessWidget {
                           backgroundImage: const NetworkImage(
                             'assets/icon/my_image.png',
                           ),
-
                           child: const Text(
                             'K',
                             style: TextStyle(fontSize: 40),
@@ -84,44 +99,36 @@ class CreateAccPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  //this space to add photo option (UI)
                   const SizedBox(height: 30),
-
                   const Text(
-                    "USERNAME",
+                    "Email Address",
                     style: TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   TextField(
-                    controller: _usernameController,
+                    controller: _emailController,
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.email),
                       filled: true,
                       fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      hintText: 'Username',
+                      hintText: 'name@example.com',
                       hintStyle: const TextStyle(
                         color: Colors.blueGrey,
                         fontSize: 16,
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-
                     children: [
                       Expanded(
                         child: Column(
@@ -136,9 +143,7 @@ class CreateAccPage extends StatelessWidget {
                                 fontSize: 18,
                               ),
                             ),
-
                             const SizedBox(height: 10),
-
                             TextField(
                               controller: _firstNameController,
                               style: const TextStyle(
@@ -162,9 +167,7 @@ class CreateAccPage extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       const SizedBox(width: 50),
-
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,9 +180,7 @@ class CreateAccPage extends StatelessWidget {
                                 fontSize: 18,
                               ),
                             ),
-
                             const SizedBox(height: 10),
-
                             TextField(
                               controller: _lastNameController,
                               style: const TextStyle(
@@ -205,9 +206,7 @@ class CreateAccPage extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 20),
-
                   const Text(
                     'PASSWORD',
                     style: TextStyle(
@@ -216,11 +215,10 @@ class CreateAccPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   TextField(
                     controller: _passwordController,
+                    obscureText: true,
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
@@ -236,9 +234,7 @@ class CreateAccPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   const Text(
                     'CONFIRM PASSWORD',
                     style: TextStyle(
@@ -247,10 +243,9 @@ class CreateAccPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   TextField(
+                    obscureText: true,
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock_clock),
@@ -266,22 +261,21 @@ class CreateAccPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 40),
-
                   BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
                     listener: (context, state) {
                       if (state is CreateAccSuccessState) {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => const HomePage()),
+                          MaterialPageRoute(
+                              builder: (context) => const Navigationbottompage()),
                         );
                       }
-                      if (state is CreateAccErrorState){
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage),),);
+                      if (state is CreateAccErrorState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.errorMessage)),
+                        );
                       }
-                      },
-
-
+                    },
                     builder: (context, state) {
                       return Builder(
                         builder: (context) {
@@ -289,8 +283,9 @@ class CreateAccPage extends StatelessWidget {
                             onTap: () {
                               context.read<CreateAccPageBloc>().add(
                                 CreateAccDetailsSubmitted(
-                                  username: _usernameController.text.trim(),
-                                  firstName: _firstNameController.text.trim(),
+                                  email: _emailController.text.trim(),
+                                  firstName:
+                                  _firstNameController.text.trim(),
                                   lastName: _lastNameController.text.trim(),
                                   password: _passwordController.text.trim(),
                                 ),
@@ -323,18 +318,14 @@ class CreateAccPage extends StatelessWidget {
                       );
                     },
                   ),
-
                   const SizedBox(height: 15),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-
                     children: [
                       const Text(
                         "Already have an account? ",
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
-
                       BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
                         listener: (context, state) {
                           if (state is ContinueCreateAccToSignIn2State) {
@@ -354,7 +345,6 @@ class CreateAccPage extends StatelessWidget {
                                 fontSize: 17,
                               ),
                             ),
-
                             onTap: () {
                               context.read<CreateAccPageBloc>().add(
                                 ContinueCreateAccToSignIn2Event(),
