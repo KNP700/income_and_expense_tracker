@@ -44,6 +44,8 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
           listener: (context, state) {
 
             if (state is CreateLedgerPageSuccess) {
+              context.read<LedgerRepository>().clearAllData();
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('ledger created successfully'),
@@ -51,9 +53,13 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                 ),
               );
 
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
               //
-              // Navigator.of(context).pushReplacement(
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const Navigationbottompage()),
+              );
+
+
               //   MaterialPageRoute(builder: (context)=> CreateLedger2Page(ledgerId: 0, ledgerName: _nameController.text.trim()))
               // );
 

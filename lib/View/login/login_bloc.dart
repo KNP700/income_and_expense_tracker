@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/repositories/auth_repository.dart'; // Make sure this path is correct!
+import '../../data/repositories/auth_repository.dart';
 
 part 'login_event.dart';
 

@@ -6,9 +6,9 @@ part of 'login_bloc.dart';
 class LoginInitial extends LoginState {}
 
 class LoginNavigateToSignupActionState extends LoginState {}
-// class LoginFailed extends LoginState {
-//   String get message => 'Failed!!';
-// }
+class LoginFailed extends LoginState {
+  String get message => 'Failed!!';
+}
 class LoginInProgress extends LoginState {}
 
 class LoginNavigateToForgotActionState extends LoginState{}

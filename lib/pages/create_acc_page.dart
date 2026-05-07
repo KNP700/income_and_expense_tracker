@@ -267,7 +267,7 @@ class _CreateAccPageState extends State<CreateAccPage> {
                       if (state is CreateAccSuccessState) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                              builder: (context) => const Navigationbottompage()),
+                              builder: (context) => const LoginPage()),
                         );
                       }
                       if (state is CreateAccErrorState) {

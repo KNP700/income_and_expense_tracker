@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/create_acc_page.dart';
 import 'package:income_and_expense_tracker/pages/forgot_page.dart';
 import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
@@ -50,11 +51,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 );
               } else if (state is LoginSuccessState) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const Navigationbottompage(),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Syncing your data..."),
+                    backgroundColor: Colors.blue,
+                    duration: Duration(seconds: 1),
                   ),
                 );
+
+                context.read<LedgerRepository>().syncDataFromCloud().then((_) {
+                  if (context.mounted) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const Navigationbottompage(),
+                      ),
+                    );
+                  }
+                });
               }
             },
             child: SafeArea(
@@ -156,12 +169,15 @@ class _LoginPageState extends State<LoginPage> {
                                 ? null
                                 : () {
                               final email = _emailController.text.trim();
-                              final password = _passwordController.text.trim();
+                              final password =
+                              _passwordController.text.trim();
 
                               if (email.isEmpty || password.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(
                                   const SnackBar(
-                                    content: Text("Please enter both email and password"),
+                                    content: Text(
+                                        "Please enter both email and password"),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -226,7 +242,9 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              context.read<LoginBloc>().add(GoogleSignInEvent());
+                              context
+                                  .read<LoginBloc>()
+                                  .add(GoogleSignInEvent());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -264,7 +282,9 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     "Apple",
                                     style: TextStyle(
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -304,7 +324,9 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Text(
                                         "Login with Mobile",
                                         style: TextStyle(
-                                          color: isDarkMode ? Colors.white : Colors.black,
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -322,16 +344,21 @@ class _LoginPageState extends State<LoginPage> {
                               Text(
                                 "Don't have an account? ",
                                 style: TextStyle(
-                                  color: Theme.of(context).textTheme.bodySmall?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color,
                                   fontSize: 17,
                                 ),
                               ),
                               BlocConsumer<LoginBloc, LoginState>(
                                 listener: (context, state) {
-                                  if (state is LoginNavigateToSignupActionState) {
+                                  if (state
+                                  is LoginNavigateToSignupActionState) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => const CreateAccPage(),
+                                        builder: (context) =>
+                                        const CreateAccPage(),
                                       ),
                                     );
                                   }

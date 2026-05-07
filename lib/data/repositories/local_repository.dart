@@ -1,4 +1,3 @@
-
 // import 'package:isar/isar.dart';
 import 'package:income_and_expense_tracker/data/model/transaction_model/transaction_model.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,12 +12,14 @@ class LocalRepository {
     db = openDB();
   }
 
-  Future<List<TransactionModel>>getTransactionsLocal(int ledgerId) async {
-    final isar =await db;
+  Future<List<TransactionModel>> getTransactionsLocal(int ledgerId) async {
+    final isar = await db;
 
-    return await isar.transactionModels.filter().ledgerIdEqualTo(ledgerId).findAll();
+    return await isar.transactionModels
+        .filter()
+        .ledgerIdEqualTo(ledgerId)
+        .findAll();
   }
-
 
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
@@ -39,7 +40,7 @@ class LocalRepository {
     required String categories,
     required String paymentMethod,
     required String notes,
-})async{
+  }) async {
     final isar = await db;
     final transaction = TransactionModel();
     transaction.ledgerId = ledgerId;
@@ -51,13 +52,10 @@ class LocalRepository {
     transaction.notes = notes;
     transaction.date = DateTime.now();
 
-    await isar.writeTxn(()async{
+    await isar.writeTxn(() async {
       await isar.transactionModels.put(transaction);
     });
-
   }
-
-
 
   Future<void> saveLedgerLocal(LedgerModel ledger) async {
     final isar = await db;
@@ -66,16 +64,30 @@ class LocalRepository {
     });
   }
 
-  Future<void> deleteLedgerLocal(int id) async{
+  Future<void> deleteLedgerLocal(int id) async {
     final isar = await db;
-    await isar.writeTxn(()async{
+    await isar.writeTxn(() async {
       await isar.ledgerModels.delete(id);
     });
   }
 
-
   Future<List<LedgerModel>> getLedgersLocal() async {
     final isar = await db;
     return await isar.ledgerModels.where().findAll();
+  }
+
+  Future<void> clearAllData() async {
+    final isar = await db;
+    await isar.writeTxn(() async {
+      await isar.clear();
+    });
+  }
+
+  Future<void> saveTransactionLocal(TransactionModel transaction) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.transactionModels.put(transaction);
+    });
   }
 }

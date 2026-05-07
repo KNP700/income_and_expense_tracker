@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
+import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:income_and_expense_tracker/data/repositories/local_repository.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -150,6 +153,8 @@ class _SettingPageState extends State<SettingPage> {
           ElevatedButton(
             onPressed: () async {
               try {
+                await context.read<LedgerRepository>().clearAllData();
+
                 await FirebaseAuth.instance.signOut();
 
                 if (context.mounted) {
