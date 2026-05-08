@@ -1,3 +1,4 @@
+import 'package:biometric_signature/biometric_signature.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
@@ -7,6 +8,9 @@ import 'package:income_and_expense_tracker/pages/login_with_mobile_page.dart';
 import '../View/login/login_bloc.dart';
 import '../data/repositories/auth_repository.dart';
 import 'navigationBottomPage.dart';
+
+
+final biometricSignature = BiometricSignature();
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

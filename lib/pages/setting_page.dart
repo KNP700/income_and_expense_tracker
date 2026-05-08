@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:income_and_expense_tracker/data/repositories/local_repository.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -14,31 +13,30 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   bool _isDarkMode = true;
   bool _isNotificationsEnabled = false;
   bool _isBiometricEnabled = false;
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _detectBiometricType();
   }
 
-  Future<void> _detectBiometricType()async{
+  Future<void> _detectBiometricType() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isBiometricEnabled = prefs.getBool('use biometric')?? false;
+      _isBiometricEnabled = prefs.getBool('use_biometrics') ?? false;
     });
   }
 
-  Future<void> __toggleLock(bool value) async{
-    final prefs =  await SharedPreferences.getInstance();
-    await prefs.setBool('use biomatric', value);
+  Future<void> __toggleLock(bool value) async {
     setState(() {
       _isBiometricEnabled = value;
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('use_biometrics', value);
   }
 
   @override
@@ -48,12 +46,9 @@ class _SettingPageState extends State<SettingPage> {
         title: const Text('Settings'),
         centerTitle: true,
       ),
-
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-
-
           const CircleAvatar(
             radius: 45,
             backgroundColor: Colors.blue,
@@ -67,9 +62,8 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
           const SizedBox(height: 32),
-
-
-          const Text('PREFERENCES', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          const Text('PREFERENCES',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           Card(
             child: Column(
@@ -102,15 +96,15 @@ class _SettingPageState extends State<SettingPage> {
                   leading: Icon(Icons.attach_money, color: Colors.blue),
                   title: Text('Currency Format'),
                   subtitle: Text('LKR (Rs)'),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  trailing: Icon(
+                      Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
-
-
-          const Text('SECURITY', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          const Text('SECURITY',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           Card(
             child: Column(
@@ -121,8 +115,7 @@ class _SettingPageState extends State<SettingPage> {
                   subtitle: const Text('FaceID / TouchID'),
                   value: _isBiometricEnabled,
                   onChanged: (val) {
-                    __toggleLock(val) ;
-
+                    __toggleLock(val);
                   },
                 ),
                 const Divider(height: 1),
@@ -130,15 +123,15 @@ class _SettingPageState extends State<SettingPage> {
                   leading: Icon(Icons.restore, color: Colors.blue),
                   title: Text('Change Password'),
                   subtitle: Text('Last changed 3 months ago'),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  trailing: Icon(
+                      Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
-
-
-          const Text('ABOUT', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          const Text('ABOUT',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           const Card(
             child: ListTile(
@@ -148,32 +141,29 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
           const SizedBox(height: 32),
-
-
           ElevatedButton(
             onPressed: () async {
               try {
                 await context.read<LedgerRepository>().clearAllData();
-
                 await FirebaseAuth.instance.signOut();
 
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => LoginPage()), (
-                      route) => false,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                        (route) => false,
                   );
                 }
               } catch (e) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Error -- >$e"),
+                    SnackBar(
+                      content: Text("Error -- >$e"),
                       backgroundColor: Colors.red,
                     ),
                   );
                 }
               }
             },
-
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade50,
               minimumSize: const Size(double.infinity, 50),
@@ -181,8 +171,11 @@ class _SettingPageState extends State<SettingPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text('Log Out', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold)
-            ),
+            child: const Text('Log Out',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 20),
         ],
