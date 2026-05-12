@@ -10,8 +10,10 @@ class ReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LedgerPageBloc(),
-      child: const Scaffold(
-        backgroundColor: Color(0XFF0a1625),
+      child:  Scaffold(
+        backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
         body: Center(
           child: Text("Report Page", style: TextStyle(color: Colors.white)),
         ),

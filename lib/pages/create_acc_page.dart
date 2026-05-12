@@ -50,7 +50,9 @@ class _CreateAccPageState extends State<CreateAccPage> {
     return BlocProvider(
       create: (context) => CreateAccPageBloc(authRepository: AuthRepository()),
       child: Scaffold(
-        backgroundColor: const Color(0XFF0a1625),
+        backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20.0),

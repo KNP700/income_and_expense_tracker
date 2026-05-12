@@ -17,7 +17,9 @@ class MobileOtpPage extends StatelessWidget {
     return BlocProvider(
         create: (context) => MobileOtpPageBloc(),
         child: Scaffold(
-          backgroundColor: const Color(0XFF0a1625),
+          backgroundColor:Theme
+            .of(context)
+            .scaffoldBackgroundColor,
           body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),

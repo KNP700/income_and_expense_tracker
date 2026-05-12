@@ -12,7 +12,9 @@ class ForgotOtpPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ForgotOtpPageBloc(),
       child: Scaffold(
-        backgroundColor: const Color(0XFF0a1625),
+        backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20.0),

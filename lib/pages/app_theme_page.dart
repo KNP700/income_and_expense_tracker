@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppThemePage {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF0D171C),
+    scaffoldBackgroundColor:  Colors.black87,
     cardColor: const Color(0xFF15202B),
     dividerColor: const Color(0xFF2A3948),
     appBarTheme: const AppBarTheme(
@@ -59,6 +59,10 @@ class AppThemePage {
       ),
     ),
   );
+
+
+
+
 
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
