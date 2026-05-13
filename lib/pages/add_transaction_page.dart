@@ -261,13 +261,13 @@ class _SimpleAddTransactionState extends State<AddTransactionPage> {
                       TextField(
                         controller: _notesController,
                         maxLines: 3,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
+                        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),
+                        decoration: InputDecoration(
                           hintText: 'Add details about this transaction...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(),
+                          hintStyle: TextStyle(color:isDarkMode ? Colors.white54 : Colors.grey,),
+                          border: const OutlineInputBorder(),
                           filled: true,
-                          fillColor: Colors.black45,
+                          fillColor: isDarkMode ? Colors.black : Colors.white,
                         ),
                       ),
                       const SizedBox(height: 24),
