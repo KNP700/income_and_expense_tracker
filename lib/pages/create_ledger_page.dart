@@ -88,9 +88,14 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('LEDGER NAME',
+                  Text('LEDGER NAME',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.grey)),
+                          fontWeight: FontWeight.bold, color: Theme
+                      .of(context)
+                      .textTheme
+                          .bodyMedium
+                          ?.color,
+                      )),
                   const SizedBox(height: 8),
                   TextField(
                     controller: _nameController,
@@ -100,9 +105,14 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text('SELECT ICON',
+                   Text('SELECT ICON',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.grey)),
+                          fontWeight: FontWeight.bold, color: Theme
+                      .of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color,
+                      )),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -136,9 +146,15 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text('CURRENCY',
+                   Text('CURRENCY',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.grey)),
+                          fontWeight: FontWeight.bold, color: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color,
+
+                      )),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     initialValue: _Currency,

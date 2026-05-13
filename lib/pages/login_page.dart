@@ -111,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.email),
                           hintText: 'name@example.com',
+
                         ),
                       ),
                       const SizedBox(height: 20),

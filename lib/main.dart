@@ -6,19 +6,25 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/pages/app_theme_page.dart';
 import 'package:income_and_expense_tracker/pages/start_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/ledger_firestore_repository.dart';
 import 'data/repositories/ledger_repository.dart';
 import 'data/repositories/local_repository.dart';
 
+
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  final prefs = await SharedPreferences.getInstance();
+  final isDark = prefs.getBool('is_dark_mode') ?? true;
+  themeNotifier.value = isDark ? ThemeMode.dark : ThemeMode.light;
+
   runApp(const MyApp());
 }
 
-// 1. Change this to StatefulWidget
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -35,6 +41,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _initDeepLinks();
   }
+
 
   void _initDeepLinks() {
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
@@ -69,14 +76,20 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Income Tracker',
-        theme: AppThemePage.lightTheme,
-        darkTheme: AppThemePage.darkTheme,
-        themeMode: ThemeMode.system,
-        home: const StartView(),
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Income Tracker',
+            theme: AppThemePage.lightTheme,
+            darkTheme: AppThemePage.darkTheme,
+            themeMode: currentMode,
+            home: const StartView(),
+          );
+        },
       ),
     );
   }
 }
+

@@ -171,8 +171,7 @@ class _LedgerPageState extends State<LedgerPage> {
                         final ledger = ledgers[index];
                         return ListTile(
                           leading: CircleAvatar(
-                            backgroundColor:
-                            Colors.blueAccent.withOpacity(0.2),
+                            backgroundColor: Colors.blueAccent.withOpacity(0.2),
                             child: Icon(
                               _getLedgerIcon(ledger.iconLabel),
                               color: Colors.blueAccent,
@@ -186,8 +185,8 @@ class _LedgerPageState extends State<LedgerPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AddTransactionPage(
-                                    ledgerId: ledger.id),
+                                builder: (context) =>
+                                    AddTransactionPage(ledgerId: ledger.id),
                               ),
                             ).then((_) {
                               setState(() {});
@@ -209,9 +208,7 @@ class _LedgerPageState extends State<LedgerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-      .of (context)
-      .scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -255,7 +252,7 @@ class _LedgerPageState extends State<LedgerPage> {
                   ),
                   ChoiceChip(
                     label: Text(_selectedFilter == DateFilter.custom &&
-                        _customDataRange != null
+                            _customDataRange != null
                         ? '${_customDataRange!.start.day}/${_customDataRange!.start.month} - ${_customDataRange!.end.day}/${_customDataRange!.end.month}'
                         : 'Custom'),
                     selected: _selectedFilter == DateFilter.custom,
@@ -344,7 +341,7 @@ class _LedgerPageState extends State<LedgerPage> {
                   final totalIncome = stats['income'] as double;
                   final totalExpense = stats['expense'] as double;
                   final transactionList =
-                  stats['transactions'] as List<TransactionModel>;
+                      stats['transactions'] as List<TransactionModel>;
                   final remainingBalance = totalIncome - totalExpense;
 
                   double incomeValue = 0.0;
@@ -372,7 +369,10 @@ class _LedgerPageState extends State<LedgerPage> {
                               child: CircularProgressIndicator(
                                   value: 1.0,
                                   strokeWidth: 16,
-                                  color: Colors.grey[900]),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color),
                             ),
                             SizedBox(
                               width: 220,
@@ -393,18 +393,26 @@ class _LedgerPageState extends State<LedgerPage> {
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text('TOTAL BALANCE',
+                                Text('TOTAL BALANCE',
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Rs.${remainingBalance.toStringAsFixed(0)}',
                                   style: TextStyle(
-                                    color: remainingBalance >= 0
-                                        ? Colors.white
-                                        : Colors.redAccent,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color,
+
+                                    // remainingBalance >= 0
+                                    //     ? Colors.white
+                                    //     : Colors.redAccent,
                                     fontSize: 36,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -427,8 +435,11 @@ class _LedgerPageState extends State<LedgerPage> {
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 8),
                               Text('Rs.${totalIncome.toStringAsFixed(0)}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold)),
                             ],
@@ -443,8 +454,11 @@ class _LedgerPageState extends State<LedgerPage> {
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 8),
                               Text('Rs.${totalExpense.toStringAsFixed(0)}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold)),
                             ],
@@ -472,7 +486,10 @@ class _LedgerPageState extends State<LedgerPage> {
                       else
                         ...transactionList.map((transaction) {
                           return Card(
-                            color: const Color(0xFF15202B),
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.color,
                             margin: const EdgeInsets.only(bottom: 10),
                             child: ListTile(
                               leading: Icon(
@@ -520,7 +537,8 @@ class _LedgerPageState extends State<LedgerPage> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }
@@ -546,7 +564,10 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey[900],
+      color: Theme.of(context)
+          .textTheme
+          .bodySmall
+          ?.color,
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
@@ -573,8 +594,14 @@ class CategoryCard extends StatelessWidget {
               width: 60,
               child: LinearProgressIndicator(
                 value: progress,
-                backgroundColor: Colors.grey[800],
-                color: color,
+                backgroundColor:Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.color,
+                color: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.color,
                 minHeight: 4,
                 borderRadius: BorderRadius.circular(4),
               ),

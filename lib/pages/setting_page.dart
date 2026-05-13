@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../main.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -20,23 +22,42 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    _detectBiometricType();
+    _loadSettings();
   }
 
-  Future<void> _detectBiometricType() async {
+  Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isBiometricEnabled = prefs.getBool('use_biometrics') ?? false;
+      _isDarkMode = prefs.getBool('is_dark_mode') ?? true;
+      _isNotificationsEnabled = prefs.getBool('is_notifications_enabled') ?? false;
     });
   }
 
-  Future<void> __toggleLock(bool value) async {
+  Future<void> _toggleLock(bool value) async {
     setState(() {
       _isBiometricEnabled = value;
     });
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('use_biometrics', value);
+  }
+
+  Future<void> _toggleTheme(bool value) async {
+    setState(() {
+      _isDarkMode = value;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_dark_mode', value);
+    themeNotifier.value = value ? ThemeMode.dark : ThemeMode.light;
+  }
+
+  Future<void> _toggleNotifications(bool value) async {
+    setState(() {
+      _isNotificationsEnabled = value;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_notifications_enabled', value);
   }
 
   @override
@@ -73,11 +94,7 @@ class _SettingPageState extends State<SettingPage> {
                   title: const Text('Dark Mode'),
                   subtitle: const Text('Reduce eye strain'),
                   value: _isDarkMode,
-                  onChanged: (val) {
-                    setState(() {
-                      _isDarkMode = val;
-                    });
-                  },
+                  onChanged: _toggleTheme,
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
@@ -85,11 +102,7 @@ class _SettingPageState extends State<SettingPage> {
                   title: const Text('Notifications'),
                   subtitle: const Text('Daily spending alerts'),
                   value: _isNotificationsEnabled,
-                  onChanged: (val) {
-                    setState(() {
-                      _isNotificationsEnabled = val;
-                    });
-                  },
+                  onChanged: _toggleNotifications,
                 ),
                 const Divider(height: 1),
                 const ListTile(
@@ -114,9 +127,7 @@ class _SettingPageState extends State<SettingPage> {
                   title: const Text('Biometric Lock'),
                   subtitle: const Text('FaceID / TouchID'),
                   value: _isBiometricEnabled,
-                  onChanged: (val) {
-                    __toggleLock(val);
-                  },
+                  onChanged: _toggleLock,
                 ),
                 const Divider(height: 1),
                 const ListTile(

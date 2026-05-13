@@ -58,9 +58,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
     return BlocProvider(
       create: (context) => CreateLedger2PageBloc(),
       child: Scaffold(
-        backgroundColor: Theme
-        .of(context)
-        .scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -68,10 +66,10 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.ledgerName,
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
-              const Text('April 10 - April 19, 2026',
-                  style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
           actions: const [
@@ -82,8 +80,8 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
           ],
         ),
         body: FutureBuilder<List<TransactionModel>>(
-          future: context.read<LedgerRepository>().getTransactions(
-              widget.ledgerId),
+          future:
+              context.read<LedgerRepository>().getTransactions(widget.ledgerId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -104,9 +102,8 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
             double remainingBalance = totalIncome - totalExpense;
 
             bool showExpenses = _selectedTab == 1;
-            final displayList = transactions
-                .where((t) => t.isExpense == showExpenses)
-                .toList();
+            final displayList =
+                transactions.where((t) => t.isExpense == showExpenses).toList();
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -118,8 +115,9 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                         child: ElevatedButton(
                           onPressed: () => setState(() => _selectedTab = 0),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                            _selectedTab == 0 ? Colors.blue : Colors.grey[800],
+                            backgroundColor: _selectedTab == 0
+                                ? Colors.blue
+                                : Colors.grey[800],
                           ),
                           child: Text('Income',
                               style: TextStyle(
@@ -133,8 +131,9 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                         child: ElevatedButton(
                           onPressed: () => setState(() => _selectedTab = 1),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                            _selectedTab == 1 ? Colors.red : Colors.grey[800],
+                            backgroundColor: _selectedTab == 1
+                                ? Colors.red
+                                : Colors.grey[800],
                           ),
                           child: Text('Expenses',
                               style: TextStyle(
@@ -148,9 +147,9 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                   const SizedBox(height: 40),
                   Text(
                     _selectedTab == 0 ? 'Total Income' : 'Total Spent',
-                    style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
@@ -158,8 +157,8 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                     _selectedTab == 0
                         ? 'Rs.${totalIncome.toStringAsFixed(2)}'
                         : 'Rs.${totalExpense.toStringAsFixed(1)}',
-                    style: const TextStyle(
-                        color: Colors.white,
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 36,
                         fontWeight: FontWeight.bold),
                   ),
@@ -189,40 +188,44 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                   ),
                   const SizedBox(height: 30),
                   const Row(
-                    children: [
-                      Text('COLLABORATORS',
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold)),
-                      Spacer(),
-                      CircleAvatar(backgroundColor: Colors.green, radius: 15),
-                      SizedBox(width: 5),
-                      CircleAvatar(backgroundColor: Colors.grey, radius: 15),
-                      SizedBox(width: 5),
-                      CircleAvatar(backgroundColor: Colors.white, radius: 15),
-                      SizedBox(width: 5),
-                      CircleAvatar(
-                          backgroundColor: Colors.black,
-                          child: Icon(
-                              Icons.add, color: Colors.white, size: 18)),
-                    ],
+                    // children: [
+                    //   Text('COLLABORATORS',
+                    //       style: TextStyle(
+                    //           color: Colors.blue,
+                    //           fontSize: 12,
+                    //           fontWeight: FontWeight.bold)),
+                    //   Spacer(),
+                    //   CircleAvatar(backgroundColor: Colors.green, radius: 15),
+                    //   SizedBox(width: 5),
+                    //   CircleAvatar(backgroundColor: Colors.grey, radius: 15),
+                    //   SizedBox(width: 5),
+                    //   CircleAvatar(backgroundColor: Colors.white, radius: 15),
+                    //   SizedBox(width: 5),
+                    //   CircleAvatar(
+                    //       backgroundColor: Colors.black,
+                    //       child:
+                    //           Icon(Icons.add, color: Colors.white, size: 18)),
+                    // ],
                   ),
                   const SizedBox(height: 30),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text('TRANSACTIONS',
                         style: TextStyle(
-                            color: Colors.grey,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 12,
                             fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(height: 10),
                   if (displayList.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.all(20),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
                       child: Text("No Transactions yet",
-                          style: TextStyle(color: Colors.grey)),
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
+                          )),
                     )
                   else
                     ...displayList.map((transaction) {
@@ -332,8 +335,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                           .push(
                         MaterialPageRoute(
                           builder: (context) =>
-                              AddTransactionPage(
-                                  ledgerId: widget.ledgerId),
+                              AddTransactionPage(ledgerId: widget.ledgerId),
                         ),
                       )
                           .then((_) {

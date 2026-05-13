@@ -81,6 +81,8 @@ class AppThemePage {
       surfaceContainer: Color(0xFFEEF2F5),
       surfaceContainerHighest: Color(0xFFEEF2F5),
     ),
+
+
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: Colors.black),
       titleLarge: TextStyle(color: Colors.black),
