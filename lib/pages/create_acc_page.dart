@@ -20,6 +20,7 @@ class _CreateAccPageState extends State<CreateAccPage> {
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  late final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
   @override
   void initState() {
@@ -50,9 +51,7 @@ class _CreateAccPageState extends State<CreateAccPage> {
     return BlocProvider(
       create: (context) => CreateAccPageBloc(authRepository: AuthRepository()),
       child: Scaffold(
-        backgroundColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -62,14 +61,14 @@ class _CreateAccPageState extends State<CreateAccPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 30),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       " Create Account",
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                   ),
@@ -102,10 +101,10 @@ class _CreateAccPageState extends State<CreateAccPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const Text(
+                  Text(
                     "Email Address",
                     style: TextStyle(
-                      color: Colors.blueGrey,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -113,17 +112,18 @@ class _CreateAccPageState extends State<CreateAccPage> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: _emailController,
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                        fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.email),
                       filled: true,
-                      fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       hintText: 'name@example.com',
-                      hintStyle: const TextStyle(
-                        color: Colors.blueGrey,
+                      hintStyle: TextStyle(
+                        color: isDarkMode ? Colors.white54 : Colors.grey,
                         fontSize: 16,
                       ),
                     ),
@@ -136,11 +136,14 @@ class _CreateAccPageState extends State<CreateAccPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               "FIRST NAME",
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                color: Colors.blueGrey,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
@@ -148,20 +151,20 @@ class _CreateAccPageState extends State<CreateAccPage> {
                             const SizedBox(height: 10),
                             TextField(
                               controller: _firstNameController,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
+                              style: TextStyle(
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
+                                  fontSize: 18),
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.person),
                                 filled: true,
-                                fillColor: const Color(0XFF1c304a),
+                                // fillColor: const Color(0XFF1c304a),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 hintText: 'First name',
-                                hintStyle: const TextStyle(
-                                  color: Colors.blueGrey,
+                                hintStyle:  TextStyle(
+                                  color: isDarkMode ? Colors.white54 : Colors.grey,
                                   fontSize: 16,
                                 ),
                               ),
@@ -174,10 +177,13 @@ class _CreateAccPageState extends State<CreateAccPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'LAST NAME',
                               style: TextStyle(
-                                color: Colors.blueGrey,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
@@ -185,20 +191,19 @@ class _CreateAccPageState extends State<CreateAccPage> {
                             const SizedBox(height: 10),
                             TextField(
                               controller: _lastNameController,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: isDarkMode ? Colors.white: Colors.black,
                                 fontSize: 18,
                               ),
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.person),
                                 filled: true,
-                                fillColor: const Color(0XFF1c304a),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 hintText: 'Last name',
-                                hintStyle: const TextStyle(
-                                  color: Colors.blueGrey,
+                                hintStyle: TextStyle(
+                                  color: isDarkMode ? Colors.white54 : Colors.grey,
                                   fontSize: 16,
                                 ),
                               ),
@@ -209,10 +214,10 @@ class _CreateAccPageState extends State<CreateAccPage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'PASSWORD',
                     style: TextStyle(
-                      color: Colors.blueGrey,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -221,26 +226,27 @@ class _CreateAccPageState extends State<CreateAccPage> {
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                        color: isDarkMode? Colors.white: Colors.black, fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
                       filled: true,
-                      fillColor: const Color(0XFF1c304a),
+                      // fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       hintText: '*********',
-                      hintStyle: const TextStyle(
-                        color: Colors.blueGrey,
+                      hintStyle:  TextStyle(
+                        color: isDarkMode? Colors.white54 : Colors.grey,
                         fontSize: 16,
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'CONFIRM PASSWORD',
                     style: TextStyle(
-                      color: Colors.blueGrey,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -248,17 +254,18 @@ class _CreateAccPageState extends State<CreateAccPage> {
                   const SizedBox(height: 10),
                   TextField(
                     obscureText: true,
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
-                    decoration: InputDecoration(
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.white54: Colors.grey, fontSize: 16,),
+                      decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock_clock),
                       filled: true,
-                      fillColor: const Color(0XFF1c304a),
+                      // fillColor: const Color(0XFF1c304a),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       hintText: '*********',
-                      hintStyle: const TextStyle(
-                        color: Colors.blueGrey,
+                      hintStyle: TextStyle(
+                        color: isDarkMode? Colors.white54: Colors.grey,
                         fontSize: 16,
                       ),
                     ),
@@ -284,14 +291,14 @@ class _CreateAccPageState extends State<CreateAccPage> {
                           return InkWell(
                             onTap: () {
                               context.read<CreateAccPageBloc>().add(
-                                CreateAccDetailsSubmitted(
-                                  email: _emailController.text.trim(),
-                                  firstName:
-                                  _firstNameController.text.trim(),
-                                  lastName: _lastNameController.text.trim(),
-                                  password: _passwordController.text.trim(),
-                                ),
-                              );
+                                    CreateAccDetailsSubmitted(
+                                      email: _emailController.text.trim(),
+                                      firstName:
+                                          _firstNameController.text.trim(),
+                                      lastName: _lastNameController.text.trim(),
+                                      password: _passwordController.text.trim(),
+                                    ),
+                                  );
                             },
                             child: Container(
                               padding: const EdgeInsets.all(12),
@@ -324,9 +331,12 @@ class _CreateAccPageState extends State<CreateAccPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         "Already have an account? ",
-                        style: TextStyle(color: Colors.white, fontSize: 17),
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
+                            fontSize: 17),
                       ),
                       BlocConsumer<CreateAccPageBloc, CreateAccPageState>(
                         listener: (context, state) {
@@ -343,14 +353,14 @@ class _CreateAccPageState extends State<CreateAccPage> {
                             child: const Text(
                               "Log In",
                               style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 17,
-                              ),
+                                  color: Colors.blue,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold),
                             ),
                             onTap: () {
                               context.read<CreateAccPageBloc>().add(
-                                ContinueCreateAccToSignIn2Event(),
-                              );
+                                    ContinueCreateAccToSignIn2Event(),
+                                  );
                             },
                           );
                         },
