@@ -20,10 +20,22 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('is_dark_mode') ?? true;
+  final themeString = prefs.getString('theme_mode')??'system';
   themeNotifier.value = isDark ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode initialMode;
+  if (themeString == 'light') {
+    initialMode = ThemeMode.light;
+  } else if (themeString == 'dark') {
+    initialMode = ThemeMode.dark;
+  } else {
+    initialMode = ThemeMode.system;
+  }
+
+  themeNotifier.value = initialMode;
 
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

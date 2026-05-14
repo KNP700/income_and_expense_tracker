@@ -5,8 +5,10 @@ import 'package:income_and_expense_tracker/data/repositories/ledger_repository.d
 import 'package:income_and_expense_tracker/pages/login_page.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../main.dart';
+
+
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -21,10 +23,43 @@ class _SettingPageState extends State<SettingPage> {
   bool _isNotificationsEnabled = false;
   bool _isBiometricEnabled = false;
 
+  String _firstName = 'Loading...';
+  String _lastName = '';
+
+  Future<void> _fetchUserData() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            _firstName = userDoc.get('firstName') ?? '';
+            _lastName = userDoc.get('lastName') ?? '';
+          });
+        } else {
+          setState(() {
+            _firstName = 'User Name';
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      setState(() {
+        _firstName = 'Welcome';
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _loadSettings();
+    _fetchUserData();
   }
 
   Future<void> _loadSettings() async {
@@ -54,7 +89,7 @@ class _SettingPageState extends State<SettingPage> {
           });
 
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('use_biometrics', true);
+          await prefs.setBool('use biometrics', true);
         } else {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -70,7 +105,7 @@ class _SettingPageState extends State<SettingPage> {
         _isBiometricEnabled = false;
       });
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('use_biometrics', false);
+      await prefs.setBool('use_biomatrics', false);
     }
   }
 
@@ -107,10 +142,10 @@ class _SettingPageState extends State<SettingPage> {
             child: Icon(Icons.person, size: 50, color: Colors.white),
           ),
           const SizedBox(height: 16),
-          const Center(
+          Center(
             child: Text(
-              'Kaveen Nimsara',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                '$_firstName $_lastName'.trim(),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 32),
