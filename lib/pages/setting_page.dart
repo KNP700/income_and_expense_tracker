@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/login_page.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -15,6 +16,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final LocalAuthentication _localAuth = LocalAuthentication();
   bool _isDarkMode = true;
   bool _isNotificationsEnabled = false;
   bool _isBiometricEnabled = false;
@@ -30,17 +32,46 @@ class _SettingPageState extends State<SettingPage> {
     setState(() {
       _isBiometricEnabled = prefs.getBool('use_biometrics') ?? false;
       _isDarkMode = prefs.getBool('is_dark_mode') ?? true;
-      _isNotificationsEnabled = prefs.getBool('is_notifications_enabled') ?? false;
+      _isNotificationsEnabled =
+          prefs.getBool('is_notifications_enabled') ?? false;
     });
   }
 
   Future<void> _toggleLock(bool value) async {
-    setState(() {
-      _isBiometricEnabled = value;
-    });
+    if (value == true) {
+      try {
+        bool didAuthenticate = await _localAuth.authenticate(
+          localizedReason: "please vertify to enable biometric lock",
+          options: const AuthenticationOptions(
+            stickyAuth: true,
+            biometricOnly: false,
+          ),
+        );
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('use_biometrics', value);
+        if (didAuthenticate) {
+          setState(() {
+            _isBiometricEnabled = true;
+          });
+
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('use_biometrics', true);
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed. Try again')),
+            );
+          }
+        }
+      } catch (e) {
+        print('Biometric error $e');
+      }
+    } else {
+      setState(() {
+        _isBiometricEnabled = false;
+      });
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('use_biometrics', false);
+    }
   }
 
   Future<void> _toggleTheme(bool value) async {
@@ -84,7 +115,8 @@ class _SettingPageState extends State<SettingPage> {
           ),
           const SizedBox(height: 32),
           const Text('PREFERENCES',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           Card(
             child: Column(
@@ -98,7 +130,8 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
-                  secondary: const Icon(Icons.notifications, color: Colors.blue),
+                  secondary:
+                      const Icon(Icons.notifications, color: Colors.blue),
                   title: const Text('Notifications'),
                   subtitle: const Text('Daily spending alerts'),
                   value: _isNotificationsEnabled,
@@ -109,15 +142,16 @@ class _SettingPageState extends State<SettingPage> {
                   leading: Icon(Icons.attach_money, color: Colors.blue),
                   title: Text('Currency Format'),
                   subtitle: Text('LKR (Rs)'),
-                  trailing: Icon(
-                      Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  trailing: Icon(Icons.arrow_forward_ios,
+                      size: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
           const Text('SECURITY',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           Card(
             child: Column(
@@ -134,15 +168,16 @@ class _SettingPageState extends State<SettingPage> {
                   leading: Icon(Icons.restore, color: Colors.blue),
                   title: Text('Change Password'),
                   subtitle: Text('Last changed 3 months ago'),
-                  trailing: Icon(
-                      Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  trailing: Icon(Icons.arrow_forward_ios,
+                      size: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
           const Text('ABOUT',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           const Card(
             child: ListTile(
@@ -161,7 +196,7 @@ class _SettingPageState extends State<SettingPage> {
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const LoginPage()),
-                        (route) => false,
+                    (route) => false,
                   );
                 }
               } catch (e) {
