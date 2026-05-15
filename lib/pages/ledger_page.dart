@@ -19,6 +19,19 @@ class _LedgerPageState extends State<LedgerPage> {
   DateTimeRange? _customDataRange;
   final List<String> _selectedLedgers = [];
 
+
+  late Future<List<LedgerModel>> _ledgersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshLedgers();
+  }
+
+  void _refreshLedgers() {
+    _ledgersFuture = context.read<LedgerRepository>().getLedgers();
+  }
+
   IconData _getLedgerIcon(String label) {
     switch (label.toLowerCase()) {
       case 'travel':
@@ -117,10 +130,11 @@ class _LedgerPageState extends State<LedgerPage> {
     };
   }
 
-  void _showLedgerSection(BuildContext context) {
+
+  void _showLedgerSection(BuildContext context, List<LedgerModel> loadedLedgers) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF15202B),
+      backgroundColor: Theme.of(context).cardColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -132,71 +146,60 @@ class _LedgerPageState extends State<LedgerPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Select Ledger",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 16),
-                FutureBuilder<List<LedgerModel>>(
-                  future: context.read<LedgerRepository>().getLedgers(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(
-                            child: CircularProgressIndicator(
-                                color: Colors.blueAccent)),
-                      );
-                    }
-
-                    final ledgers = snapshot.data ?? [];
-
-                    if (ledgers.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(
-                            child: Text("No ledger Found",
-                                style: TextStyle(color: Colors.grey))),
-                      );
-                    }
-
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: ledgers.length,
-                      itemBuilder: (context, index) {
-                        final ledger = ledgers[index];
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.blueAccent.withOpacity(0.2),
-                            child: Icon(
-                              _getLedgerIcon(ledger.iconLabel),
-                              color: Colors.blueAccent,
-                            ),
+                if (loadedLedgers.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Center(
+                        child: Text("No ledger Found",
+                            style: TextStyle(color: Colors.grey))),
+                  )
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: loadedLedgers.length,
+                    itemBuilder: (context, index) {
+                      final ledger = loadedLedgers[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.blueAccent.withOpacity(0.2),
+                          child: Icon(
+                            _getLedgerIcon(ledger.iconLabel),
+                            color: Colors.blueAccent,
                           ),
-                          title: Text(ledger.name,
-                              style: const TextStyle(color: Colors.white)),
-                          onTap: () {
-                            Navigator.pop(context);
+                        ),
+                        title: Text(
+                          ledger.name,
+                          style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    AddTransactionPage(ledgerId: ledger.id),
-                              ),
-                            ).then((_) {
-                              setState(() {});
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddTransactionPage(ledgerId: ledger.id),
+                            ),
+                          ).then((_) {
+
+                            setState(() {
+                              _refreshLedgers();
                             });
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
+                          });
+                        },
+                      );
+                    },
+                  ),
               ],
             ),
           ),
@@ -207,13 +210,16 @@ class _LedgerPageState extends State<LedgerPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('Ledger Analysis',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Ledger Analysis',
+            style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
         centerTitle: true,
         actions: [
           IconButton(
@@ -223,7 +229,7 @@ class _LedgerPageState extends State<LedgerPage> {
         ],
       ),
       body: FutureBuilder<List<LedgerModel>>(
-        future: context.read<LedgerRepository>().getLedgers(),
+        future: _ledgersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -252,7 +258,7 @@ class _LedgerPageState extends State<LedgerPage> {
                   ),
                   ChoiceChip(
                     label: Text(_selectedFilter == DateFilter.custom &&
-                            _customDataRange != null
+                        _customDataRange != null
                         ? '${_customDataRange!.start.day}/${_customDataRange!.start.month} - ${_customDataRange!.end.day}/${_customDataRange!.end.month}'
                         : 'Custom'),
                     selected: _selectedFilter == DateFilter.custom,
@@ -288,7 +294,7 @@ class _LedgerPageState extends State<LedgerPage> {
                       color: Colors.grey, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
               if (dbLedgers.isEmpty)
-                const Text('No ledger created yet,',
+                const Text('No ledger created yet.',
                     style: TextStyle(color: Colors.grey))
               else
                 Wrap(
@@ -341,7 +347,7 @@ class _LedgerPageState extends State<LedgerPage> {
                   final totalIncome = stats['income'] as double;
                   final totalExpense = stats['expense'] as double;
                   final transactionList =
-                      stats['transactions'] as List<TransactionModel>;
+                  stats['transactions'] as List<TransactionModel>;
                   final remainingBalance = totalIncome - totalExpense;
 
                   double incomeValue = 0.0;
@@ -369,10 +375,7 @@ class _LedgerPageState extends State<LedgerPage> {
                               child: CircularProgressIndicator(
                                   value: 1.0,
                                   strokeWidth: 16,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.color),
+                                  color: Theme.of(context).cardColor),
                             ),
                             SizedBox(
                               width: 220,
@@ -395,24 +398,14 @@ class _LedgerPageState extends State<LedgerPage> {
                               children: [
                                 Text('TOTAL BALANCE',
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.color,
+                                        color: textColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Rs.${remainingBalance.toStringAsFixed(0)}',
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.color,
-
-                                    // remainingBalance >= 0
-                                    //     ? Colors.white
-                                    //     : Colors.redAccent,
+                                    color: textColor,
                                     fontSize: 36,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -436,10 +429,7 @@ class _LedgerPageState extends State<LedgerPage> {
                               const SizedBox(height: 8),
                               Text('Rs.${totalIncome.toStringAsFixed(0)}',
                                   style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.color,
+                                      color: textColor,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold)),
                             ],
@@ -455,10 +445,7 @@ class _LedgerPageState extends State<LedgerPage> {
                               const SizedBox(height: 8),
                               Text('Rs.${totalExpense.toStringAsFixed(0)}',
                                   style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.color,
+                                      color: textColor,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold)),
                             ],
@@ -466,12 +453,12 @@ class _LedgerPageState extends State<LedgerPage> {
                         ],
                       ),
                       const SizedBox(height: 40),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Recent Transactions',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: textColor,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)),
                         ],
@@ -486,10 +473,8 @@ class _LedgerPageState extends State<LedgerPage> {
                       else
                         ...transactionList.map((transaction) {
                           return Card(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.color,
+
+                            color: Theme.of(context).cardColor,
                             margin: const EdgeInsets.only(bottom: 10),
                             child: ListTile(
                               leading: Icon(
@@ -497,8 +482,8 @@ class _LedgerPageState extends State<LedgerPage> {
                                 color: _getCategoryColor(transaction.category),
                               ),
                               title: Text(transaction.category,
-                                  style: const TextStyle(
-                                      color: Colors.white,
+                                  style: TextStyle(
+                                      color: textColor,
                                       fontWeight: FontWeight.bold)),
                               subtitle: Text(
                                 transaction.notes?.isNotEmpty == true
@@ -529,16 +514,21 @@ class _LedgerPageState extends State<LedgerPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showLedgerSection(context);
-        },
-        backgroundColor: Colors.blueAccent,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: FutureBuilder<List<LedgerModel>>(
+          future: _ledgersFuture,
+          builder: (context, snapshot) {
+            return FloatingActionButton(
+              onPressed: () {
+                _showLedgerSection(context, snapshot.data ?? []);
+              },
+              backgroundColor: Colors.blueAccent,
+              shape: const CircleBorder(),
+              child: const Icon(Icons.add, color: Colors.white),
+            );
+          }
       ),
       floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
+      FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }
@@ -563,11 +553,10 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white;
+
     return Card(
-      color: Theme.of(context)
-          .textTheme
-          .bodySmall
-          ?.color,
+      color: Theme.of(context).cardColor,
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
@@ -577,16 +566,16 @@ class CategoryCard extends StatelessWidget {
           child: Icon(icon, color: color),
         ),
         title: Text(title,
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                color: textColor, fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey)),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(amount,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: textColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
@@ -594,14 +583,8 @@ class CategoryCard extends StatelessWidget {
               width: 60,
               child: LinearProgressIndicator(
                 value: progress,
-                backgroundColor:Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.color,
-                color: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.color,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                color: Colors.blueAccent, // Fixed invisible progress bar issue
                 minHeight: 4,
                 borderRadius: BorderRadius.circular(4),
               ),

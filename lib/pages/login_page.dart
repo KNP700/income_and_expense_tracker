@@ -64,7 +64,27 @@ class _LoginPageState extends State<LoginPage> {
                 );
 
                 context.read<LedgerRepository>().syncDataFromCloud().then((_) {
+
                   if (context.mounted) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const Navigationbottompage(),
+                      ),
+                    );
+                  }
+                }).catchError((error) {
+
+                  print("SYNC CRASHED: $error");
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Sync Failed: $error"),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 6),
+                      ),
+                    );
+
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => const Navigationbottompage(),

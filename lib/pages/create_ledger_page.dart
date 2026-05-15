@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:income_and_expense_tracker/data/repositories/ledger_repository.dart';
 import 'package:income_and_expense_tracker/pages/NavigationBottomPage.dart';
-import 'package:income_and_expense_tracker/pages/create_ledger2_page.dart';
 import '../View/createLedgerPage/create_ledger_page_bloc.dart';
 
 class CreateLedgerPage extends StatefulWidget {
@@ -42,27 +41,18 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
       child: Builder(builder: (context) {
         return BlocListener<CreateLedgerPageBloc, CreateLedgerPageState>(
           listener: (context, state) {
-
             if (state is CreateLedgerPageSuccess) {
-              context.read<LedgerRepository>().clearAllData();
-
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('ledger created successfully'),
+                  content: Text('Ledger created successfully'),
                   backgroundColor: Colors.green,
                 ),
               );
 
-              // Navigator.of(context).pop();
-              //
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const Navigationbottompage()),
+                MaterialPageRoute(
+                    builder: (context) => const Navigationbottompage()),
               );
-
-
-              //   MaterialPageRoute(builder: (context)=> CreateLedger2Page(ledgerId: 0, ledgerName: _nameController.text.trim()))
-              // );
-
             } else if (state is CreateLedgerPageError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -90,11 +80,8 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                 children: [
                   Text('LEDGER NAME',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Theme
-                      .of(context)
-                      .textTheme
-                          .bodyMedium
-                          ?.color,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       )),
                   const SizedBox(height: 8),
                   TextField(
@@ -105,13 +92,10 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                   Text('SELECT ICON',
+                  Text('SELECT ICON',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Theme
-                      .of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.color,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       )),
                   const SizedBox(height: 8),
                   Row(
@@ -146,14 +130,10 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                   Text('CURRENCY',
+                  Text('CURRENCY',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.color,
-
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       )),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
@@ -174,23 +154,6 @@ class _CreateLedgerPageState extends State<CreateLedgerPage> {
                       }
                     },
                   ),
-                  const SizedBox(height: 24),
-                  // Card(
-                  //   child: SwitchListTile(
-                  //     title: const Text('Shared Ledger',
-                  //         style: TextStyle(fontWeight: FontWeight.bold)),
-                  //     subtitle: const Text('Invite friends to track together'),
-                  //     secondary:
-                  //     const Icon(Icons.group_add, color: Colors.blue),
-                  //     value: _isShared,
-                  //     activeThumbColor: Colors.blue,
-                  //     onChanged: (value) {
-                  //       setState(() {
-                  //         _isShared = value;
-                  //       });
-                  //     },
-                  //   ),
-                  // ),
                   const Spacer(),
                   BlocBuilder<CreateLedgerPageBloc, CreateLedgerPageState>(
                     builder: (context, state) {

@@ -23,15 +23,27 @@ class CreateLedger2Page extends StatefulWidget {
 class _SimpleLedgerPageState extends State<CreateLedger2Page> {
   int _selectedTab = 1;
 
+  late Future<List<TransactionModel>> _transactionsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshTransactions();
+  }
+
+  void _refreshTransactions() {
+    _transactionsFuture = context.read<LedgerRepository>().getTransactions(widget.ledgerId);
+  }
+
   IconData _getCategoryIcon(String category) {
     switch (category.toUpperCase()) {
-      case 'Transport':
+      case 'TRANSPORT':
         return Icons.train;
-      case 'Food':
+      case 'FOOD':
         return Icons.restaurant;
-      case 'Stay':
+      case 'STAY':
         return Icons.bed;
-      case 'Gift':
+      case 'GIFT':
         return Icons.card_giftcard;
       default:
         return Icons.category;
@@ -40,13 +52,13 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
 
   Color _getCategoryColor(String category) {
     switch (category.toUpperCase()) {
-      case 'Transport':
+      case 'TRANSPORT':
         return Colors.orange;
-      case 'Food ':
+      case 'FOOD':
         return Colors.cyan;
-      case 'Stay':
+      case 'STAY':
         return Colors.purple;
-      case 'Gift':
+      case 'GIFT':
         return Colors.pink;
       default:
         return Colors.blue;
@@ -55,6 +67,8 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white;
+
     return BlocProvider(
       create: (context) => CreateLedger2PageBloc(),
       child: Scaffold(
@@ -67,7 +81,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
             children: [
               Text(widget.ledgerName,
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      color: textColor,
                       fontSize: 26,
                       fontWeight: FontWeight.bold)),
             ],
@@ -80,8 +94,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
           ],
         ),
         body: FutureBuilder<List<TransactionModel>>(
-          future:
-              context.read<LedgerRepository>().getTransactions(widget.ledgerId),
+          future: _transactionsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -103,7 +116,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
 
             bool showExpenses = _selectedTab == 1;
             final displayList =
-                transactions.where((t) => t.isExpense == showExpenses).toList();
+            transactions.where((t) => t.isExpense == showExpenses).toList();
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -148,7 +161,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                   Text(
                     _selectedTab == 0 ? 'Total Income' : 'Total Spent',
                     style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        color: textColor,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
@@ -158,7 +171,7 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                         ? 'Rs.${totalIncome.toStringAsFixed(2)}'
                         : 'Rs.${totalExpense.toStringAsFixed(1)}',
                     style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        color: textColor,
                         fontSize: 36,
                         fontWeight: FontWeight.bold),
                   ),
@@ -187,33 +200,11 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const Row(
-                    // children: [
-                    //   Text('COLLABORATORS',
-                    //       style: TextStyle(
-                    //           color: Colors.blue,
-                    //           fontSize: 12,
-                    //           fontWeight: FontWeight.bold)),
-                    //   Spacer(),
-                    //   CircleAvatar(backgroundColor: Colors.green, radius: 15),
-                    //   SizedBox(width: 5),
-                    //   CircleAvatar(backgroundColor: Colors.grey, radius: 15),
-                    //   SizedBox(width: 5),
-                    //   CircleAvatar(backgroundColor: Colors.white, radius: 15),
-                    //   SizedBox(width: 5),
-                    //   CircleAvatar(
-                    //       backgroundColor: Colors.black,
-                    //       child:
-                    //           Icon(Icons.add, color: Colors.white, size: 18)),
-                    // ],
-                  ),
-                  const SizedBox(height: 30),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text('TRANSACTIONS',
                         style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 12,
                             fontWeight: FontWeight.bold)),
                   ),
@@ -223,14 +214,14 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                       padding: const EdgeInsets.all(20),
                       child: Text("No Transactions yet",
                           style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                           )),
                     )
                   else
                     ...displayList.map((transaction) {
                       return Card(
-                        color: const Color(0xFF15202B),
+                        // 3. Replaced hardcoded Dark Mode colors with adaptive Theme colors
+                        color: Theme.of(context).cardColor,
                         margin: const EdgeInsets.only(bottom: 10),
                         child: ListTile(
                           leading: Icon(
@@ -238,8 +229,8 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                             color: _getCategoryColor(transaction.category),
                           ),
                           title: Text(transaction.category,
-                              style: const TextStyle(
-                                  color: Colors.white,
+                              style: TextStyle(
+                                  color: textColor,
                                   fontWeight: FontWeight.bold)),
                           subtitle: Text(
                               transaction.notes?.isNotEmpty == true
@@ -260,74 +251,6 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                         ),
                       );
                     }),
-                  //
-                  //
-                  // const Card(
-                  //   color: Color(0xFF15202B),
-                  //   child: ListTile(
-                  //     leading: Icon(Icons.train, color: Colors.orange),
-                  //     title: Text('Transport',
-                  //         style: TextStyle(
-                  //             color: Colors.white, fontWeight: FontWeight
-                  //             .bold)),
-                  //     subtitle: Text('EXPENSE',
-                  //         style: TextStyle(color: Colors.grey,
-                  //             fontSize: 10)),
-                  //     trailing: Text('Rs 2,000',
-                  //         style: TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 16,
-                  //             fontWeight: FontWeight.bold)),
-                  //   ),
-                  // ),
-                  // const Card(
-                  //   color: Color(0xFF15202B),
-                  //   child: ListTile(
-                  //     leading: Icon(Icons.restaurant, color: Colors.cyan),
-                  //     title: Text('Food',
-                  //         style: TextStyle(
-                  //             color: Colors.white, fontWeight: FontWeight
-                  //             .bold)),
-                  //     subtitle: Text('EXPENSE',
-                  //         style: TextStyle(color: Colors.grey,
-                  //             fontSize: 10)),
-                  //     trailing: Text('Rs 500',
-                  //         style: TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 16,
-                  //             fontWeight: FontWeight.bold)),
-                  //   ),
-                  // ),
-                  // const Card(
-                  //   color: Color(0xFF15202B),
-                  //   child: ListTile(
-                  //     leading: Icon(Icons.bed, color: Colors.purple),
-                  //     title: Text('Stay',
-                  //         style: TextStyle(
-                  //             color: Colors.white, fontWeight: FontWeight
-                  //             .bold)),
-                  //     subtitle: Text('EXPENSE',
-                  //         style: TextStyle(color: Colors.grey,
-                  //             fontSize: 10)),
-                  //     trailing: Text('Rs 5,000',
-                  //         style: TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 16,
-                  //             fontWeight: FontWeight.bold)),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 30),
-                  // // BlocConsumer<CreateLedger2PageBloc, CreateLedger2PageState>(
-                  // //   listener: (context, state) {
-                  // //     if (state is createLegerToAddTransactionState) {
-                  // //       Navigator.of(context).push(
-                  // //         MaterialPageRoute(
-                  // //           builder: (context) => const AddTransactionPage(),
-                  // //         ),
-                  // //       );
-                  // //     }
-                  // //   },n
-                  // //   builder: (context, state) {
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
                     onPressed: () {
@@ -339,7 +262,10 @@ class _SimpleLedgerPageState extends State<CreateLedger2Page> {
                         ),
                       )
                           .then((_) {
-                        setState(() {});
+
+                        setState(() {
+                          _refreshTransactions();
+                        });
                       });
                     },
                     icon: const Icon(Icons.add_circle, color: Colors.black),

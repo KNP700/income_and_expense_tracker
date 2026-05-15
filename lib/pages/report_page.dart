@@ -106,7 +106,6 @@ class _ReportPageState extends State<ReportPage> {
         }
       }
     } catch (e) {
-      print("Error fetching ledgers: $e");
       if (mounted && _isLoadingLedgers) {
         setState(() => _isLoadingLedgers = false);
       }
@@ -134,7 +133,6 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    _fetchLedgerFromDatabase();
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -150,6 +148,13 @@ class _ReportPageState extends State<ReportPage> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            onPressed: () {
+              setState(() => _isLoadingLedgers = true);
+              _fetchLedgerFromDatabase();
+            },
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: CircleAvatar(
@@ -222,75 +227,6 @@ class _ReportPageState extends State<ReportPage> {
               ),
             ),
             const SizedBox(height: 30),
-            // _buildSectionTitle('REPORT TYPE'),
-            const SizedBox(height: 10),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //         child: _buildReportTypeCard(
-            //             'Ledger Summary', Icons.account_balance_wallet)),
-            //     const SizedBox(width: 15),
-            //     Expanded(
-            //         child: _buildReportTypeCard(
-            //             'Transaction List', Icons.list_alt)),
-            //   ],
-            // ),
-            const SizedBox(height: 30),
-            // Container(
-            //   padding: const EdgeInsets.all(20),
-            //   decoration: BoxDecoration(
-            //     color: cardColor,
-            //     borderRadius: BorderRadius.circular(16),
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       Container(
-            //         height: 60,
-            //         width: 50,
-            //         decoration: BoxDecoration(
-            //           color: Colors.white.withOpacity(0.05),
-            //           borderRadius: BorderRadius.circular(8),
-            //           border: Border.all(color: Colors.white12),
-            //         ),
-            //         child: const Icon(Icons.text_snippet,
-            //             color: Colors.white24, size: 30),
-            //       ),
-            //       const SizedBox(width: 20),
-            //       // const Expanded(
-            //       //   child: Column(
-            //       //     children: [
-            //       //       Row(
-            //       //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       //         children: [
-            //       //           Text('PERIOD',
-            //       //               style: TextStyle(
-            //       //                   color: Colors.grey, fontSize: 12)),
-            //       //           Text('Oct 1 - Oct 18',
-            //       //               style: TextStyle(
-            //       //                   color: Colors.white,
-            //       //                   fontWeight: FontWeight.bold)),
-            //       //         ],
-            //       //       ),
-            //       //       SizedBox(height: 10),
-            //       //       Row(
-            //       //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       //         children: [
-            //       //           Text('FORMAT',
-            //       //               style: TextStyle(
-            //       //                   color: Colors.grey, fontSize: 12)),
-            //       //           Text('PDF',
-            //       //               style: TextStyle(
-            //       //                   color: Colors.white,
-            //       //                   fontWeight: FontWeight.bold)),
-            //       //         ],
-            //       //       ),
-            //       //     ],
-            //       //   ),
-            //       // )
-            //     ],
-            //   ),
-            // ),
-            const SizedBox(height: 30),
             GestureDetector(
               onTap: _isDownloading
                   ? null
@@ -301,9 +237,10 @@ class _ReportPageState extends State<ReportPage> {
 
                 try {
                   final repo = context.read<LedgerRepository>();
+                  final freshLedgers = await repo.getLedgers();
                   List<TransactionModel> finalTransactionsToReport = [];
 
-                  for (var ledger in _dbLedgers) {
+                  for (var ledger in freshLedgers) {
                     if (selectedLedger == 'All Ledgers' ||
                         selectedLedger == ledger.name) {
                       final transactions =
@@ -458,42 +395,6 @@ class _ReportPageState extends State<ReportPage> {
             color: isSelected ? cyanAccent : Colors.grey,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildReportTypeCard(String title, IconData icon) {
-    bool isSelected = selectedReportType == title;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedReportType = title;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        decoration: BoxDecoration(
-          color: isSelected ? cyanAccent : cardColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.black : Colors.grey,
-              size: 28,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                color: isSelected ? Colors.black : Colors.grey,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-          ],
         ),
       ),
     );
