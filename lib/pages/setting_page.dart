@@ -8,8 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../main.dart';
 
-
-
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
 
@@ -19,7 +17,9 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   final LocalAuthentication _localAuth = LocalAuthentication();
-  bool _isDarkMode = true;
+
+
+  String _themeModeString = 'system';
   bool _isNotificationsEnabled = false;
   bool _isBiometricEnabled = false;
 
@@ -30,7 +30,6 @@ class _SettingPageState extends State<SettingPage> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
@@ -66,17 +65,33 @@ class _SettingPageState extends State<SettingPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isBiometricEnabled = prefs.getBool('use_biometrics') ?? false;
-      _isDarkMode = prefs.getBool('is_dark_mode') ?? true;
+      _themeModeString = prefs.getString('theme_mode') ?? 'system';
       _isNotificationsEnabled =
           prefs.getBool('is_notifications_enabled') ?? false;
     });
+  }
+
+  Future<void> _changeTheme(String newTheme) async {
+    setState(() {
+      _themeModeString = newTheme;
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('theme_mode', newTheme);
+
+    if (newTheme == 'light') {
+      themeNotifier.value = ThemeMode.light;
+    } else if (newTheme == 'dark') {
+      themeNotifier.value = ThemeMode.dark;
+    } else {themeNotifier.value = ThemeMode.system;
+    }
   }
 
   Future<void> _toggleLock(bool value) async {
     if (value == true) {
       try {
         bool didAuthenticate = await _localAuth.authenticate(
-          localizedReason: "please vertify to enable biometric lock",
+          localizedReason: "Please verify to enable biometric lock",
           options: const AuthenticationOptions(
             stickyAuth: true,
             biometricOnly: false,
@@ -89,7 +104,7 @@ class _SettingPageState extends State<SettingPage> {
           });
 
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('use biometrics', true);
+          await prefs.setBool('use_biometrics', true);
         } else {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -105,17 +120,8 @@ class _SettingPageState extends State<SettingPage> {
         _isBiometricEnabled = false;
       });
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('use_biomatrics', false);
+      await prefs.setBool('use_biometrics', false);
     }
-  }
-
-  Future<void> _toggleTheme(bool value) async {
-    setState(() {
-      _isDarkMode = value;
-    });
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('is_dark_mode', value);
-    themeNotifier.value = value ? ThemeMode.dark : ThemeMode.light;
   }
 
   Future<void> _toggleNotifications(bool value) async {
@@ -144,29 +150,48 @@ class _SettingPageState extends State<SettingPage> {
           const SizedBox(height: 16),
           Center(
             child: Text(
-                '$_firstName $_lastName'.trim(),
+              '$_firstName $_lastName'.trim(),
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 32),
           const Text('PREFERENCES',
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           Card(
             child: Column(
               children: [
-                SwitchListTile(
-                  secondary: const Icon(Icons.dark_mode, color: Colors.blue),
-                  title: const Text('Dark Mode'),
-                  subtitle: const Text('Reduce eye strain'),
-                  value: _isDarkMode,
-                  onChanged: _toggleTheme,
+                ListTile(
+                  leading: Icon(
+                    _themeModeString == 'dark'
+                        ? Icons.dark_mode
+                        : _themeModeString == 'light'
+                        ? Icons.light_mode
+                        : Icons.brightness_auto_sharp,
+                    color: Colors.blue,
+                  ),
+                  title: const Text('App Theme'),
+                  subtitle: const Text('Choose light, dark, or system'),
+                  trailing: DropdownButton<String>(
+                    value: _themeModeString,
+                    underline: const SizedBox(),
+                    items: const [
+                      DropdownMenuItem(value: 'system', child: Text('System')),
+                      DropdownMenuItem(value: 'light', child: Text('Light')),
+                      DropdownMenuItem(value: 'dark', child: Text('Dark')),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        _changeTheme(value);
+                      }
+                    },
+                  ),
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
                   secondary:
-                      const Icon(Icons.notifications, color: Colors.blue),
+                  const Icon(Icons.notifications, color: Colors.blue),
                   title: const Text('Notifications'),
                   subtitle: const Text('Daily spending alerts'),
                   value: _isNotificationsEnabled,
@@ -186,7 +211,7 @@ class _SettingPageState extends State<SettingPage> {
           const SizedBox(height: 24),
           const Text('SECURITY',
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           Card(
             child: Column(
@@ -212,7 +237,7 @@ class _SettingPageState extends State<SettingPage> {
           const SizedBox(height: 24),
           const Text('ABOUT',
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
           const Card(
             child: ListTile(
@@ -231,7 +256,7 @@ class _SettingPageState extends State<SettingPage> {
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false,
+                        (route) => false,
                   );
                 }
               } catch (e) {

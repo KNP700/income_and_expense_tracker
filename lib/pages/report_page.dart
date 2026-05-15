@@ -8,6 +8,9 @@ import 'package:printing/printing.dart';
 import '../data/model/ledger_model/ledger_model.dart';
 import '../data/model/transaction_model/transaction_model.dart';
 
+// 1. Added the enum here so the DateFilter works properly
+enum DateFilter { today, weekly, custom }
+
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
 
@@ -16,7 +19,9 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
-  String selectedTimeframe = 'Monthly';
+  DateFilter _selectedFilter = DateFilter.weekly;
+  DateTimeRange? _customDataRange;
+
   String selectedLedger = 'All Ledgers';
   String selectedReportType = 'Ledger Summary';
   bool _isDownloading = false;
@@ -25,14 +30,26 @@ class _ReportPageState extends State<ReportPage> {
 
   List<LedgerModel> _dbLedgers = [];
 
-  final Color bgColor = const Color(0xFF0D131A);
-  final Color cardColor = const Color(0xFF1A222D);
   final Color cyanAccent = const Color(0xFF00E5FF);
 
   @override
   void initState() {
     super.initState();
     _fetchLedgerFromDatabase();
+  }
+
+  String get timeFrameString {
+    switch (_selectedFilter) {
+      case DateFilter.today:
+        return 'Today';
+      case DateFilter.weekly:
+        return 'Weekly';
+      case DateFilter.custom:
+        if (_customDataRange != null) {
+          return '${_customDataRange!.start.day}/${_customDataRange!.start.month} - ${_customDataRange!.end.day}/${_customDataRange!.end.month}';
+        }
+        return 'Custom';
+    }
   }
 
   Future<void> _genaratedPdf(List<TransactionModel> transactions) async {
@@ -51,7 +68,7 @@ class _ReportPageState extends State<ReportPage> {
               ),
               pw.SizedBox(height: 10),
               pw.Text('Ledger: $selectedLedger'),
-              pw.Text('TimeFrame: $selectedTimeframe'),
+              pw.Text('TimeFrame: $timeFrameString'),
               pw.Text('Report Type : $selectedReportType'),
               pw.Divider(),
               pw.SizedBox(height: 20),
@@ -111,30 +128,29 @@ class _ReportPageState extends State<ReportPage> {
       }
     }
   }
-
   bool _isWithinTime(DateTime transactionDate) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    switch (selectedTimeframe) {
-      case 'Daily':
+    switch (_selectedFilter) {
+      case DateFilter.today:
         return transactionDate.isAfter(today) ||
             transactionDate.isAtSameMomentAs(today);
-      case 'Weekly':
+      case DateFilter.weekly:
         final weekAgo = today.subtract(const Duration(days: 7));
         return transactionDate.isAfter(weekAgo);
-      case 'Monthly':
-        final monthAgo = DateTime(now.year, now.month - 1, now.day);
-        return transactionDate.isAfter(monthAgo);
-      default:
-        return true;
+      case DateFilter.custom:
+        if (_customDataRange == null) return true;
+        final start = _customDataRange!.start;
+        final end = _customDataRange!.end.add(const Duration(days: 1));
+        return transactionDate.isAfter(start) && transactionDate.isBefore(end);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -142,9 +158,11 @@ class _ReportPageState extends State<ReportPage> {
           icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () {},
         ),
-        title: const Text(
+        title: Text(
           'Report Configuration',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -155,14 +173,6 @@ class _ReportPageState extends State<ReportPage> {
               _fetchLedgerFromDatabase();
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.orange.withOpacity(0.2),
-              child: const Icon(Icons.receipt_long,
-                  color: Colors.orange, size: 20),
-            ),
-          )
         ],
       ),
       body: SingleChildScrollView(
@@ -176,16 +186,17 @@ class _ReportPageState extends State<ReportPage> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.teal.withOpacity(0.1),
+                      color: Colors.transparent.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.settings, color: cyanAccent, size: 30),
+                    child: const Icon(Icons.settings,
+                        color: Colors.blueAccent, size: 30),
                   ),
                   const SizedBox(height: 15),
-                  const Text(
+                  Text(
                     'Configure & Download your report',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -196,20 +207,65 @@ class _ReportPageState extends State<ReportPage> {
             const SizedBox(height: 30),
             _buildSectionTitle('TIMEFRAME'),
             const SizedBox(height: 10),
+
+
             Container(
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: cardColor,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildTimeframeOption('Daily'),
-                  _buildTimeframeOption('Weekly'),
-                  _buildTimeframeOption('Monthly'),
-                  _buildTimeframeOption('Custom'),
+                  ChoiceChip(
+                    label: const Text('Today'),
+                    selected: _selectedFilter == DateFilter.today,
+                    selectedColor: Colors.blueAccent,
+                    onSelected: (_) =>
+                        setState(() => _selectedFilter = DateFilter.today),
+                  ),
+                  ChoiceChip(
+                    label: const Text('Weekly'),
+                    selected: _selectedFilter == DateFilter.weekly,
+                    selectedColor: Colors.blueAccent,
+                    onSelected: (_) =>
+                        setState(() => _selectedFilter = DateFilter.weekly),
+                  ),
+                  ChoiceChip(
+                    label: Text(_selectedFilter == DateFilter.custom &&
+                        _customDataRange != null
+                        ? '${_customDataRange!.start.day}/${_customDataRange!.start.month} - ${_customDataRange!.end.day}/${_customDataRange!.end.month}'
+                        : 'Custom'),
+                    selected: _selectedFilter == DateFilter.custom,
+                    selectedColor: Colors.blueAccent,
+                    onSelected: (selected) async {
+                      final DateTimeRange? picked = await showDateRangePicker(
+                        context: context,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime.now(),
+                        builder: (context, child) {
+                          return Theme(
+                            data: ThemeData.dark().copyWith(
+                              colorScheme: const ColorScheme.dark(
+                                  primary: Colors.blueAccent),
+                            ),
+                            child: child!,
+                          );
+                        },
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          _customDataRange = picked;
+                          _selectedFilter = DateFilter.custom;
+                        });
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
+
             const SizedBox(height: 30),
             _buildSectionTitle('SELECT LEDGERS'),
             const SizedBox(height: 10),
@@ -333,40 +389,11 @@ class _ReportPageState extends State<ReportPage> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(
-        color: cyanAccent,
-        fontSize: 12,
+      style: const TextStyle(
+        color: Colors.blueAccent,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
         letterSpacing: 1.2,
-      ),
-    );
-  }
-
-  Widget _buildTimeframeOption(String title) {
-    bool isSelected = selectedTimeframe == title;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedTimeframe = title;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: isSelected ? cyanAccent : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: isSelected ? Colors.black : Colors.grey,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -383,7 +410,9 @@ class _ReportPageState extends State<ReportPage> {
         margin: const EdgeInsets.only(right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.teal.withOpacity(0.1) : cardColor,
+          color: isSelected
+              ? Colors.teal.withOpacity(0.1)
+              : Theme.of(context).cardColor,
           border: Border.all(
             color: isSelected ? cyanAccent : Colors.transparent,
           ),
