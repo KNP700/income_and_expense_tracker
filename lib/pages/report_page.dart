@@ -340,16 +340,16 @@ class _ReportPageState extends State<ReportPage> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
-                  color: _isDownloading ? Colors.grey : cyanAccent,
+                  color: _isDownloading ? Colors.grey : Colors.blue,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    if (!_isDownloading)
-                      BoxShadow(
-                        color: cyanAccent.withOpacity(0.4),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      )
-                  ],
+                  // boxShadow: [
+                  //   if (!_isDownloading)
+                  //     BoxShadow(
+                  //       color: cyanAccent.withOpacity(0.4),
+                  //       blurRadius: 15,
+                  //       offset: const Offset(0, 5),
+                  //     )
+                  // ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
